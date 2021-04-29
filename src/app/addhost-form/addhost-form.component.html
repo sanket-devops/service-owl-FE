@@ -1,0 +1,160 @@
+<div class="first-div">
+  <button type="button" class="btn btn-primary ml3" (click)="back()">Dashboard</button>
+</div>
+
+<div class="container">
+  <form [formGroup]="form">
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>HostName</mat-label>
+          <input matInput placeholder="HostName" formControlName="hostName">
+        </mat-form-field>
+      </div>
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>IPAddress</mat-label>
+          <input matInput placeholder="IPAddress" formControlName="ipAddress">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>GroupName</mat-label>
+          <input matInput placeholder="groupName" formControlName="groupName">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>ClusterName</mat-label>
+          <input matInput placeholder="ClusterName" formControlName="clusterName">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>EnvName</mat-label>
+          <input matInput placeholder="EnvName" formControlName="envName">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>VmName</mat-label>
+          <input matInput placeholder="VmName" formControlName="vmName">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>User</mat-label>
+          <input matInput placeholder="User" formControlName="usr">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>Password</mat-label>
+          <input matInput placeholder="Password" formControlName="pwd">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <mat-form-field appearance="legacy">
+          <mat-label>Note</mat-label>
+          <textarea matInput placeholder="Note" formControlName="note"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Port Table</h3>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>Name</th>
+          <th>Port</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr *ngFor="let data of data.port; let index = index;">
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Name</mat-label>
+              <input matInput type="text" placeholder="Name" [(ngModel)]="data.name" name="name_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Port</mat-label>
+              <input matInput placeholder="Port" type="number" [(ngModel)]="data.port" name="port_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <button class="btn btn-success" (click)="AddPortTableRow()">+</button>
+            <button class="btn btn-danger ml3" (click)="removePortTableRow(index)">-</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h3>Linked Table</h3>
+      <table class="table table-bordered">
+        <thead>
+        <tr>
+          <th>HostName</th>
+          <th>IPAddress</th>
+          <th>Port</th>
+          <th>Action</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr *ngFor="let data of data.linkTo; let index = index;">
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>HostName</mat-label>
+              <input matInput type="text" placeholder="HostName" [(ngModel)]="data.hostName" name="hostName_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>IPAddress</mat-label>
+              <input matInput placeholder="IPAddress" [(ngModel)]="data.ipAddress" name="ipAddress_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Port</mat-label>
+              <input matInput placeholder="Port" type="number" [(ngModel)]="data.port" name="port_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <button class="btn btn-success" (click)="AddLinktoTableRow()">+</button>
+            <button class="btn btn-danger ml3" (click)="RemoveLinktoTableRow(index)">-</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <button class="btn btn-primary" (click)="saveData()">Save</button>
+    </div>
+  </div>
+
+</div>

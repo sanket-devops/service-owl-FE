@@ -1,0 +1,121 @@
+<!--<mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="latestPull($event)">Auto Reload 60/s: {{isChecked}}</mat-slide-toggle>-->
+<!---->
+<div class="first-div">
+<!--  <button mat-raised-button color="primary" class="btn btn-primary" (click)="latestPull($event)">Reload</button>-->
+  <button type="button" class="btn btn-primary ml3" (click)="latestPull($event)">Reload</button>
+  <button type="button" class="btn btn-primary ml3" (click)="AddHost()">Add Host</button>
+<!--  <button mat-raised-button color="primary" class="btn btn-primary ml3" (click)="AddHost()">Add Host</button>-->
+</div>
+
+<kendo-grid [kendoGridBinding]="responseData"
+            kendoGridSelectBy="_id"
+            [pageable]="false"
+            [sortable]="true"
+            [reorderable]="true"
+            [resizable]="true"
+            [loading]="loading"
+            [columnMenu]="{ filter: true }"
+            [trackBy]="trackBy"
+            class="grid-sm chocolaty kendo-grid-clickable kendo-grid-stripped"
+            style="overflow: hidden; height: calc(100vh - 5px);">
+  <kendo-grid-column field="hostName" title="HostName" [width]="150"></kendo-grid-column>
+  <kendo-grid-column field="ipAddress" title="Address" [width]="135"></kendo-grid-column>
+  <kendo-grid-column field="port" title="Service" [width]="170" class="text-center">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#serviceModal" (click)="modelOpen(dataItem.port)">Services
+        <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>
+        <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>
+        <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning button-circle">⇅</button>
+      </button>
+    </ng-template>
+  </kendo-grid-column>
+<!--  <kendo-grid-column field="status" title="Status" [width]="100" class="text-center">-->
+<!--    <ng-template kendoGridCellTemplate let-dataItem>-->
+<!--      <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>-->
+<!--      <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>-->
+<!--      <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning button-circle">⇅</button>-->
+<!--    </ng-template>-->
+<!--  </kendo-grid-column>-->
+  <kendo-grid-column field="linkTo" title="Linked" [width]="100">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#linkModal" (click)="linkModel(dataItem.linkTo)">Linked</button>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="groupName" title="GroupName" [width]="100"></kendo-grid-column>
+  <kendo-grid-column field="clusterName" title="ClusterName" [width]="150"></kendo-grid-column>
+  <kendo-grid-column field="envName" title="Env" [width]="80"></kendo-grid-column>
+  <kendo-grid-column field="vmName" title="VM" [width]="80"></kendo-grid-column>
+<!--  <kendo-grid-column field="usr" title="UserName" [width]="100"></kendo-grid-column>-->
+<!--  <kendo-grid-column field="pwd" title="Password" [width]="100"></kendo-grid-column>-->
+  <kendo-grid-column field="note" title="Note" class="nowrap" [width]="150"></kendo-grid-column>
+</kendo-grid>
+
+<!-- Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="serviceModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <kendo-grid [kendoGridBinding]="serviceData"  [columnMenu]="{ filter: true }" [height]="410"
+                    kendoGridSelectBy="_id"
+                    [pageable]="false"
+                    [sortable]="true"
+                    [reorderable]="true"
+                    [resizable]="true"
+                    [loading]="loading"
+                    [columnMenu]="{ filter: true }"
+                    [trackBy]="trackBy">
+          <kendo-grid-column field="name" title="ServiceName"></kendo-grid-column>
+          <kendo-grid-column field="port" title="Port"></kendo-grid-column>
+          <kendo-grid-column field="status" title="Status">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>
+                <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>
+            </ng-template>
+          </kendo-grid-column>
+        </kendo-grid>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="linkModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <kendo-grid [kendoGridBinding]="linkedData"  [columnMenu]="{ filter: true }" [height]="410"
+                    kendoGridSelectBy="_id"
+                    [pageable]="false"
+                    [sortable]="true"
+                    [reorderable]="true"
+                    [resizable]="true"
+                    [loading]="loading"
+                    [columnMenu]="{ filter: true }"
+                    [trackBy]="trackBy">
+          <kendo-grid-column field="hostName" title="HostName"></kendo-grid-column>
+          <kendo-grid-column field="ipAddress" title="Address"></kendo-grid-column>
+          <kendo-grid-column field="port" title="Port"></kendo-grid-column>
+        </kendo-grid>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
