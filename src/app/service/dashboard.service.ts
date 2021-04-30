@@ -9,30 +9,33 @@ export class DashboardService {
 
   // url = '/notes/';
 
+  cloneObj: Idashboard = <any>undefined;
+  editObj: Idashboard = <any>undefined;
+
   constructor(private http: HttpClient, public ConstantService: ConstantService) {
   }
 
   delete_soft(_id: string) {
-    return this.http.put(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT  + 'delete_soft/' + _id), {
+    return this.http.put(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + 'delete_soft/' + _id), {
       _id: _id,
       active: 0
     });
   }
 
   delete(_id: string) {
-    return this.http.delete(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT  + _id));
+    return this.http.delete(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + _id));
   }
 
   save(data: Partial<Idashboard>) {
-    return this.http.post(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT ), data);
+    return this.http.post(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT), data);
   }
 
   update(data: Partial<Idashboard>) {
-    return this.http.put(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT  + data._id), data);
+    return this.http.put(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + '/' + data._id), data);
   }
 
   get(_id: string, populate?: string) {
-    return this.http.get<Partial<Idashboard>>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT  + _id + `${populate ? '?populate=' + populate : ''}`));
+    return this.http.get<Partial<Idashboard>>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + _id + `${populate ? '?populate=' + populate : ''}`));
   }
 
   latestPull() {
@@ -41,13 +44,13 @@ export class DashboardService {
 
   list(select?: string) {
     if (select) {
-      return this.http.get<Partial<Idashboard>[]>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT  + `select=${select}`));
+      return this.http.get<Partial<Idashboard>[]>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + `select=${select}`));
     } else {
       return this.http.get<Partial<Idashboard>[]>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT));
     }
   }
 
   query(query: any) {
-    return this.http.post<Partial<Idashboard>[]>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT  + `query`), query);
+    return this.http.post<Partial<Idashboard>[]>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + `query`), query);
   }
 }

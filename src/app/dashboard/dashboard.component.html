@@ -20,13 +20,22 @@
             style="overflow: hidden; height: calc(100vh - 5px);">
   <kendo-grid-column field="hostName" title="HostName" [width]="150"></kendo-grid-column>
   <kendo-grid-column field="ipAddress" title="Address" [width]="135"></kendo-grid-column>
-  <kendo-grid-column field="port" title="Service" [width]="170" class="text-center">
+  <kendo-grid-column field="status" title="Service" [width]="100" class="text-center">
     <ng-template kendoGridCellTemplate let-dataItem>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#serviceModal" (click)="modelOpen(dataItem.port)">Services
-        <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>
-        <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>
-        <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning button-circle">⇅</button>
-      </button>
+      <div class="nowrap text-center">
+        <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#serviceModal" (click)="modelOpen(dataItem.port)">
+          <span>Services</span>
+          <span *ngIf="!dataItem.status" class="badge badge-secondary ml-2">&nbsp;&nbsp;</span>
+          <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-2">⇈</span>
+          <span *ngIf="dataItem.status === EStatus.DOWN" class="badge badge-danger ml-2">⇊</span>
+          <span *ngIf="dataItem.status === EStatus.S_DOWN" class="badge badge-warning ml-2">⇅</span>
+        </button>
+        <!--<button *ngIf="!dataItem.status" class="btn btn-secondary btn-sm">⇈</button>
+
+        <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success btn-sm">⇈</button>
+        <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger btn-sm">⇊</button>
+        <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning btn-sm">⇅</button>-->
+      </div>
     </ng-template>
   </kendo-grid-column>
 <!--  <kendo-grid-column field="status" title="Status" [width]="100" class="text-center">-->
@@ -36,18 +45,33 @@
 <!--      <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning button-circle">⇅</button>-->
 <!--    </ng-template>-->
 <!--  </kendo-grid-column>-->
-  <kendo-grid-column field="linkTo" title="Linked" [width]="100">
+  <kendo-grid-column field="linkTo" title="Linked" [width]="60">
     <ng-template kendoGridCellTemplate let-dataItem>
-      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#linkModal" (click)="linkModel(dataItem.linkTo)">Linked</button>
+      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#linkModal" (click)="linkModel(dataItem.linkTo)">
+        <i class="fas fa-link fa-fw"></i>
+      </button>
     </ng-template>
   </kendo-grid-column>
   <kendo-grid-column field="groupName" title="GroupName" [width]="100"></kendo-grid-column>
   <kendo-grid-column field="clusterName" title="ClusterName" [width]="150"></kendo-grid-column>
   <kendo-grid-column field="envName" title="Env" [width]="80"></kendo-grid-column>
   <kendo-grid-column field="vmName" title="VM" [width]="80"></kendo-grid-column>
-<!--  <kendo-grid-column field="usr" title="UserName" [width]="100"></kendo-grid-column>-->
-<!--  <kendo-grid-column field="pwd" title="Password" [width]="100"></kendo-grid-column>-->
   <kendo-grid-column field="note" title="Note" class="nowrap" [width]="150"></kendo-grid-column>
+  <kendo-grid-column field="linkTo" title="Options" [width]="150">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div class="nowrap text-center">
+        <button type="button" class="btn btn-primary btn-sm ml3" (click)="editData(dataItem)">
+          <i class="fas fa-edit fa-fw"></i>
+        </button>
+        <button type="button" class="btn btn-info btn-sm ml3" (click)="cloneData(dataItem)">
+          <i class="far fa-clone fa-fw"></i>
+        </button>
+        <button type="button" class="btn btn-danger btn-sm ml3" (click)="deleteData(dataItem)">
+          <i class="fas fa-trash fa-fw"></i>
+        </button>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
 </kendo-grid>
 
 <!-- Modal -->

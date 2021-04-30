@@ -8,8 +8,8 @@ import {State} from '@progress/kendo-data-query';
 import {Router} from '@angular/router';
 
 declare let toastr: any;
-
 declare let $: any;
+declare let _: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -54,6 +54,7 @@ export class DashboardComponent implements OnInit {
       }
     }
     this.responseData = res;
+    this.responseData = _.orderBy(this.responseData, ['status'], ['asc'])
     // console.log(this.responseData);
   }
 
@@ -65,11 +66,31 @@ export class DashboardComponent implements OnInit {
     this.linkedData = value;
   }
 
+  cloneData(item: Idashboard) {
+    let tempItem: Idashboard = JSON.parse(JSON.stringify(item));
+    delete tempItem._id;
+    this.dashboardservice.cloneObj = tempItem;
+    this.dashboardservice.editObj = <any>undefined;
+    this.router.navigate(['addhost']);
+  }
+
+  editData(item: Idashboard) {
+    this.dashboardservice.cloneObj = <any>undefined;
+    this.dashboardservice.editObj = item;
+    this.router.navigate(['addhost']);
+  }
+
+  deleteData(item: Idashboard) {
+    console.log(item);
+  }
+
   public trackBy(index: number, item: GridItem): any {
     return index;
   }
 
   AddHost() {
+    this.dashboardservice.cloneObj = <any>undefined;
+    this.dashboardservice.editObj = <any>undefined;
     this.router.navigate(['addhost']);
   }
 
@@ -88,7 +109,7 @@ export class DashboardComponent implements OnInit {
       let oldStorageMap = this.getRowsMap(oldStorageObj, '_id');
       let changeFound = false;
       for (let item of res) {
-        let oldItem: Idashboard = oldStorageMap[item._id];
+        let oldItem: Idashboard = oldStorageMap[<any>item._id];
         let isAnyChangeFound = oldItem ? this.comparePortsArrAndFindChange(oldItem.port, item.port) : false;
         if (isAnyChangeFound) {
           changeFound = true;

@@ -5,6 +5,8 @@ import {Idashboard, IPort} from '../interface/Idashboard';
 import {ConstantService} from '../service/constant.service';
 import {DashboardService} from '../service/dashboard.service';
 
+declare let toastr: any;
+
 @Component({
   selector: 'app-addhost-form',
   templateUrl: './addhost-form.component.html',
@@ -14,12 +16,11 @@ export class AddhostFormComponent implements OnInit {
   form: FormGroup;
   data: Idashboard = this.getEmptyTable();
 
-  // linkData: Idashboard = this.getEmptyTable();
-
   constructor(public router: Router,
               public formbuilder: FormBuilder,
               public dashboardservice: DashboardService) {
     this.form = this.formbuilder.group({
+      _id: [''],
       hostName: [''],
       ipAddress: [''],
       groupName: [''],
@@ -28,18 +29,25 @@ export class AddhostFormComponent implements OnInit {
       vmName: [''],
       note: [''],
     });
+
+    if (this.dashboardservice.editObj || this.dashboardservice.cloneObj) {
+      let fillObj = this.dashboardservice.editObj || this.dashboardservice.cloneObj;
+      this.form.patchValue(fillObj);
+      this.data.port = fillObj.port;
+      this.data.linkTo = fillObj.linkTo;
+    }
   }
 
   ngOnInit() {
   }
 
   getEmptyTable(): Idashboard {
-    return <any> <Partial<Idashboard>> {
-      port: [<any> {
+    return <any><Partial<Idashboard>>{
+      port: [<any>{
         name: 'ssh',
         port: 22
       }],
-      linkTo: [<any> {
+      linkTo: [<any>{
         hostName: '',
         ipAddress: '',
         port: null
@@ -52,19 +60,15 @@ export class AddhostFormComponent implements OnInit {
   }
 
   AddPortTableRow() {
-    console.log('sds');
-    this.data.port.push(<any> {});
-
+    this.data.port.push(<any>{});
   }
 
   AddLinktoTableRow() {
-    this.data.linkTo.push(<any> {});
-
+    this.data.linkTo.push(<any>{});
   }
 
   RemoveLinktoTableRow(index: any) {
     this.data.linkTo.splice(this.data.linkTo.indexOf(index), 1);
-
   }
 
   back() {
@@ -72,30 +76,21 @@ export class AddhostFormComponent implements OnInit {
   }
 
   async saveData() {
-    // console.log(this.data.port);
-    // console.log(this.data.linkTo);
-    // console.log(this.form.value);
-    if (this.form.invalid) {
-      // this.utils.show_message('Please fill all required fields');
-      return;
-    }
+    if (this.form.invalid) return;
     let formValue: Idashboard = this.form.value;
-    formValue.port = <any> this.data.port;
-    formValue.linkTo = <any> this.data.linkTo;
-    console.log(formValue);
+    formValue.port = <any>this.data.port;
+    formValue.linkTo = <any>this.data.linkTo;
     try {
-      // Update Stock In location
       if (formValue._id) {
-        // formValue._id = this.id;
         let response = await ConstantService.get_promise(this.dashboardservice.update(formValue));
-        // this.utils.show_message('Stock updated.');
+        toastr.success('Data updated.');
       } else {
-        // save Stock In location
+        delete formValue._id;
         let response: Idashboard = await ConstantService.get_promise(this.dashboardservice.save(formValue));
-        // this.form.patchValue(this.setEmptyData());
-        // this.utils.show_message('Stock saved.');
+        toastr.success('Data saved.');
         this.form.reset();
       }
+      this.back();
     } catch (e) {
       console.log(e);
     }
