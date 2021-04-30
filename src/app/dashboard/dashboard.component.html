@@ -18,17 +18,24 @@
             [trackBy]="trackBy"
             class="grid-sm chocolaty kendo-grid-clickable kendo-grid-stripped"
             style="overflow: hidden; height: calc(100vh - 5px);">
-  <kendo-grid-column field="hostName" title="HostName" [width]="150"></kendo-grid-column>
+  <kendo-grid-column field="hostName" title="HostName" [width]="200"></kendo-grid-column>
   <kendo-grid-column field="ipAddress" title="Address" [width]="135"></kendo-grid-column>
-  <kendo-grid-column field="status" title="Service" [width]="100" class="text-center">
+  <kendo-grid-column field="status" title="Service" [width]="120" class="text-center">
     <ng-template kendoGridCellTemplate let-dataItem>
       <div class="nowrap text-center">
-        <button type="button" class="btn btn-primary btn-sm btn-block" data-toggle="modal" data-target="#serviceModal" (click)="modelOpen(dataItem.port)">
-          <span>Services</span>
-          <span *ngIf="!dataItem.status" class="badge badge-secondary ml-2">&nbsp;&nbsp;</span>
-          <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-2">⇈</span>
-          <span *ngIf="dataItem.status === EStatus.DOWN" class="badge badge-danger ml-2">⇊</span>
-          <span *ngIf="dataItem.status === EStatus.S_DOWN" class="badge badge-warning ml-2">⇅</span>
+        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#serviceModal" (click)="modelOpen(dataItem.port)">
+          <span>Services
+                    <span *ngIf="!dataItem.status" class="badge badge-secondary ml-2">&nbsp;&nbsp;</span>
+          <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-1">
+            <i class="fas fa-angle-double-up fa-fw"></i>
+          </span>
+          <span *ngIf="dataItem.status === EStatus.DOWN" class="badge badge-danger ml-1">
+            <i class="fas fa-angle-double-down fa-fw"></i>
+          </span>
+          <span *ngIf="dataItem.status === EStatus.S_DOWN" class="badge badge-warning ml-1">
+            <i class="fas fa-angle-double-right fa-fw"></i>
+          </span>
+          </span>
         </button>
         <!--<button *ngIf="!dataItem.status" class="btn btn-secondary btn-sm">⇈</button>
 
