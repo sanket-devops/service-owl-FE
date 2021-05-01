@@ -1,10 +1,11 @@
 <!--<mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="latestPull($event)">Auto Reload 60/s: {{isChecked}}</mat-slide-toggle>-->
 <!---->
 <div class="first-div">
-<!--  <button mat-raised-button color="primary" class="btn btn-primary" (click)="latestPull($event)">Reload</button>-->
-  <button type="button" class="btn btn-primary ml3" (click)="latestPull($event)">Reload</button>
-  <button type="button" class="btn btn-primary ml3" (click)="AddHost()">Add Host</button>
-<!--  <button mat-raised-button color="primary" class="btn btn-primary ml3" (click)="AddHost()">Add Host</button>-->
+  <!--  <button mat-raised-button color="primary" class="btn btn-primary" (click)="latestPull($event)">Reload</button>-->
+  <button type="button" class="btn btn-primary ml3" (click)="latestPull($event)"><i class="fas fa-sync-alt fa-fw"></i> Reload</button>
+  <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="AddHost()"><i class="fas fa-plus fa-fw"></i> Add Host</button>
+  <button type="button" class="btn btn-danger float-right mr-2" (click)="logout()"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</button>
+  <!--  <button mat-raised-button color="primary" class="btn btn-primary ml3" (click)="AddHost()">Add Host</button>-->
 </div>
 
 <kendo-grid [kendoGridBinding]="responseData"
@@ -25,6 +26,7 @@
       <div class="nowrap text-center">
         <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#serviceModal" (click)="selectedService = dataItem">
           <span>
+            <i class="fab fa-scribd fa-fw"></i>
             <span class="small mr-1">Services</span>
             <span *ngIf="!dataItem.status" class="badge badge-secondary ml-2">&nbsp;&nbsp;</span>
           <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-1">
@@ -46,13 +48,13 @@
       </div>
     </ng-template>
   </kendo-grid-column>
-<!--  <kendo-grid-column field="status" title="Status" [width]="100" class="text-center">-->
-<!--    <ng-template kendoGridCellTemplate let-dataItem>-->
-<!--      <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>-->
-<!--      <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>-->
-<!--      <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning button-circle">⇅</button>-->
-<!--    </ng-template>-->
-<!--  </kendo-grid-column>-->
+  <!--  <kendo-grid-column field="status" title="Status" [width]="100" class="text-center">-->
+  <!--    <ng-template kendoGridCellTemplate let-dataItem>-->
+  <!--      <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>-->
+  <!--      <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>-->
+  <!--      <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning button-circle">⇅</button>-->
+  <!--    </ng-template>-->
+  <!--  </kendo-grid-column>-->
   <kendo-grid-column field="linkTo" title="Linked" [width]="70">
     <ng-template kendoGridCellTemplate let-dataItem>
       <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#linkModal" (click)="this.selectedService = dataItem">
@@ -65,7 +67,7 @@
   <kendo-grid-column field="envName" title="Env" [width]="80"></kendo-grid-column>
   <kendo-grid-column field="vmName" title="VM" [width]="80"></kendo-grid-column>
   <kendo-grid-column field="note" title="Note" class="nowrap" [width]="150"></kendo-grid-column>
-  <kendo-grid-column field="linkTo" title="Options" [width]="150">
+  <kendo-grid-column *ngIf="isAdmin" field="linkTo" title="Options" [width]="150">
     <ng-template kendoGridCellTemplate let-dataItem>
       <div class="nowrap text-center">
         <button type="button" class="btn btn-primary btn-sm ml3" (click)="editData(dataItem)">
@@ -84,16 +86,17 @@
 
 <!-- Modal -->
 <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div *ngIf="selectedService" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="serviceModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h5>
+        <h5 class="modal-title mb-0 bold" id="serviceModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body p-1">
         <kendo-grid [kendoGridBinding]="selectedService.port"
+                    class="grid-sm chocolaty"
                     kendoGridSelectBy="_id"
                     [pageable]="false"
                     [sortable]="true"
@@ -103,18 +106,23 @@
                     [columnMenu]="{ filter: true }"
                     [trackBy]="trackBy">
           <kendo-grid-column field="name" title="ServiceName"></kendo-grid-column>
-          <kendo-grid-column field="port" title="Port"></kendo-grid-column>
-          <kendo-grid-column field="status" title="Status">
+          <kendo-grid-column field="port" [width]="200" title="Port"></kendo-grid-column>
+          <kendo-grid-column field="status" [width]="150" title="Status">
             <ng-template kendoGridCellTemplate let-dataItem>
-                <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>
-                <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>
+              <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-1">
+                <i class="fas fa-angle-double-up fa-fw"></i>
+              </span>
+              <span *ngIf="dataItem.status === EStatus.DOWN" class="badge badge-danger ml-1">
+                <i class="fas fa-angle-double-down fa-fw"></i>
+              </span>
+<!--              <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>-->
+<!--              <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>-->
             </ng-template>
           </kendo-grid-column>
         </kendo-grid>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
       </div>
     </div>
   </div>
@@ -125,13 +133,14 @@
   <div class="modal-dialog" role="document">
     <div *ngIf="selectedService" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="linkModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h5>
+        <h5 class="modal-title mb-0 bold" id="linkModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
+      <div class="modal-body p-1">
         <kendo-grid [kendoGridBinding]="selectedService.linkTo"
+                    class="grid-sm chocolaty"
                     [height]="410"
                     kendoGridSelectBy="_id"
                     [pageable]="false"
@@ -148,7 +157,6 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary btn-sm">Save changes</button>
       </div>
     </div>
   </div>

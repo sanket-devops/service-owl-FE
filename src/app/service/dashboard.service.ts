@@ -12,45 +12,54 @@ export class DashboardService {
   cloneObj: Idashboard = <any>undefined;
   editObj: Idashboard = <any>undefined;
 
-  constructor(private http: HttpClient, public ConstantService: ConstantService) {
+  constructor(private http: HttpClient, public constantService: ConstantService) {
   }
 
   delete_soft(_id: string) {
-    return this.http.put(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + 'delete_soft/' + _id), {
+    return this.http.put(this.constantService.get_api_url(this.constantService.API_ENDPOINT + 'delete_soft/' + _id), {
       _id: _id,
       active: 0
     });
   }
 
   delete(_id: string) {
-    return this.http.delete(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + '/' + _id));
+    return this.http.post(this.constantService.get_api_url(this.constantService.API_ENDPOINT + `/host-delete`), {data: this.constantService.getEncryptedData(_id)});
   }
 
   save(data: Partial<Idashboard>) {
-    return this.http.post(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT), data);
+    return this.http.post(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/host-save'), {
+      data: this.constantService.getEncryptedData(data)
+    });
   }
 
   update(data: Partial<Idashboard>) {
-    return this.http.put(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + '/' + data._id), data);
+    return this.http.put(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/update'),
+      {
+        data: this.constantService.getEncryptedData(data),
+        id: this.constantService.getEncryptedData(data._id),
+      }
+    );
   }
 
   get(_id: string, populate?: string) {
-    return this.http.get<Partial<Idashboard>>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + _id + `${populate ? '?populate=' + populate : ''}`));
+    return this.http.get<Partial<Idashboard>>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + _id + `${populate ? '?populate=' + populate : ''}`));
   }
 
   latestPull() {
-    return this.http.get<Partial<Idashboard>>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + '/latestPull'));
+    return this.http.get<Partial<Idashboard>>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/latestPull'));
   }
 
-  list(select?: string) {
+  async list(select?: string) {
+    let resp: any;
     if (select) {
-      return this.http.get<Partial<Idashboard>[]>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + `select=${select}`));
+      resp = await this.http.get<Partial<Idashboard>[]>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + `select=${select}`)).toPromise();
     } else {
-      return this.http.get<Partial<Idashboard>[]>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT));
+      resp = await this.http.get<Partial<Idashboard>[]>(this.constantService.get_api_url(this.constantService.API_ENDPOINT)).toPromise();
     }
+    return JSON.parse(this.constantService.getDecryptedData(resp.data));
   }
 
   query(query: any) {
-    return this.http.post<Partial<Idashboard>[]>(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + `query`), query);
+    return this.http.post<Partial<Idashboard>[]>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + `query`), query);
   }
 }
