@@ -18,8 +18,7 @@ declare let _: any;
 })
 export class DashboardComponent implements OnInit {
   responseData: Idashboard[] = [];
-  serviceData: any[] = [];
-  linkedData: any[] = [];
+  selectedService: Idashboard = <any>undefined;
   EStatus = EStatus;
   isChecked = true;
   loading: boolean = false;
@@ -27,8 +26,8 @@ export class DashboardComponent implements OnInit {
   audio = new Audio('../assets/sound/service_down.mp3');
   storageItemName = 'oldDashboard';
 
-  constructor(public constantservice: ConstantService,
-              public dashboardservice: DashboardService,
+  constructor(public constantService: ConstantService,
+              public dashboardService: DashboardService,
               public router: Router) {
   }
 
@@ -45,43 +44,37 @@ export class DashboardComponent implements OnInit {
   }
 
   async loadData() {
-    let res: Idashboard[] = await ConstantService.get_promise(this.dashboardservice.list());
+    let res: Idashboard[] = await ConstantService.get_promise(this.dashboardService.list());
     for (let data of res) {
       if (data.status === EStatus.DOWN || data.status === EStatus.S_DOWN) {
-        console.log('DOWN');
         await this.compareStatus();
         // this.audio.play();
       }
     }
     this.responseData = res;
     this.responseData = _.orderBy(this.responseData, ['status'], ['asc'])
-    // console.log(this.responseData);
-  }
-
-  modelOpen(value: any) {
-    this.serviceData = value;
-  }
-
-  linkModel(value: any) {
-    this.linkedData = value;
   }
 
   cloneData(item: Idashboard) {
     let tempItem: Idashboard = JSON.parse(JSON.stringify(item));
     delete tempItem._id;
-    this.dashboardservice.cloneObj = tempItem;
-    this.dashboardservice.editObj = <any>undefined;
+    this.dashboardService.cloneObj = tempItem;
+    this.dashboardService.editObj = <any>undefined;
     this.router.navigate(['addhost']);
   }
 
   editData(item: Idashboard) {
-    this.dashboardservice.cloneObj = <any>undefined;
-    this.dashboardservice.editObj = item;
+    this.dashboardService.cloneObj = <any>undefined;
+    this.dashboardService.editObj = item;
     this.router.navigate(['addhost']);
   }
 
-  deleteData(item: Idashboard) {
-    console.log(item);
+  async deleteData(item: Idashboard) {
+    if (window.confirm(`Do you want to delete : ${item.hostName + ' : ' + item.ipAddress} ?`)) {
+      let resp = await this.dashboardService.delete(<any>item._id).toPromise();
+      toastr.success('Item deleted successfully : ' + item.hostName);
+      await this.loadData();
+    }
   }
 
   public trackBy(index: number, item: GridItem): any {
@@ -89,8 +82,8 @@ export class DashboardComponent implements OnInit {
   }
 
   AddHost() {
-    this.dashboardservice.cloneObj = <any>undefined;
-    this.dashboardservice.editObj = <any>undefined;
+    this.dashboardService.cloneObj = <any>undefined;
+    this.dashboardService.editObj = <any>undefined;
     this.router.navigate(['addhost']);
   }
 
@@ -102,7 +95,7 @@ export class DashboardComponent implements OnInit {
   }
 
   async compareStatus() {
-    let res: Idashboard[] = await ConstantService.get_promise(this.dashboardservice.list());
+    let res: Idashboard[] = await ConstantService.get_promise(this.dashboardService.list());
     let oldDashboard = localStorage.getItem(this.storageItemName);
     if (oldDashboard) {
       let oldStorageObj: Idashboard[] = JSON.parse(oldDashboard);
@@ -113,7 +106,6 @@ export class DashboardComponent implements OnInit {
         let isAnyChangeFound = oldItem ? this.comparePortsArrAndFindChange(oldItem.port, item.port) : false;
         if (isAnyChangeFound) {
           changeFound = true;
-          console.log('Change found in ', item.hostName);
           break;
         }
       }
@@ -123,19 +115,13 @@ export class DashboardComponent implements OnInit {
     } else {
       localStorage.setItem(this.storageItemName, JSON.stringify(this.getDashboardToStore(res)));
     }
-    console.log(res);
   }
 
   comparePortsArrAndFindChange(oldPorts: IPort[], newPorts: IPort[]) {
     let oldPortsMap = this.getRowsMap(oldPorts, 'port');
     for (let port of newPorts) {
       let oldPort: IPort = oldPortsMap[port.port];
-      if (oldPort) {
-        if (oldPort.status !== port.status && (port.status === EStatus.DOWN || port.status === EStatus.S_DOWN)) {
-          console.log('Port status changed : ', oldPort.status);
-          return true;
-        }
-      }
+      if (oldPort && oldPort.status !== port.status && (port.status === EStatus.DOWN || port.status === EStatus.S_DOWN)) return true;
     }
     return false;
   }

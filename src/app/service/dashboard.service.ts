@@ -23,7 +23,7 @@ export class DashboardService {
   }
 
   delete(_id: string) {
-    return this.http.delete(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + _id));
+    return this.http.delete(this.ConstantService.get_api_url(this.ConstantService.API_ENDPOINT + '/' + _id));
   }
 
   save(data: Partial<Idashboard>) {
