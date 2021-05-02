@@ -137,8 +137,8 @@
                     [columnMenu]="{ filter: true }"
                     [trackBy]="trackBy">
           <kendo-grid-column field="hostName" title="HostName"></kendo-grid-column>
-          <kendo-grid-column field="ipAddress" title="Address"></kendo-grid-column>
-          <kendo-grid-column field="port" title="Port"></kendo-grid-column>
+          <kendo-grid-column field="ipAddress" [width]="135" title="Address"></kendo-grid-column>
+          <kendo-grid-column field="port" [width]="75" title="Port"></kendo-grid-column>
         </kendo-grid>
       </div>
       <div class="modal-footer">
