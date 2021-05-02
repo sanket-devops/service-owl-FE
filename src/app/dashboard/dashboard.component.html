@@ -40,21 +40,9 @@
           </span>
           </span>
         </button>
-        <!--<button *ngIf="!dataItem.status" class="btn btn-secondary btn-sm">⇈</button>
-
-        <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success btn-sm">⇈</button>
-        <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger btn-sm">⇊</button>
-        <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning btn-sm">⇅</button>-->
       </div>
     </ng-template>
   </kendo-grid-column>
-  <!--  <kendo-grid-column field="status" title="Status" [width]="100" class="text-center">-->
-  <!--    <ng-template kendoGridCellTemplate let-dataItem>-->
-  <!--      <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>-->
-  <!--      <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>-->
-  <!--      <button *ngIf="dataItem.status === EStatus.S_DOWN" class="btn btn-warning button-circle">⇅</button>-->
-  <!--    </ng-template>-->
-  <!--  </kendo-grid-column>-->
   <kendo-grid-column field="linkTo" title="Linked" [width]="70">
     <ng-template kendoGridCellTemplate let-dataItem>
       <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#linkModal" (click)="this.selectedService = dataItem">
@@ -105,9 +93,9 @@
                     [loading]="loading"
                     [columnMenu]="{ filter: true }"
                     [trackBy]="trackBy">
-          <kendo-grid-column field="name" title="ServiceName"></kendo-grid-column>
-          <kendo-grid-column field="port" [width]="200" title="Port"></kendo-grid-column>
-          <kendo-grid-column field="status" [width]="150" title="Status">
+          <kendo-grid-column field="name" [width]="180" title="ServiceName"></kendo-grid-column>
+          <kendo-grid-column field="port" [width]="75" title="Port"></kendo-grid-column>
+          <kendo-grid-column field="status" [width]="75" title="Status">
             <ng-template kendoGridCellTemplate let-dataItem>
               <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-1">
                 <i class="fas fa-angle-double-up fa-fw"></i>
@@ -115,8 +103,6 @@
               <span *ngIf="dataItem.status === EStatus.DOWN" class="badge badge-danger ml-1">
                 <i class="fas fa-angle-double-down fa-fw"></i>
               </span>
-<!--              <button *ngIf="dataItem.status === EStatus.UP" class="btn btn-success button-circle">⇈</button>-->
-<!--              <button *ngIf="dataItem.status === EStatus.DOWN" class="btn btn-danger button-circle">⇊</button>-->
             </ng-template>
           </kendo-grid-column>
         </kendo-grid>
