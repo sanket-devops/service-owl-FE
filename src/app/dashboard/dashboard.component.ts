@@ -63,7 +63,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async loadData() {
-    let res: Idashboard[] = <any>await this.dashboardService.list();
+    this.responseData = [];
+    let res:Idashboard[] = [];
+    try {
+      res = <any>await this.dashboardService.list();
+    } catch (e) {
+      await this.audio.play();
+      console.log(e);
+    }
     for (let data of res) {
       if (data.status === EStatus.DOWN || data.status === EStatus.S_DOWN) {
         await this.compareStatus(res);
