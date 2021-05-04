@@ -68,7 +68,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     try {
       res = <any>await this.dashboardService.list();
     } catch (e) {
-      this.audio.play();
+      <any> await this.audio.play();
       console.log(e);
     }
     for (let data of res) {
