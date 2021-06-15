@@ -56,7 +56,7 @@ export class AddhostFormComponent implements OnInit {
   }
 
   removePortTableRow(index: any) {
-    this.data.port.splice(this.data.port.indexOf(index), 1);
+    this.data.port.splice(index, 1);
   }
 
   AddPortTableRow() {
@@ -68,7 +68,7 @@ export class AddhostFormComponent implements OnInit {
   }
 
   RemoveLinktoTableRow(index: any) {
-    this.data.linkTo.splice(this.data.linkTo.indexOf(index), 1);
+    this.data.linkTo.splice(index, 1);
   }
 
   back() {
