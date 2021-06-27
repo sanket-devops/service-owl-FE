@@ -45,9 +45,9 @@ export class DashboardService {
     return this.http.get<Partial<Idashboard>>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + _id + `${populate ? '?populate=' + populate : ''}`));
   }
 
-  latestPull() {
-    return this.http.get<Partial<Idashboard>>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/latestPull'));
-  }
+  // latestPull() {
+  //   return this.http.get<Partial<Idashboard>>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/latestPull'));
+  // }
 
   async list(select?: string) {
     let resp: any;
