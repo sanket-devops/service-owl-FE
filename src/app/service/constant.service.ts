@@ -15,7 +15,7 @@ export class ConstantService {
 
   vu = [
     {u: 'admin', p: '123@Moon', t: 'admin'},
-    {u: 'owl', p: '1234', t: 'user'},
+    {u: 'owl', p: 'Owl@1234', t: 'user'},
   ];
 
 
