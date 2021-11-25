@@ -20,6 +20,8 @@ import {AddhostFormComponent} from './addhost-form/addhost-form.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {MatInputModule} from '@angular/material/input';
 import {LoginComponent} from './login/login.component';
+import {CheckBoxModule} from '@progress/kendo-angular-treeview';
+import {SwitchModule} from '@progress/kendo-angular-inputs';
 
 // import * as http from 'http';
 
@@ -31,23 +33,25 @@ import {LoginComponent} from './login/login.component';
     AddhostFormComponent,
     LoginComponent
   ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    GuiGridModule,
-    HttpClientModule,
-    GridModule,
-    BrowserAnimationsModule,
-    MatToolbarModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatAutocompleteModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatSlideToggleModule,
-    FormsModule,
-    MatInputModule,
-  ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        GuiGridModule,
+        HttpClientModule,
+        GridModule,
+        BrowserAnimationsModule,
+        MatToolbarModule,
+        MatIconModule,
+        MatFormFieldModule,
+        MatAutocompleteModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatSlideToggleModule,
+        FormsModule,
+        MatInputModule,
+        CheckBoxModule,
+        SwitchModule,
+    ],
   providers: [ConstantService, DashboardService],
   bootstrap: [AppComponent]
 })

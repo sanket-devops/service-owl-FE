@@ -10,7 +10,8 @@ export interface Idashboard extends ICore {
   envName: string,
   vmName: string,
   status?: string,
-  note: string
+  note: string,
+  hostCheck: boolean
 }
 
 export interface IPort {

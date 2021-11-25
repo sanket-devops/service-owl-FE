@@ -19,6 +19,7 @@
             [trackBy]="trackBy"
             class="grid-sm chocolaty kendo-grid-clickable kendo-grid-stripped"
             style="overflow: hidden; height: calc(100vh - 5px);">
+  <kendo-grid-checkbox-column title="" [width]="30" aria-checked="true"></kendo-grid-checkbox-column>
   <kendo-grid-column field="hostName" title="HostName" [width]="210"></kendo-grid-column>
   <kendo-grid-column field="ipAddress" title="Address" [width]="135"></kendo-grid-column>
   <kendo-grid-column field="status" title="Service" [width]="130" class="text-center">
@@ -40,6 +41,13 @@
           </span>
           </span>
         </button>
+      </div>
+    </ng-template>
+  </kendo-grid-column>
+  <kendo-grid-column field="hostCheck" title="Check" [width]="60">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <div class="switch">
+        <kendo-switch data-toggle="modal" [(ngModel)]="dataItem.hostCheck" (ngModelChange)="switchChange($event, dataItem)"></kendo-switch>
       </div>
     </ng-template>
   </kendo-grid-column>

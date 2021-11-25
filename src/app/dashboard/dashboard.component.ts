@@ -6,6 +6,7 @@ import {GridItem} from '@progress/kendo-angular-grid';
 import {EStatus} from '../interface/enum/EStatus';
 import {State} from '@progress/kendo-data-query';
 import {Router} from '@angular/router';
+import {ngModuleJitUrl} from '@angular/compiler';
 
 declare let toastr: any;
 declare let $: any;
@@ -166,6 +167,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       });
     }
     return arr;
+  }
+
+  async switchChange(newValue: boolean, dashboard: Idashboard) {
+    await ConstantService.get_promise(this.dashboardService.update({
+      _id: <any>dashboard._id,
+      hostCheck: newValue,
+    }));
   }
 
   logout() {
