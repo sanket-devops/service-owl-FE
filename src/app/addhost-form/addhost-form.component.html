@@ -65,6 +65,9 @@
         <tr>
           <th>Name</th>
           <th>Port</th>
+          <th>Http Check</th>
+          <th>Path</th>
+          <th>Req Type</th>
           <th>Action</th>
         </tr>
         </thead>
@@ -83,6 +86,23 @@
               <input matInput placeholder="Port" type="number" [(ngModel)]="data.port" name="port_{{index}}">
             </mat-form-field>
           </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Http Check</mat-label>
+              <input matInput placeholder="Http Check" type="boolean" [(ngModel)]="data.http" name="port_{{index}}">
+            </mat-form-field>
+            <!-- <div class="dropdown">
+              <button class="btn btn-secondary ml3 mt3 dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <button class="dropdown-item" type="button">True</button>
+                <button class="dropdown-item" type="button">False</button>
+              </div>
+            </div> -->
+          </td>
+          <td></td>
+          <td></td>
           <td>
             <button class="btn btn-success ml3 mt3" (click)="AddPortTableRow()">+</button>
             <button class="btn btn-danger ml3 mt3" (click)="removePortTableRow(index)">--</button>
