@@ -47,7 +47,10 @@ export class AddhostFormComponent implements OnInit {
       port: [<any>{
         name: 'ssh',
         port: 22,
-        http: false
+        http: false,
+        path: '/',
+        method: 'GET',
+        statuscode: 200
       }],
       linkTo: [<any>{
         hostName: '',

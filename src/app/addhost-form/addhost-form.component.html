@@ -68,6 +68,7 @@
           <th>Http Check</th>
           <th>Path</th>
           <th>Req Type</th>
+          <th>Status Code</th>
           <th>Action</th>
         </tr>
         </thead>
@@ -91,18 +92,25 @@
               <mat-label>Http Check</mat-label>
               <input matInput placeholder="Http Check" type="boolean" [(ngModel)]="data.http" name="port_{{index}}">
             </mat-form-field>
-            <!-- <div class="dropdown">
-              <button class="btn btn-secondary ml3 mt3 dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Select
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <button class="dropdown-item" type="button">True</button>
-                <button class="dropdown-item" type="button">False</button>
-              </div>
-            </div> -->
           </td>
-          <td></td>
-          <td></td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Path</mat-label>
+              <input matInput placeholder="Path" type="text" [(ngModel)]="data.path" name="port_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Req Type</mat-label>
+              <input matInput placeholder="Req Type" type="text" [(ngModel)]="data.method" name="port_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Status Code</mat-label>
+              <input matInput placeholder="Status Code" type="number" [(ngModel)]="data.statuscode" name="port_{{index}}">
+            </mat-form-field>
+          </td>
           <td>
             <button class="btn btn-success ml3 mt3" (click)="AddPortTableRow()">+</button>
             <button class="btn btn-danger ml3 mt3" (click)="removePortTableRow(index)">--</button>

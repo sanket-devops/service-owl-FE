@@ -4,6 +4,7 @@
 /dist
 /tmp
 /out-tsc
+/.angular
 # Only exists if Bazel was run
 /bazel-out
 
@@ -22,6 +23,7 @@ speed-measure-plugin*.json
 *.launch
 .settings/
 *.sublime-workspace
+
 
 # IDE - VSCode
 .vscode/*
