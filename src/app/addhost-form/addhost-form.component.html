@@ -49,7 +49,14 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-6">
+        <mat-form-field appearance="legacy">
+          <mat-label>HostCheck</mat-label>
+          <input matInput type="boolean" placeholder="HostCheck" formControlName="hostCheck">
+        </mat-form-field>
+      </div>
+
+      <div class="col-md-6">
         <mat-form-field appearance="legacy">
           <mat-label>Note</mat-label>
           <textarea matInput placeholder="Note" formControlName="note"></textarea>
@@ -60,7 +67,7 @@
   <div class="row">
     <div class="col-md-12">
       <h3>Port Table</h3>
-      <table class="table table-bordered">
+      <table class="table table-bordered table-hover table-sm table-striped">
         <thead>
         <tr>
           <th>Name</th>
@@ -124,7 +131,7 @@
   <div class="row">
     <div class="col-md-12">
       <h3>Linked Table</h3>
-      <table class="table table-bordered">
+      <table class="table table-bordered table-hover table-sm table-striped">
         <thead>
         <tr>
           <th>HostName</th>
