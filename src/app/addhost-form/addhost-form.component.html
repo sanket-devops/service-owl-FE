@@ -2,16 +2,16 @@
   <button type="button" class="btn btn-primary ml3" (click)="back()">Dashboard</button>
 </div>
 
-<div class="container">
+<div class="container-fluid">
   <form [formGroup]="form">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>HostName</mat-label>
           <input matInput placeholder="HostName" formControlName="hostName">
         </mat-form-field>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>IPAddress</mat-label>
           <input matInput placeholder="IPAddress" formControlName="ipAddress">
@@ -19,14 +19,14 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>GroupName</mat-label>
           <input matInput placeholder="groupName" formControlName="groupName">
         </mat-form-field>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>ClusterName</mat-label>
           <input matInput placeholder="ClusterName" formControlName="clusterName">
@@ -34,14 +34,14 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>EnvName</mat-label>
           <input matInput placeholder="EnvName" formControlName="envName">
         </mat-form-field>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>VmName</mat-label>
           <input matInput placeholder="VmName" formControlName="vmName">
@@ -49,14 +49,14 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>HostCheck</mat-label>
           <input matInput type="boolean" placeholder="HostCheck" formControlName="hostCheck">
         </mat-form-field>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>Note</mat-label>
           <textarea matInput placeholder="Note" formControlName="note"></textarea>
@@ -67,7 +67,7 @@
   <div class="row">
     <div class="col-md-12">
       <h3>Port Table</h3>
-      <table class="table table-bordered table-hover table-sm table-striped">
+      <table class="table table-hover table-striped table-responsive table-sm">
         <thead>
         <tr>
           <th>Name</th>
@@ -131,7 +131,7 @@
   <div class="row">
     <div class="col-md-12">
       <h3>Linked Table</h3>
-      <table class="table table-bordered table-hover table-sm table-striped">
+      <table class="table table-hover table-striped table-responsive table-sm">
         <thead>
         <tr>
           <th>HostName</th>
