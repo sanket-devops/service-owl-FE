@@ -1,21 +1,33 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Idashboard, IPort} from '../interface/Idashboard';
-import {ConstantService} from '../service/constant.service';
-import {DashboardService} from '../service/dashboard.service';
-import {GridItem} from '@progress/kendo-angular-grid';
-import {EStatus} from '../interface/enum/EStatus';
-import {State} from '@progress/kendo-data-query';
-import {Router} from '@angular/router';
-import {ngModuleJitUrl} from '@angular/compiler';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Idashboard, IPort } from '../interface/Idashboard';
+import { ConstantService } from '../service/constant.service';
+import { DashboardService } from '../service/dashboard.service';
+import { GridItem } from '@progress/kendo-angular-grid';
+import { EStatus } from '../interface/enum/EStatus';
+import { State } from '@progress/kendo-data-query';
+import { Router } from '@angular/router';
+import { ngModuleJitUrl } from '@angular/compiler';
 
 declare let toastr: any;
 declare let $: any;
 declare let _: any;
+let timer: number;
+
+timer = 60;
+let interval = setInterval(function () {
+  timer--;
+  $('.timer').text(timer);
+  if (timer === 0) {
+    // clearInterval(interval);
+    timer = 60;
+    interval
+  }
+}, 1000);
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.scss']
+  styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   responseData: Idashboard[] = [];
@@ -23,26 +35,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   EStatus = EStatus;
   isChecked = true;
   loading: boolean = false;
-  public state: State = {sort: [{dir: 'desc', field: 'hostName'}]};
+  public state: State = { sort: [{ dir: 'desc', field: 'hostName' }] };
   audio = new Audio('../assets/sound/service_down.mp3');
   storageItemName = 'oldDashboard';
   intervalId = <any>undefined;
-  login = {u: '', p: '', t: ''};
+  login = { u: '', p: '', t: '' };
 
-  constructor(public constantService: ConstantService,
-              public dashboardService: DashboardService,
-              public router: Router) {
-  }
+  constructor(
+    public constantService: ConstantService,
+    public dashboardService: DashboardService,
+    public router: Router
+  ) {}
 
   async ngOnInit() {
     try {
-      this.login = JSON.parse(this.constantService.getDecryptedData(localStorage.getItem('token')));
+      this.login = JSON.parse(
+        this.constantService.getDecryptedData(localStorage.getItem('token'))
+      );
       let isValidUser = this.constantService.isValidUser(this.login);
       if (!isValidUser) return this.logout();
     } catch (e) {
       return this.logout();
     }
-
 
     // this.audio.play();
     await this.loadData();
@@ -65,11 +79,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async loadData() {
     this.responseData = [];
-    let res:Idashboard[] = [];
+    let res: Idashboard[] = [];
     try {
       res = <any>await this.dashboardService.list();
     } catch (e) {
-      <any> await this.audio.play();
+      <any>await this.audio.play();
       console.log(e);
     }
     for (let data of res) {
@@ -79,7 +93,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
     this.responseData = res;
-    this.responseData = _.orderBy(this.responseData, ['status'], ['asc'])
+    this.responseData = _.orderBy(this.responseData, ['status'], ['asc']);
   }
 
   cloneData(item: Idashboard) {
@@ -97,7 +111,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async deleteData(item: Idashboard) {
-    if (window.confirm(`Do you want to delete : ${item.hostName + ' : ' + item.ipAddress} ?`)) {
+    if (
+      window.confirm(
+        `Do you want to delete : ${item.hostName + ' : ' + item.ipAddress} ?`
+      )
+    ) {
       let resp = await this.dashboardService.delete(<any>item._id).toPromise();
       toastr.success('Item deleted successfully : ' + item.hostName);
       await this.loadData();
@@ -114,10 +132,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['addhost']);
   }
 
+
   async latestPull(event?: any) {
     // let res = await ConstantService.get_promise(this.dashboardservice.latestPull());
     this.loading = true;
     await this.loadData();
+    // await this.reloadTimer()
     this.loading = false;
   }
 
@@ -129,7 +149,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
       let changeFound = false;
       for (let item of res) {
         let oldItem: Idashboard = oldStorageMap[<any>item._id];
-        let isAnyChangeFound = oldItem ? this.comparePortsArrAndFindChange(oldItem.port, item.port) : false;
+        let isAnyChangeFound = oldItem
+          ? this.comparePortsArrAndFindChange(oldItem.port, item.port)
+          : false;
         if (isAnyChangeFound) {
           changeFound = true;
           break;
@@ -137,9 +159,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
       if (changeFound) await this.audio.play();
       else console.log('No change found');
-      localStorage.setItem(this.storageItemName, JSON.stringify(this.getDashboardToStore(res)));
+      localStorage.setItem(
+        this.storageItemName,
+        JSON.stringify(this.getDashboardToStore(res))
+      );
     } else {
-      localStorage.setItem(this.storageItemName, JSON.stringify(this.getDashboardToStore(res)));
+      localStorage.setItem(
+        this.storageItemName,
+        JSON.stringify(this.getDashboardToStore(res))
+      );
     }
   }
 
@@ -147,7 +175,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let oldPortsMap = this.getRowsMap(oldPorts, 'port');
     for (let port of newPorts) {
       let oldPort: IPort = oldPortsMap[port.port];
-      if (oldPort && oldPort.status !== port.status && (port.status === EStatus.DOWN || port.status === EStatus.S_DOWN)) return true;
+      if (
+        oldPort &&
+        oldPort.status !== port.status &&
+        (port.status === EStatus.DOWN || port.status === EStatus.S_DOWN)
+      )
+        return true;
     }
     return false;
   }
@@ -161,19 +194,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getDashboardToStore(rows: Idashboard[]): Idashboard[] {
     let arr: Idashboard[] = [];
     for (let row of rows) {
-      arr.push(<any><Partial<Idashboard>>{
+      arr.push(<any>(<Partial<Idashboard>>{
         _id: row._id,
         port: row.port,
-      });
+      }));
     }
     return arr;
   }
 
   async switchChange(newValue: boolean, dashboard: Idashboard) {
-    await ConstantService.get_promise(this.dashboardService.update({
-      _id: <any>dashboard._id,
-      hostCheck: newValue,
-    }));
+    await ConstantService.get_promise(
+      this.dashboardService.update({
+        _id: <any>dashboard._id,
+        hostCheck: newValue,
+      })
+    );
   }
 
   logout() {
@@ -184,5 +219,4 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     clearInterval(this.intervalId);
   }
-
 }
