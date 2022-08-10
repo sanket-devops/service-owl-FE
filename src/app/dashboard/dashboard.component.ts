@@ -47,12 +47,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // this.audio.play();
     await this.loadData();
     // await this.compareStatus();
-    // this.intervalId = setInterval(() => {
-    //   this.loading = true;
-    //   this.loadData();
-    //   this.loading = false;
-    //   toastr.success('Reload Data Successfully!');
-    // }, 60000);
+    this.intervalId = setInterval(() => {
+      this.loading = true;
+      this.loadData();
+      this.loading = false;
+      toastr.success('Reload Data Successfully!');
+    }, 60000);
   }
 
   get isAdmin() {
