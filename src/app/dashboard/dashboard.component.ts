@@ -20,7 +20,7 @@ let interval = setInterval(function () {
   if (timer === 0) {
     // clearInterval(interval);
     timer = 60;
-    interval
+    // interval
   }
 }, 1000);
 
@@ -137,7 +137,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // let res = await ConstantService.get_promise(this.dashboardservice.latestPull());
     this.loading = true;
     await this.loadData();
-    // await this.reloadTimer()
+    interval
     this.loading = false;
   }
 
