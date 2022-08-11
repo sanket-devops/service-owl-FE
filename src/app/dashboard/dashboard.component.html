@@ -93,7 +93,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div *ngIf="selectedService" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title mb-0 bold" id="serviceModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h5>
+        <h3 class="modal-title mb-0 bold" id="serviceModalLabel">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -110,8 +110,8 @@
                     [columnMenu]="{ filter: true }"
                     [trackBy]="trackBy">
           <kendo-grid-column field="name" [width]="180" title="ServiceName"></kendo-grid-column>
-          <kendo-grid-column field="port" [width]="75" title="Port"></kendo-grid-column>
-          <kendo-grid-column field="status" [width]="75" title="Status">
+          <kendo-grid-column field="port" [width]="70" title="Port"></kendo-grid-column>
+          <kendo-grid-column field="status" [width]="60" title="Status">
             <ng-template kendoGridCellTemplate let-dataItem>
               <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-1">
                 <i class="fas fa-angle-double-up fa-fw"></i>
@@ -121,6 +121,10 @@
               </span>
             </ng-template>
           </kendo-grid-column>
+          <kendo-grid-column field="http" [width]="60" title="Http"></kendo-grid-column>
+          <kendo-grid-column field="path" [width]="35" title="Path"></kendo-grid-column>
+          <kendo-grid-column field="method" [width]="60" title="Method"></kendo-grid-column>
+          <kendo-grid-column field="statuscode" [width]="60" title="Status Code"></kendo-grid-column>
         </kendo-grid>
       </div>
       <div class="modal-footer">
