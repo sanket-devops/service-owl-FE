@@ -11,18 +11,6 @@ import { ngModuleJitUrl } from '@angular/compiler';
 declare let toastr: any;
 declare let $: any;
 declare let _: any;
-let timer: number;
-
-timer = 60;
-let interval = setInterval(function () {
-  timer--;
-  $('.timer').text(timer);
-  if (timer === 0) {
-    // clearInterval(interval);
-    timer = 60;
-    // interval
-  }
-}, 1000);
 
 @Component({
   selector: 'app-dashboard',
@@ -39,6 +27,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   audio = new Audio('../assets/sound/service_down.mp3');
   storageItemName = 'oldDashboard';
   intervalId = <any>undefined;
+  reloadInterval = <any>undefined;
+  intervalTime: number = 60;
+  timer: number = this.intervalTime;
   login = { u: '', p: '', t: '' };
 
   constructor(
@@ -62,11 +53,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     await this.loadData();
     // await this.compareStatus();
     this.intervalId = setInterval(() => {
-      this.loading = true;
-      this.loadData();
-      this.loading = false;
-      toastr.success('Reload Data Successfully!');
-    }, 60000);
+      if (this.isChecked) {
+        this.timer--;
+        $('.timer').text(this.timer);
+        if (this.timer === 0) {
+          this.loading = true;
+          this.loadData();
+          this.loading = false;
+          toastr.success('Reload Data Successfully!');
+          this.timer = this.intervalTime;
+        }
+      } else {
+        toastr.warning('Auto Reload Data Off!');
+      }
+    }, 1000);
   }
 
   get isAdmin() {
@@ -132,12 +132,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['addhost']);
   }
 
+  async autoReload(event?: any) {
+    this.isChecked != this.isChecked
+  }
 
   async latestPull(event?: any) {
     // let res = await ConstantService.get_promise(this.dashboardservice.latestPull());
     this.loading = true;
     await this.loadData();
-    interval
     this.loading = false;
   }
 
