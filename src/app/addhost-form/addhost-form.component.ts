@@ -46,7 +46,11 @@ export class AddhostFormComponent implements OnInit {
     return <any><Partial<Idashboard>>{
       port: [<any>{
         name: 'ssh',
-        port: 22
+        port: 22,
+        http: false,
+        path: '/',
+        method: 'GET',
+        statuscode: 200
       }],
       linkTo: [<any>{
         hostName: '',
