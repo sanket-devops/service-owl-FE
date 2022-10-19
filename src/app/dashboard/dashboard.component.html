@@ -28,7 +28,7 @@
       <input [kendoGridSelectionCheckbox]="idx" />
     </ng-template>
   </kendo-grid-checkbox-column>
-  <kendo-grid-column field="hostName" title="HostName" [width]="210"></kendo-grid-column>
+  <kendo-grid-column field="hostName" title="Host Name" [width]="230"></kendo-grid-column>
   <kendo-grid-column field="ipAddress" title="Address" [width]="135"></kendo-grid-column>
   <kendo-grid-column field="status" title="Service" [width]="130" class="text-center">
     <ng-template kendoGridCellTemplate let-dataItem>
@@ -66,8 +66,8 @@
       </button>
     </ng-template>
   </kendo-grid-column>
-  <kendo-grid-column field="groupName" title="GroupName" [width]="130"></kendo-grid-column>
-  <kendo-grid-column field="clusterName" title="ClusterName" [width]="170"></kendo-grid-column>
+  <kendo-grid-column field="groupName" title="Group Name" [width]="180"></kendo-grid-column>
+  <kendo-grid-column field="clusterName" title="Cluster Name" [width]="220"></kendo-grid-column>
   <kendo-grid-column field="envName" title="Env" [width]="80"></kendo-grid-column>
   <kendo-grid-column field="vmName" title="VM" [width]="80"></kendo-grid-column>
   <kendo-grid-column field="note" title="Note" class="nowrap" [width]="150"></kendo-grid-column>
@@ -156,7 +156,7 @@
                     [loading]="loading"
                     [columnMenu]="{ filter: true }"
                     [trackBy]="trackBy">
-          <kendo-grid-column field="hostName" title="HostName"></kendo-grid-column>
+          <kendo-grid-column field="hostName" title="Host Name"></kendo-grid-column>
           <kendo-grid-column field="ipAddress" [width]="135" title="Address"></kendo-grid-column>
           <kendo-grid-column field="port" [width]="75" title="Port"></kendo-grid-column>
         </kendo-grid>
