@@ -3,6 +3,8 @@ import {ICore} from './Icore';
 export interface Idashboard extends ICore {
   hostName: string,
   ipAddress: string,
+  userName: string,
+  userPass: string,
   port: IPort[],
   linkTo: ILinked[],
   groupName: string,
@@ -19,7 +21,7 @@ export interface IPort {
   port: number;
   status: string;
   http: boolean;
-  path: string; 
+  path: string;
   method: string;
   statuscode: number;
 

@@ -14,7 +14,7 @@ export class ConstantService {
   k = '\x6A\x40\x6D\x65\x73\x62\x6F\x6E\x64';
 
   vu = [
-    {u: 'admin', p: '123@Moon', t: 'admin'},
+    {u: 'admin', p: 'Nimda$2022%letaP', t: 'admin'},
     {u: 'owl', p: 'Owl@1234', t: 'user'},
   ];
 

@@ -23,6 +23,8 @@ export class AddhostFormComponent implements OnInit {
       _id: [''],
       hostName: [''],
       ipAddress: [''],
+      userName: [''],
+      userPass: [''],
       groupName: [''],
       clusterName: [''],
       envName: [''],
