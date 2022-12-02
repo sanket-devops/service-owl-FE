@@ -6,6 +6,7 @@ export interface Idashboard extends ICore {
   userName: string,
   userPass: string,
   port: IPort[],
+  hostMetrics: IhostMetrics[],
   linkTo: ILinked[],
   groupName: string,
   clusterName: string,
@@ -32,4 +33,16 @@ export interface ILinked {
   hostName: string;
   ipAddress: string;
   port: number;
+}
+
+
+export interface IhostMetrics {
+  DiskTotal: string;
+  DiskFree: string;
+  MemTotal: string;
+  MemAvailable: string;
+  CpuUsage: string;
+  CPU: string;
+  uptime: string;
+  createdAt: Date;
 }

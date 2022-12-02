@@ -59,6 +59,14 @@
       </div>
     </ng-template>
   </kendo-grid-column>
+  <kendo-grid-column field="hostMetrics" title="Host Status" [width]="130">
+    <ng-template kendoGridCellTemplate let-dataItem>
+      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#hostStatus" (click)="this.selectedService = dataItem">
+        <!-- <i class="fas fa-link fa-fw"></i> -->
+        Metrics
+      </button>
+    </ng-template>
+  </kendo-grid-column>
   <kendo-grid-column field="linkTo" title="Linked" [width]="70">
     <ng-template kendoGridCellTemplate let-dataItem>
       <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#linkModal" (click)="this.selectedService = dataItem">
@@ -139,7 +147,8 @@
   <div class="modal-dialog" role="document">
     <div *ngIf="selectedService" class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title mb-0 bold" id="linkModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h5>
+        <h1 class="modal-title mb-0 bold" id="linkModalLabel">Linked Hosts</h1>
+        <h3 class="modal-title mb-0 bold" id="linkModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h3>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -168,3 +177,43 @@
   </div>
 </div>
 
+<!-- Host Status Modal -->
+<div class="modal fade bd-example-modal-lg" id="hostStatus" tabindex="-1" role="dialog" aria-labelledby="hostStatusModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div *ngIf="selectedService" class="modal-content">
+      <div class="modal-header text-center">
+        <h2 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">Host Status<br> </h2>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="text-center">
+        <h3 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h3>
+      </div>
+      <div class="modal-body p-1">
+        <kendo-grid [kendoGridBinding]="selectedService.hostMetrics"
+                    class="grid-sm chocolaty"
+                    kendoGridSelectBy="_id"
+                    [pageable]="false"
+                    [sortable]="true"
+                    [reorderable]="true"
+                    [resizable]="true"
+                    [loading]="loading"
+                    [columnMenu]="{ filter: true }"
+                    [trackBy]="trackBy">
+          <kendo-grid-column field="DiskTotal" [width]="50" title="Disk Total"></kendo-grid-column>
+          <kendo-grid-column field="DiskFree" [width]="50" title="Disk Free"></kendo-grid-column>
+          <kendo-grid-column field="MemTotal" [width]="50" title="Mem Total"></kendo-grid-column>
+          <kendo-grid-column field="MemAvailable" [width]="50" title="Mem Available"></kendo-grid-column>
+          <kendo-grid-column field="CpuUsage" [width]="50" title="Cpu Usage"></kendo-grid-column>
+          <kendo-grid-column field="CPU" [width]="50" title="CPU"></kendo-grid-column>
+          <kendo-grid-column field="uptime" [width]="100" title="Up Time"></kendo-grid-column>
+          <kendo-grid-column field="createdAt" [width]="150" title="Time Stemp"></kendo-grid-column>
+        </kendo-grid>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
