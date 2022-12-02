@@ -98,15 +98,22 @@
   </kendo-grid-column>
 </kendo-grid>
 
-<!-- Modal -->
+<!-- Services Modal -->
 <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div *ngIf="selectedService" class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title mb-0 bold" id="serviceModalLabel">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
+      <div class="modal-header text-center">
+        <h2 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">Services Status<br> </h2>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+      </div>
+      <div>
+        <button type="button" class="btn btn-secondary ml3 float-left" (click)="latestPull($event)"><i class="fas fa-sync-alt fa-fw"></i> Reload in <span class="timer">{{timer}}</span></button>
+        <button type="button" class="btn btn-primary ml3 float-left">
+          <mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="autoReload($event)"><i class="fas fa-sync-alt fa-fw"></i> Auto Reload 60/s: {{isChecked}}</mat-slide-toggle>
+        </button>
+        <h3 class="modal-title mb-0 bold w-100 text-center" id="hostStatusModalLabel">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
       </div>
       <div class="modal-body p-1">
         <kendo-grid [kendoGridBinding]="selectedService.port"
@@ -146,14 +153,16 @@
 
 <!-- link modal -->
 <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div *ngIf="selectedService" class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title mb-0 bold" id="linkModalLabel">Linked Hosts</h1>
-        <h3 class="modal-title mb-0 bold" id="linkModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h3>
+      <div class="modal-header text-center">
+        <h2 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">Linked Hosts<br> </h2>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
+      </div>
+      <div class="text-center">
+        <h3 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
       </div>
       <div class="modal-body p-1">
         <kendo-grid [kendoGridBinding]="selectedService.linkTo"
@@ -180,7 +189,7 @@
 </div>
 
 <!-- Host Status Modal -->
-<div class="modal fade bd-example-modal-lg" id="hostStatus" tabindex="-1" role="dialog" aria-labelledby="hostStatusModalLabel" aria-hidden="true">
+<div class="modal fade" id="hostStatus" tabindex="-1" role="dialog" aria-labelledby="hostStatusModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div *ngIf="selectedService" class="modal-content">
       <div class="modal-header text-center">
@@ -189,8 +198,12 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="text-center">
-        <h3 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h3>
+      <div>
+        <button type="button" class="btn btn-secondary ml3 float-left" (click)="latestPull($event)"><i class="fas fa-sync-alt fa-fw"></i> Reload in <span class="timer">{{timer}}</span></button>
+        <button type="button" class="btn btn-primary ml3 float-left">
+          <mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="autoReload($event)"><i class="fas fa-sync-alt fa-fw"></i> Auto Reload 60/s: {{isChecked}}</mat-slide-toggle>
+        </button>
+        <h3 class="modal-title mb-0 bold w-100 text-center" id="hostStatusModalLabel">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
       </div>
       <div class="modal-body p-1">
         <kendo-grid [kendoGridBinding]="selectedService.hostMetrics"
@@ -203,13 +216,13 @@
                     [loading]="loading"
                     [columnMenu]="{ filter: true }"
                     [trackBy]="trackBy">
-          <kendo-grid-column field="DiskTotal" [width]="50" title="Disk Total"></kendo-grid-column>
-          <kendo-grid-column field="DiskFree" [width]="50" title="Disk Free"></kendo-grid-column>
-          <kendo-grid-column field="MemTotal" [width]="50" title="Mem Total"></kendo-grid-column>
-          <kendo-grid-column field="MemAvailable" [width]="50" title="Mem Available"></kendo-grid-column>
-          <kendo-grid-column field="CpuUsage" [width]="50" title="Cpu Usage"></kendo-grid-column>
+          <kendo-grid-column field="DiskTotal" [width]="60" title="Disk Total"></kendo-grid-column>
+          <kendo-grid-column field="DiskFree" [width]="60" title="Disk Free"></kendo-grid-column>
+          <kendo-grid-column field="MemTotal" [width]="60" title="Mem Total"></kendo-grid-column>
+          <kendo-grid-column field="MemAvailable" [width]="60" title="Mem Available"></kendo-grid-column>
+          <kendo-grid-column field="CpuUsage" [width]="60" title="Cpu Usage"></kendo-grid-column>
           <kendo-grid-column field="CPU" [width]="50" title="CPU"></kendo-grid-column>
-          <kendo-grid-column field="uptime" [width]="100" title="Up Time"></kendo-grid-column>
+          <kendo-grid-column field="uptime" [width]="110" title="Up Time"></kendo-grid-column>
           <kendo-grid-column field="createdAt" [width]="150" title="Time Stemp"></kendo-grid-column>
         </kendo-grid>
       </div>
