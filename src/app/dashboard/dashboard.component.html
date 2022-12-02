@@ -62,8 +62,10 @@
   <kendo-grid-column field="hostMetrics" title="Host Status" [width]="130">
     <ng-template kendoGridCellTemplate let-dataItem>
       <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#hostStatus" (click)="this.selectedService = dataItem">
-        <!-- <i class="fas fa-link fa-fw"></i> -->
-        Metrics
+        <span>
+          <i class="fas fa-chart-area"></i>
+          <span class="small mr-1"> Metrics</span>
+        </span>
       </button>
     </ng-template>
   </kendo-grid-column>
