@@ -11,6 +11,7 @@ import { ngModuleJitUrl } from '@angular/compiler';
 declare let toastr: any;
 declare let $: any;
 declare let _: any;
+declare let google: any;
 
 @Component({
   selector: 'app-dashboard',
@@ -220,5 +221,41 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     clearInterval(this.intervalId);
+  }
+
+  async drawChart() {
+
+    let diskStatus: any = google.visualization.arrayToDataTable(this.selectedService.hostMetrics[0].diskStatus);
+    let memStatus: any = google.visualization.arrayToDataTable(this.selectedService.hostMetrics[0].memStatus);
+    let cpuStatus: any = google.visualization.arrayToDataTable(this.selectedService.hostMetrics[0].cpuStatus);
+
+    let diskStatusOptions = {
+      title: 'Disk Status',
+      hAxis: {title: 'Timestemp'},
+      vAxis: {title: 'Disk in GB'},
+      legend: { position: 'bottom' }
+    };
+
+    let memStatusOptions = {
+      title: 'Memory Status',
+      hAxis: {title: 'Timestemp'},
+      vAxis: {title: 'Memory in GB'},
+      legend: { position: 'bottom' }
+    };
+
+    let cpuStatusOptions = {
+      title: 'CPU Status',
+      hAxis: {title: 'Timestemp'},
+      vAxis: {title: 'CPU Usage in %'},
+      legend: { position: 'bottom' }
+    };
+
+    let diskStatusChart = await new google.visualization.LineChart(document.getElementById('diskStatus'));
+    let memStatusChart = await new google.visualization.LineChart(document.getElementById('memStatus'));
+    let cpuStatusChart = await new google.visualization.LineChart(document.getElementById('cpuStatus'));
+
+    await diskStatusChart.draw(diskStatus, diskStatusOptions);
+    await memStatusChart.draw(memStatus, memStatusOptions);
+    await cpuStatusChart.draw(cpuStatus, cpuStatusOptions);
   }
 }
