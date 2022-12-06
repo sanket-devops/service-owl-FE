@@ -253,9 +253,9 @@
       <div class="modal-body p-1">
         <button type="button" class="btn btn-secondary ml3" (click)="this.drawChart()"><i class="fas fa-sync-alt fa-fw"></i> Drow chart</button>
         <h2 class="bold text-center">CPU Core: {{ selectedService.hostMetrics[0].CPU }} Core</h2>
-        <div id="diskStatus" style="width:100%; max-width:1500px; height:500px;"></div>
-        <div id="memStatus" style="width:100%; max-width:1500px; height:500px;"></div>
-        <div id="cpuStatus" style="width:100%; max-width:1500px; height:500px;"></div>
+        <div id="diskStatus" style="width:100%; width:1500px; height:800px;"></div>
+        <div id="memStatus" style="width:100%; max-width:1500px; height:800px;"></div>
+        <div id="cpuStatus" style="width:100%; max-width:1500px; height:800px;"></div>
         <h2 class="bold text-center">Host Up Time: {{ selectedService.hostMetrics[0].uptime }}</h2>
       </div>
       <div class="modal-footer">

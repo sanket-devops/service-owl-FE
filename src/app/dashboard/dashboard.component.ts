@@ -230,24 +230,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let cpuStatus: any = google.visualization.arrayToDataTable(this.selectedService.hostMetrics[0].cpuStatus);
 
     let diskStatusOptions = {
-      title: 'Disk Status',
+      title: `Disk Status => [ Total: ${this.selectedService.hostMetrics[0].DiskTotal}G, Use: ${this.selectedService.hostMetrics[0].DiskUsage}G, Free: ${this.selectedService.hostMetrics[0].DiskFree}G ]`,
       hAxis: {title: 'Timestemp'},
-      vAxis: {title: 'Disk in GB'},
-      legend: { position: 'bottom' }
+      vAxis: {title: 'Disk in GB', minValue: 0},
+      curveType: 'function',
+      pointSize: 10,
+      colors: ['blue', 'red', 'green'],
+      // legend: { position: 'bottom' }
     };
 
     let memStatusOptions = {
-      title: 'Memory Status',
+      title: `Memory Status => [ Total: ${this.selectedService.hostMetrics[0].MemTotal}G, Use: ${this.selectedService.hostMetrics[0].MemUsage}G, Free: ${this.selectedService.hostMetrics[0].MemFree}G ]`,
       hAxis: {title: 'Timestemp'},
-      vAxis: {title: 'Memory in GB'},
-      legend: { position: 'bottom' }
+      vAxis: {title: 'Memory in GB', minValue: 0},
+      curveType: 'function',
+      pointSize: 10,
+      colors: ['blue', 'red', 'green'],
+      // legend: { position: 'bottom' }
     };
 
     let cpuStatusOptions = {
-      title: 'CPU Status',
+      title: `CPU Status => [ Total: ${this.selectedService.hostMetrics[0].CpuTotal}%, Use: ${this.selectedService.hostMetrics[0].CpuUsage}%, Free: ${this.selectedService.hostMetrics[0].CpuFree}% ]`,
       hAxis: {title: 'Timestemp'},
-      vAxis: {title: 'CPU Usage in %'},
-      legend: { position: 'bottom' }
+      vAxis: {title: 'CPU Usage in %', minValue: 0},
+      curveType: 'function',
+      pointSize: 10,
+      colors: ['blue', 'red', 'green'],
+      // legend: { position: 'bottom' }
     };
 
     let diskStatusChart = await new google.visualization.LineChart(document.getElementById('diskStatus'));
