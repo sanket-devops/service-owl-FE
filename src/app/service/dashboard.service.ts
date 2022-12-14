@@ -49,6 +49,15 @@ export class DashboardService {
   //   return this.http.get<Partial<Idashboard>>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/latestPull'));
   // }
 
+  async hostMetricsData(_id: any) {
+    let resp: any;
+    if (_id) {
+      resp = await this.http.get<Partial<Idashboard>[]>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/hostMetrics/' + _id)).toPromise();
+      // console.log(resp);
+    }
+    return JSON.parse(this.constantService.getDecryptedData(resp.data));
+  }
+
   async list(select?: string) {
     let resp: any;
     if (select) {

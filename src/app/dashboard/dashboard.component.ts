@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Idashboard, IPort } from '../interface/Idashboard';
+import { Idashboard, IhostMetrics, IPort } from '../interface/Idashboard';
 import { ConstantService } from '../service/constant.service';
 import { DashboardService } from '../service/dashboard.service';
 import { GridItem } from '@progress/kendo-angular-grid';
@@ -21,6 +21,8 @@ declare let google: any;
 export class DashboardComponent implements OnInit, OnDestroy {
   responseData: Idashboard[] = [];
   selectedService: Idashboard = <any>undefined;
+  selectedHostMetrics: IhostMetrics = <any>undefined;
+  hostId: any = undefined
   EStatus = EStatus;
   isChecked = true;
   loading: boolean = false;
@@ -37,7 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public constantService: ConstantService,
     public dashboardService: DashboardService,
     public router: Router
-  ) {}
+  ) { }
 
   async ngOnInit() {
     try {
@@ -223,48 +225,68 @@ export class DashboardComponent implements OnInit, OnDestroy {
     clearInterval(this.intervalId);
   }
 
-  async drawChart() {
+  async drawChart(_id: any) {
+    this.loading = true;
+    this.hostId = _id;
+    // console.log(this.hostId)
+    this.selectedHostMetrics = <any>undefined;
+    setTimeout(
+      async () => {
+        // console.log(this.hostId);
+        try {
+          let res: any = undefined;
+          res = <any>await this.dashboardService.hostMetricsData(this.hostId);
+          // console.log(res)
+          this.selectedHostMetrics = res;
+          let diskStatus: any = google.visualization.arrayToDataTable(res.diskStatus);
+          let memStatus: any = google.visualization.arrayToDataTable(res.memStatus);
+          let cpuStatus: any = google.visualization.arrayToDataTable(res.cpuStatus);
 
-    let diskStatus: any = google.visualization.arrayToDataTable(this.selectedService.hostMetrics[0].diskStatus);
-    let memStatus: any = google.visualization.arrayToDataTable(this.selectedService.hostMetrics[0].memStatus);
-    let cpuStatus: any = google.visualization.arrayToDataTable(this.selectedService.hostMetrics[0].cpuStatus);
+          let diskStatusOptions = {
+            title: `Disk Status => [ Total: ${res.DiskTotal}G, Use: ${res.DiskUsage}G, Free: ${res.DiskFree}G ]`,
+            hAxis: { title: 'Timestemp' },
+            vAxis: { title: 'Disk in GB', minValue: 0 },
+            curveType: 'function',
+            pointSize: 10,
+            colors: ['blue', 'red', 'green'],
+            // legend: { position: 'bottom' }
+          };
 
-    let diskStatusOptions = {
-      title: `Disk Status => [ Total: ${this.selectedService.hostMetrics[0].DiskTotal}G, Use: ${this.selectedService.hostMetrics[0].DiskUsage}G, Free: ${this.selectedService.hostMetrics[0].DiskFree}G ]`,
-      hAxis: {title: 'Timestemp'},
-      vAxis: {title: 'Disk in GB', minValue: 0},
-      curveType: 'function',
-      pointSize: 10,
-      colors: ['blue', 'red', 'green'],
-      // legend: { position: 'bottom' }
-    };
+          let memStatusOptions = {
+            title: `Memory Status => [ Total: ${res.MemTotal}G, Use: ${res.MemUsage}G, Free: ${res.MemFree}G ]`,
+            hAxis: { title: 'Timestemp' },
+            vAxis: { title: 'Memory in GB', minValue: 0 },
+            curveType: 'function',
+            pointSize: 10,
+            colors: ['blue', 'red', 'green'],
+            // legend: { position: 'bottom' }
+          };
 
-    let memStatusOptions = {
-      title: `Memory Status => [ Total: ${this.selectedService.hostMetrics[0].MemTotal}G, Use: ${this.selectedService.hostMetrics[0].MemUsage}G, Free: ${this.selectedService.hostMetrics[0].MemFree}G ]`,
-      hAxis: {title: 'Timestemp'},
-      vAxis: {title: 'Memory in GB', minValue: 0},
-      curveType: 'function',
-      pointSize: 10,
-      colors: ['blue', 'red', 'green'],
-      // legend: { position: 'bottom' }
-    };
+          let cpuStatusOptions = {
+            title: `CPU Status => [ Total: ${res.CpuTotal}%, Use: ${res.CpuUsage}%, Free: ${res.CpuFree}% ]`,
+            hAxis: { title: 'Timestemp' },
+            vAxis: { title: 'CPU Usage in %', minValue: 0 },
+            curveType: 'function',
+            pointSize: 10,
+            colors: ['blue', 'red', 'green'],
+            // legend: { position: 'bottom' }
+          };
+          let CPU: any = document.getElementById("CPU");
+          let uptime: any = document.getElementById("uptime");
+          CPU.innerHTML = `CPU Core: ${this.selectedHostMetrics.CPU} Core`;
+          uptime.innerHTML = `Host Up Time: ${this.selectedHostMetrics.uptime}`;
 
-    let cpuStatusOptions = {
-      title: `CPU Status => [ Total: ${this.selectedService.hostMetrics[0].CpuTotal}%, Use: ${this.selectedService.hostMetrics[0].CpuUsage}%, Free: ${this.selectedService.hostMetrics[0].CpuFree}% ]`,
-      hAxis: {title: 'Timestemp'},
-      vAxis: {title: 'CPU Usage in %', minValue: 0},
-      curveType: 'function',
-      pointSize: 10,
-      colors: ['blue', 'red', 'green'],
-      // legend: { position: 'bottom' }
-    };
+          let diskStatusChart = await new google.visualization.LineChart(document.getElementById('diskStatus'));
+          let memStatusChart = await new google.visualization.LineChart(document.getElementById('memStatus'));
+          let cpuStatusChart = await new google.visualization.LineChart(document.getElementById('cpuStatus'));
 
-    let diskStatusChart = await new google.visualization.LineChart(document.getElementById('diskStatus'));
-    let memStatusChart = await new google.visualization.LineChart(document.getElementById('memStatus'));
-    let cpuStatusChart = await new google.visualization.LineChart(document.getElementById('cpuStatus'));
-
-    await diskStatusChart.draw(diskStatus, diskStatusOptions);
-    await memStatusChart.draw(memStatus, memStatusOptions);
-    await cpuStatusChart.draw(cpuStatus, cpuStatusOptions);
+          await diskStatusChart.draw(diskStatus, diskStatusOptions);
+          await memStatusChart.draw(memStatus, memStatusOptions);
+          await cpuStatusChart.draw(cpuStatus, cpuStatusOptions);
+        } catch (e) {
+          console.log(e);
+        }
+      }, 3000);
+    this.loading = false;
   }
 }
