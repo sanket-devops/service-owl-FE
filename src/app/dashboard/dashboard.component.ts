@@ -35,6 +35,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   timer: number = this.intervalTime;
   login = { u: '', p: '', t: '' };
 
+  diskStatusChart: any = undefined;
+  memStatusChart: any = undefined;
+  cpuStatusChart: any = undefined;
+
   constructor(
     public constantService: ConstantService,
     public dashboardService: DashboardService,
@@ -225,68 +229,200 @@ export class DashboardComponent implements OnInit, OnDestroy {
     clearInterval(this.intervalId);
   }
 
+  // async drawChart(_id: any) {
+  //   this.loading = true;
+  //   this.hostId = _id;
+  //   // console.log(this.hostId)
+  //   this.selectedHostMetrics = <any>undefined;
+  //   this.diskStatusChart = undefined;
+  //   this.memStatusChart = undefined;
+  //   this.cpuStatusChart = undefined;
+  //   setTimeout(
+  //     async () => {
+  //       // console.log(this.hostId);
+  //       try {
+  //         let res: any = undefined;
+  //         res = <any>await this.dashboardService.hostMetricsData(this.hostId);
+  //         console.log(res)
+  //         this.selectedHostMetrics = res;
+  //         if (res.diskStatus) {
+  //           let diskStatus: any = google.visualization.arrayToDataTable(res.diskStatus);
+  //           let memStatus: any = google.visualization.arrayToDataTable(res.memStatus);
+  //           let cpuStatus: any = google.visualization.arrayToDataTable(res.cpuStatus);
+
+  //           let diskStatusOptions = {
+  //             title: `Disk Status => [ Total: ${res.DiskTotal}G, Use: ${res.DiskUsage}G, Free: ${res.DiskFree}G ]`,
+  //             hAxis: { title: 'Timestemp' },
+  //             vAxis: { title: 'Disk in GB', minValue: 0 },
+  //             curveType: 'function',
+  //             pointSize: 10,
+  //             colors: ['blue', 'red', 'green'],
+  //             // legend: { position: 'bottom' }
+  //           };
+
+  //           let memStatusOptions = {
+  //             title: `Memory Status => [ Total: ${res.MemTotal}G, Use: ${res.MemUsage}G, Free: ${res.MemFree}G ]`,
+  //             hAxis: { title: 'Timestemp' },
+  //             vAxis: { title: 'Memory in GB', minValue: 0 },
+  //             curveType: 'function',
+  //             pointSize: 10,
+  //             colors: ['blue', 'red', 'green'],
+  //             // legend: { position: 'bottom' }
+  //           };
+
+  //           let cpuStatusOptions = {
+  //             title: `CPU Status => [ Total: ${res.CpuTotal}%, Use: ${res.CpuUsage}%, Free: ${res.CpuFree}% ]`,
+  //             hAxis: { title: 'Timestemp' },
+  //             vAxis: { title: 'CPU Usage in %', minValue: 0 },
+  //             curveType: 'function',
+  //             pointSize: 10,
+  //             colors: ['blue', 'red', 'green'],
+  //             // legend: { position: 'bottom' }
+  //           };
+  //           let CPU: any = document.getElementById("CPU");
+  //           let uptime: any = document.getElementById("uptime");
+  //           CPU.innerHTML = `CPU Core: ${this.selectedHostMetrics.CPU} Core`;
+  //           uptime.innerHTML = `Host Up Time: ${this.selectedHostMetrics.uptime}`;
+
+  //           this.diskStatusChart = await new google.visualization.LineChart(document.getElementById('diskStatus'));
+  //           this.memStatusChart = await new google.visualization.LineChart(document.getElementById('memStatus'));
+  //           this.cpuStatusChart = await new google.visualization.LineChart(document.getElementById('cpuStatus'));
+
+  //           await this.diskStatusChart.draw(diskStatus, diskStatusOptions);
+  //           await this.memStatusChart.draw(memStatus, memStatusOptions);
+  //           await this.cpuStatusChart.draw(cpuStatus, cpuStatusOptions);
+  //         }
+
+  //       } catch (e) {
+  //         console.log(e);
+  //       }
+  //     }, 3000);
+  //   this.loading = false;
+  // }
+
   async drawChart(_id: any) {
     this.loading = true;
     this.hostId = _id;
-    // console.log(this.hostId)
     this.selectedHostMetrics = <any>undefined;
-    setTimeout(
-      async () => {
-        // console.log(this.hostId);
-        try {
-          let res: any = undefined;
-          res = <any>await this.dashboardService.hostMetricsData(this.hostId);
-          // console.log(res)
-          this.selectedHostMetrics = res;
-          let diskStatus: any = google.visualization.arrayToDataTable(res.diskStatus);
-          let memStatus: any = google.visualization.arrayToDataTable(res.memStatus);
-          let cpuStatus: any = google.visualization.arrayToDataTable(res.cpuStatus);
+    this.diskStatusChart = undefined;
+    this.memStatusChart = undefined;
+    this.cpuStatusChart = undefined;
 
-          let diskStatusOptions = {
-            title: `Disk Status => [ Total: ${res.DiskTotal}G, Use: ${res.DiskUsage}G, Free: ${res.DiskFree}G ]`,
-            hAxis: { title: 'Timestemp' },
-            vAxis: { title: 'Disk in GB', minValue: 0 },
-            curveType: 'function',
-            pointSize: 10,
-            colors: ['blue', 'red', 'green'],
-            // legend: { position: 'bottom' }
-          };
+    let winHtml = `
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>${this.selectedService.hostName} / ${this.selectedService.ipAddress}</title>
+        </head>
+        <body>
+          <div id="autoReloadConter" style="font-size: large; font-weight: bold; text-align: center; color: red;"></div>
+          <div id="CPU" style="font-size: large; font-weight: bold;"></div>
+          <div id="uptime" style="font-size: large; font-weight: bold;"></div>
+          <div id="diskStatus" style="width:100%; width:2500px; height:800px;"></div>
+          <div id="memStatus" style="width:100%; width:2500px; height:800px;"></div>
+          <div id="cpuStatus" style="width:100%; width:2500px; height:800px;"></div>
+        </body>
+    </html>`;
 
-          let memStatusOptions = {
-            title: `Memory Status => [ Total: ${res.MemTotal}G, Use: ${res.MemUsage}G, Free: ${res.MemFree}G ]`,
-            hAxis: { title: 'Timestemp' },
-            vAxis: { title: 'Memory in GB', minValue: 0 },
-            curveType: 'function',
-            pointSize: 10,
-            colors: ['blue', 'red', 'green'],
-            // legend: { position: 'bottom' }
-          };
+    let winUrl = URL.createObjectURL(
+      new Blob([winHtml], { type: "text/html"})
+    );
+    let chartWindow: any = window.open(
+      winUrl,
+      `${this.selectedService.hostName} / ${this.selectedService.ipAddress}`,
+      `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
+    );
+    let hostId = _id;
+    console.log(hostId);
+    let intervalTimeVar: any = <any>undefined;
+    let intervalTimeValue: number = 60;
+    let isChecked = true
+    let hostMetricsTimer: number = intervalTimeValue;
 
-          let cpuStatusOptions = {
-            title: `CPU Status => [ Total: ${res.CpuTotal}%, Use: ${res.CpuUsage}%, Free: ${res.CpuFree}% ]`,
-            hAxis: { title: 'Timestemp' },
-            vAxis: { title: 'CPU Usage in %', minValue: 0 },
-            curveType: 'function',
-            pointSize: 10,
-            colors: ['blue', 'red', 'green'],
-            // legend: { position: 'bottom' }
-          };
-          let CPU: any = document.getElementById("CPU");
-          let uptime: any = document.getElementById("uptime");
-          CPU.innerHTML = `CPU Core: ${this.selectedHostMetrics.CPU} Core`;
-          uptime.innerHTML = `Host Up Time: ${this.selectedHostMetrics.uptime}`;
 
-          let diskStatusChart = await new google.visualization.LineChart(document.getElementById('diskStatus'));
-          let memStatusChart = await new google.visualization.LineChart(document.getElementById('memStatus'));
-          let cpuStatusChart = await new google.visualization.LineChart(document.getElementById('cpuStatus'));
-
-          await diskStatusChart.draw(diskStatus, diskStatusOptions);
-          await memStatusChart.draw(memStatus, memStatusOptions);
-          await cpuStatusChart.draw(cpuStatus, cpuStatusOptions);
-        } catch (e) {
-          console.log(e);
+    intervalTimeVar = setInterval(() => {
+      if (isChecked) {
+        hostMetricsTimer--;
+        let autoReloadConter: any = chartWindow.document.getElementById("autoReloadConter");
+        autoReloadConter.innerHTML = `Auto Reload: ${hostMetricsTimer}s`;
+        $('.hostMetricsTimer').text(hostMetricsTimer);
+        if (hostMetricsTimer === 0) {
+          this.loading = true;
+          reloadChart();
+          this.loading = false;
+          toastr.success('Reload Data Successfully!');
+          hostMetricsTimer = intervalTimeValue;
         }
-      }, 3000);
+      } else {
+        toastr.warning('Auto Reload Data Off!');
+      }
+    }, 1000);
+
+    let reloadChart = async () => {
+      setTimeout(
+        async () => {
+          console.log(this.hostId);
+          try {
+            let res: any = undefined;
+            res = <any>await this.dashboardService.hostMetricsData(this.hostId);
+            console.log(res)
+            this.selectedHostMetrics = res;
+            if (res.diskStatus) {
+              let diskStatus: any = google.visualization.arrayToDataTable(res.diskStatus);
+              let memStatus: any = google.visualization.arrayToDataTable(res.memStatus);
+              let cpuStatus: any = google.visualization.arrayToDataTable(res.cpuStatus);
+
+              let diskStatusOptions = {
+                title: `Disk Status => [ Total: ${res.DiskTotal}G, Use: ${res.DiskUsage}G, Free: ${res.DiskFree}G ]`,
+                hAxis: { title: 'Timestemp' },
+                vAxis: { title: 'Disk in GB', minValue: 0 },
+                curveType: 'function',
+                pointSize: 10,
+                colors: ['blue', 'red', 'green'],
+                // legend: { position: 'bottom' }
+              };
+
+              let memStatusOptions = {
+                title: `Memory Status => [ Total: ${res.MemTotal}G, Use: ${res.MemUsage}G, Free: ${res.MemFree}G ]`,
+                hAxis: { title: 'Timestemp' },
+                vAxis: { title: 'Memory in GB', minValue: 0 },
+                curveType: 'function',
+                pointSize: 10,
+                colors: ['blue', 'red', 'green'],
+                // legend: { position: 'bottom' }
+              };
+
+              let cpuStatusOptions = {
+                title: `CPU Status => [ Total: ${res.CpuTotal}%, Use: ${res.CpuUsage}%, Free: ${res.CpuFree}% ]`,
+                hAxis: { title: 'Timestemp' },
+                vAxis: { title: 'CPU Usage in %', minValue: 0 },
+                curveType: 'function',
+                pointSize: 10,
+                colors: ['blue', 'red', 'green'],
+                // legend: { position: 'bottom' }
+              };
+
+              let CPU: any = chartWindow.document.getElementById("CPU");
+              CPU.innerHTML = `CPU Core: ${this.selectedHostMetrics.CPU} Core`;
+
+              let uptime: any = chartWindow.document.getElementById("uptime");
+              uptime.innerHTML = `Host Up Time: ${this.selectedHostMetrics.uptime}`;
+
+              this.diskStatusChart = await new google.visualization.LineChart(chartWindow.document.getElementById('diskStatus'));
+              this.memStatusChart = await new google.visualization.LineChart(chartWindow.document.getElementById('memStatus'));
+              this.cpuStatusChart = await new google.visualization.LineChart(chartWindow.document.getElementById('cpuStatus'));
+
+              await this.diskStatusChart.draw(diskStatus, diskStatusOptions);
+              await this.memStatusChart.draw(memStatus, memStatusOptions);
+              await this.cpuStatusChart.draw(cpuStatus, cpuStatusOptions);
+            }
+
+          } catch (e) {
+            console.log(e);
+          }
+        }, 1000);
+    }
+    reloadChart();
     this.loading = false;
   }
 }
