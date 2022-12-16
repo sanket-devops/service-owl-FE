@@ -86,6 +86,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let res: Idashboard[] = [];
     try {
       res = <any>await this.dashboardService.list();
+      // console.log(res)
     } catch (e) {
       <any>await this.audio.play();
       console.log(e);
@@ -251,9 +252,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
           <div id="autoReloadConter" style="font-size: large; font-weight: bold; text-align: center; color: red;"></div>
           <div id="CPU" style="font-size: large; font-weight: bold;"></div>
           <div id="uptime" style="font-size: large; font-weight: bold;"></div>
-          <div id="diskStatus" style="width:100%; width:2500px; height:800px;"></div>
-          <div id="memStatus" style="width:100%; width:2500px; height:800px;"></div>
-          <div id="cpuStatus" style="width:100%; width:2500px; height:800px;"></div>
+          <div id="diskStatus" style="width:2500px; height:800px;"></div>
+          <div id="memStatus" style="width:2500px; height:800px;"></div>
+          <div id="cpuStatus" style="width:2500px; height:800px;"></div>
         </body>
     </html>`;
 
@@ -292,7 +293,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           try {
             let res: any = undefined;
             res = <any>await this.dashboardService.hostMetricsData(hostId);
-            // console.log(res)
+            // console.log(res);
             this.selectedHostMetrics = res;
             if (res.diskStatus) {
               let diskStatus: any = google.visualization.arrayToDataTable(res.diskStatus);
@@ -337,9 +338,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 uptime.innerHTML = `Host Up Time: ${this.selectedHostMetrics.uptime}`;
               }, 500);
 
-              diskStatusChart = await new google.visualization.LineChart(chartWindow.document.getElementById('diskStatus'));
-              memStatusChart = await new google.visualization.LineChart(chartWindow.document.getElementById('memStatus'));
-              cpuStatusChart = await new google.visualization.LineChart(chartWindow.document.getElementById('cpuStatus'));
+              diskStatusChart = await new google.visualization.AreaChart(chartWindow.document.getElementById('diskStatus'));
+              memStatusChart = await new google.visualization.AreaChart(chartWindow.document.getElementById('memStatus'));
+              cpuStatusChart = await new google.visualization.AreaChart(chartWindow.document.getElementById('cpuStatus'));
 
               await diskStatusChart.draw(diskStatus, diskStatusOptions);
               await memStatusChart.draw(memStatus, memStatusOptions);
