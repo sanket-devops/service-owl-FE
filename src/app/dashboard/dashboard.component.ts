@@ -20,6 +20,7 @@ declare let google: any;
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   responseData: Idashboard[] = [];
+  clusterCount: number = 1;
   selectedService: Idashboard = <any>undefined;
   selectedHostMetrics: IhostMetrics = <any>undefined;
   hostId: any = undefined
