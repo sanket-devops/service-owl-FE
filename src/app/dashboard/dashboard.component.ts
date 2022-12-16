@@ -332,11 +332,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
               setTimeout(() => {
                 let CPU: any = chartWindow.document.getElementById("CPU");
                 CPU.innerHTML = `CPU Core: ${this.selectedHostMetrics.CPU} Core`;
-              }, 500);
+              }, 1000);
               setTimeout(() => {
                 let uptime: any = chartWindow.document.getElementById("uptime");
                 uptime.innerHTML = `Host Up Time: ${this.selectedHostMetrics.uptime}`;
-              }, 500);
+              }, 1000);
 
               diskStatusChart = await new google.visualization.AreaChart(chartWindow.document.getElementById('diskStatus'));
               memStatusChart = await new google.visualization.AreaChart(chartWindow.document.getElementById('memStatus'));
@@ -350,7 +350,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           } catch (e) {
             console.log(e);
           }
-        }, 1000);
+        }, 3000);
     }
     reloadChart();
     this.loading = false;
