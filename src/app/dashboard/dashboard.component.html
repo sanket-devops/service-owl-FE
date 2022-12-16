@@ -57,9 +57,8 @@
         </th>
         <th>
           <div class="nowrap text-center">
-            <mat-slide-toggle>Slide me!</mat-slide-toggle>
-            <input type="checkbox" checked data-toggle="modal" data-onstyle="success" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)">
-            <kendo-switch data-toggle="modal" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"></kendo-switch>
+            <mat-slide-toggle data-toggle="modal" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"></mat-slide-toggle>
+            <!-- <input type="checkbox" checked data-toggle="modal" data-onstyle="success" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"> -->
           </div>
         </th>
         <th>
@@ -82,19 +81,36 @@
             </button>
           </div>
         </th>
-        <th>{{data.linkTo}}</th>
+        <th>
+          <div class="nowrap text-center">
+            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#linkModal" (click)="this.selectedService = data">
+              <i class="fas fa-link fa-fw"></i>
+            </button>
+          </div>
+        </th>
         <th>{{data.groupName}}</th>
         <th>{{data.clusterName}}</th>
         <th>{{data.envName}}</th>
         <th>{{data.vmName}}</th>
         <th>{{data.note}}</th>
-        <th>Option
+        <th>
+          <div class="nowrap text-center">
+            <button type="button" class="btn btn-primary btn-sm ml3" (click)="editData(data)">
+              <i class="fas fa-edit fa-fw"></i>
+            </button>
+            <button type="button" class="btn btn-info btn-sm ml3" (click)="cloneData(data)">
+              <i class="far fa-clone fa-fw"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm ml3" (click)="deleteData(data)">
+              <i class="fas fa-trash fa-fw"></i>
+            </button>
+          </div>
         </th>
   </tbody>
 </table>
 
 
-<kendo-grid [kendoGridBinding]="responseData"
+<!-- <kendo-grid [kendoGridBinding]="responseData"
             kendoGridSelectBy="_id"
             [pageable]="false"
             [sortable]="true"
@@ -188,7 +204,7 @@
       </div>
     </ng-template>
   </kendo-grid-column>
-</kendo-grid>
+</kendo-grid> -->
 
 <!-- Services Modal -->
 <div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
