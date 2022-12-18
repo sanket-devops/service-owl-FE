@@ -83,6 +83,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async loadData() {
+    this.loading = true;
     this.responseData = [];
     let res: Idashboard[] = [];
     try {
@@ -100,6 +101,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     this.responseData = res;
     this.responseData = _.orderBy(this.responseData, ['status'], ['asc']);
+    this.loading = false;
   }
 
   cloneData(item: Idashboard) {
