@@ -242,7 +242,7 @@
       <div class="modal-body p-1">
         <table class="table table-striped table-hover">
           <thead>
-            <tr>
+            <tr class="text-light bg-dark">
               <th scope="col">#</th>
               <th scope="col">Service Name</th>
               <th scope="col">Port</th>
@@ -253,12 +253,12 @@
               <th scope="col">Code</th>
             </tr>
           </thead>
-          <tbody *ngFor="let data of selectedService.port ; let i = index">
-              <tr>
-                <th>{{i + 1}}</th>
-                <th>{{data.name}}</th>
-                <th>{{data.port}}</th>
-                <th>
+          <tbody>
+              <tr *ngFor="let data of selectedService.port ; let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{data.name}}</td>
+                <td>{{data.port}}</td>
+                <td>
                   <div class="nowrap text-center">
                     <span *ngIf="data.status === EStatus.UP" class="badge badge-success ml-1">
                       <i class="fas fa-angle-double-up fa-fw"></i>
@@ -267,11 +267,12 @@
                       <i class="fas fa-angle-double-down fa-fw"></i>
                     </span>
                   </div>
-                </th>
-                <th>{{data.http}}</th>
-                <th>{{data.path}}</th>
-                <th>{{data.method}}</th>
-                <th>{{data.statuscode}}</th>
+                </td>
+                <td>{{data.http}}</td>
+                <td>{{data.path}}</td>
+                <td>{{data.method}}</td>
+                <td>{{data.statuscode}}</td>
+              </tr>
           </tbody>
         </table>
       </div>
@@ -299,19 +300,20 @@
       <div class="modal-body p-1">
         <table class="table table-striped table-hover">
           <thead>
-            <tr>
+            <tr class="text-light bg-dark">
               <th scope="col">#</th>
               <th scope="col">Host Name</th>
               <th scope="col">Address</th>
               <th scope="col">Port</th>
             </tr>
           </thead>
-          <tbody *ngFor="let data of selectedService.linkTo ; let i = index">
-              <tr>
-                <th>{{i + 1}}</th>
-                <th>{{data.hostName}}</th>
-                <th>{{data.ipAddress}}</th>
-                <th>{{data.port}}</th>
+          <tbody>
+              <tr *ngFor="let data of selectedService.linkTo ; let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{data.hostName}}</td>
+                <td>{{data.ipAddress}}</td>
+                <td>{{data.port}}</td>
+              </tr>
           </tbody>
         </table>
       </div>
@@ -375,19 +377,20 @@
       <div class="modal-body p-1">
         <table class="table table-striped table-hover">
           <thead>
-            <tr>
+            <tr class="text-light bg-dark">
               <th scope="col">#</th>
               <th scope="col">Disk Free in GB</th>
               <th scope="col">Memory Free in GB</th>
               <th scope="col">CPU Usage in %</th>
             </tr>
           </thead>
-          <tbody *ngFor="let data of selectedService.hostMetrics ; let i = index">
-              <tr>
-                <th>{{i + 1}}</th>
-                <th>{{data.DiskFree}}</th>
-                <th>{{data.MemFree}}</th>
-                <th>{{data.CpuUsage}}</th>
+          <tbody>
+              <tr *ngFor="let data of selectedService.hostMetrics ; let i = index">
+                <td>{{i + 1}}</td>
+                <td>{{data.DiskFree}}</td>
+                <td>{{data.MemFree}}</td>
+                <td>{{data.CpuUsage}}</td>
+              </tr>
           </tbody>
         </table>
       </div>
