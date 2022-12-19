@@ -387,15 +387,14 @@
           <tbody>
               <tr *ngFor="let data of selectedService.hostMetrics ; let i = index">
                 <td>{{i + 1}}</td>
-                <td *ngIf="data.DiskFree <= 5" class="table-warning">{{data.DiskFree}}</td>
+                <td *ngIf="data.DiskFree <= 5" class="table-danger">{{data.DiskFree}}</td>
                 <td *ngIf="data.DiskFree > 5" class="table-success">{{data.DiskFree}}</td>
 
-                <td *ngIf="data.MemFree <= 0.1" class="table-warning">{{data.MemFree}}</td>
+                <td *ngIf="data.MemFree <= 0.1" class="table-danger">{{data.MemFree}}</td>
                 <td *ngIf="data.MemFree > 0.1" class="table-success">{{data.MemFree}}</td>
 
-                <td *ngIf="data.CpuUsage >= 90" class="table-warning">{{data.CpuUsage}}</td>
+                <td *ngIf="data.CpuUsage >= 90" class="table-danger">{{data.CpuUsage}}</td>
                 <td *ngIf="data.CpuUsage < 90" class="table-success">{{data.CpuUsage}}</td>
-
               </tr>
           </tbody>
         </table>
