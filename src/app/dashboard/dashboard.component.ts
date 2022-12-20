@@ -330,7 +330,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 hAxis: { title: 'Timestemp' },
                 vAxis: { title: 'Disk in GB', minValue: 0 },
                 curveType: 'function',
-                pointSize: 10,
+                pointSize: 3,
                 colors: ['blue', 'red', 'green'],
                 // legend: { position: 'bottom' }
               };
@@ -340,7 +340,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 hAxis: { title: 'Timestemp' },
                 vAxis: { title: 'Memory in GB', minValue: 0 },
                 curveType: 'function',
-                pointSize: 10,
+                pointSize: 3,
                 colors: ['blue', 'red', 'green'],
                 // legend: { position: 'bottom' }
               };
@@ -350,7 +350,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 hAxis: { title: 'Timestemp' },
                 vAxis: { title: 'CPU Usage in %', minValue: 0 },
                 curveType: 'function',
-                pointSize: 10,
+                pointSize: 3,
                 colors: ['blue', 'red', 'green'],
                 // legend: { position: 'bottom' }
               };

@@ -85,11 +85,14 @@
               </button>
               <button *ngIf="(data.hostMetrics | keyvalue)?.length" style="border-radius: 50%;" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#hostStatus" (click)="this.selectedService = data">
                 <span>
-                  <span *ngIf="data.hostMetrics[0].DiskFree <= 5 || data.hostMetrics[0].MemFree <= 0.1 || data.hostMetrics[0].CpuUsage >= 90" class="badge badge-warning sm-1">
+                  <span *ngIf="(data.hostMetrics[0].DiskFree <= 5 || data.hostMetrics[0].MemFree <= 0.1 || data.hostMetrics[0].CpuUsage >= 90) && (data.hostMetrics[0].DiskFree > 0)" class="badge badge-warning sm-1">
                     <i class="fas fa-exclamation"></i>
                   </span>
                   <span *ngIf="data.hostMetrics[0].DiskFree > 5 && data.hostMetrics[0].MemFree > 0.1 && data.hostMetrics[0].CpuUsage < 90" class="badge badge-success sm-1">
                     <i class="far fa-thumbs-up"></i>
+                  </span>
+                  <span *ngIf="data.hostMetrics[0].DiskFree === 0 && data.hostMetrics[0].MemFree === 0 && data.hostMetrics[0].CpuUsage === 0" class="badge badge-danger sm-1">
+                    <i class="fas fa-skull-crossbones"></i>
                   </span>
                 </span>
               </button>
@@ -393,8 +396,8 @@
                 <td *ngIf="data.MemFree <= 0.1" class="table-danger">{{data.MemFree}}</td>
                 <td *ngIf="data.MemFree > 0.1" class="table-success">{{data.MemFree}}</td>
 
-                <td *ngIf="data.CpuUsage >= 90" class="table-danger">{{data.CpuUsage}}</td>
-                <td *ngIf="data.CpuUsage < 90" class="table-success">{{data.CpuUsage}}</td>
+                <td *ngIf="(data.DiskFree === 0 && data.MemFree === 0 && data.CpuUsage === 0) || (data.DiskFree > 0 && data.CpuUsage >= 90)" class="table-danger">{{data.CpuUsage}}</td>
+                <td *ngIf="data.DiskFree > 0 && data.CpuUsage < 90" class="table-success">{{data.CpuUsage}}</td>
               </tr>
           </tbody>
         </table>
