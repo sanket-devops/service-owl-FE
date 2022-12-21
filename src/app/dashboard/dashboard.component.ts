@@ -321,9 +321,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
             // console.log(res);
             this.selectedHostMetrics = res;
             if (res.diskStatus) {
-              let diskStatus: any = google.visualization.arrayToDataTable(res.diskStatus);
-              let memStatus: any = google.visualization.arrayToDataTable(res.memStatus);
-              let cpuStatus: any = google.visualization.arrayToDataTable(res.cpuStatus);
+              let disk = res.diskStatus;
+              disk[0] = ['Timestamp', 'Disk Total', 'Disk Usage', 'Disk Free']
+              let diskStatus: any = google.visualization.arrayToDataTable(disk);
+
+              let ram = res.memStatus;
+              ram[0] = ['Timestamp', 'Mem Total', 'Mem Usage', 'Mem Available']
+              let memStatus: any = google.visualization.arrayToDataTable(ram);
+
+              let cpu = res.cpuStatus;
+              cpu[0] = ['Timestamp', 'CPU Total', 'CPU Usage', 'CPU Free']
+              let cpuStatus: any = google.visualization.arrayToDataTable(cpu);
 
               let diskStatusOptions = {
                 title: `Disk Status => [ Total: ${res.DiskTotal}G, Use: ${res.DiskUsage}G, Free: ${res.DiskFree}G ]`,
