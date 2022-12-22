@@ -77,12 +77,21 @@
           </td>
           <td>
             <div class="nowrap text-center">
-              <button *ngIf="(data.hostMetrics | keyvalue)?.length" type="button" class="btn btn-primary btn-sm" (click)="this.selectedService = data; this.drawChart(data._id)">
-                <span>
-                  <i class="fas fa-chart-area"></i>
-                  <span class="small mr-1"> Metrics</span>
-                </span>
+              <button *ngIf="(data.hostMetrics | keyvalue)?.length" class="btn btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" (click)="this.selectedService = data;" aria-expanded="false">
+                <!-- <i class="fas fa-eye"></i> -->
+                <i class="fas fa-chart-area"></i>
               </button>
+              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+                <li><a class="dropdown-item" (click)="drawChart(data._id, '1')">1H Metrics</a></li>
+                <li><a class="dropdown-item" (click)="drawChart(data._id, '2')">2H Metrics</a></li>
+                <li><a class="dropdown-item" (click)="drawChart(data._id, '4')">4H Metrics</a></li>
+                <li><a class="dropdown-item" (click)="drawChart(data._id, '8')">8H Metrics</a></li>
+                <li><a class="dropdown-item" (click)="drawChart(data._id, '12')">12H Metrics</a></li>
+                <li><a class="dropdown-item" (click)="drawChart(data._id, '24')">24H Metrics</a></li>
+                <li><a class="dropdown-item" (click)="drawChart(data._id, '48')">48H Metrics</a></li>
+                <li><a class="dropdown-item" (click)="drawChart(data._id, '72')">72H Metrics <i class="fas fa-exclamation-circle"></i></a></li>
+                <li><a class="dropdown-item" (click)="drawChart(data._id)" *ngIf="isAdmin">Full Metrics <i class="fas fa-exclamation-circle"></i></a></li>
+              </ul>
               <button *ngIf="(data.hostMetrics | keyvalue)?.length" style="border-radius: 50%;" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#hostStatus" (click)="this.selectedService = data">
                 <span>
                   <span *ngIf="(data.hostMetrics[0].DiskFree <= 5 || data.hostMetrics[0].MemFree <= 0.1 || data.hostMetrics[0].CpuUsage >= 90) && (data.hostMetrics[0].DiskFree > 0)" class="badge badge-warning sm-1">

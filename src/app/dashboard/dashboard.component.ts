@@ -231,14 +231,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
 // Open new window and drow chart
-  async drawChart(_id: any) {
+  async drawChart(_id: any, dataH?: any) {
     this.selectedHostMetrics = <any>undefined;
     let diskStatusChart = undefined;
     let memStatusChart = undefined;
     let cpuStatusChart = undefined;
 
     let hostId = _id;
-    // console.log(hostId);
+    let dataTime: number = (-Math.abs((dataH) * 12));
+    // console.log(dataTime);
     let intervalTimeVar: any = <any>undefined;
     let intervalTimeValue: number = 60;
     let isChecked = true
@@ -256,6 +257,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         </head>
         <body>
           <div id="autoReloadConter" style="font-size: large; font-weight: bold; text-align: center; color: red;"></div>
+          <div id="dataTimeId" style="font-size: large; font-weight: bold; text-align: center; color: red;"></div>
           <div>
             <div id="bSpinner" class="spinner-border" role="status">
               <span class="sr-only"></span>
@@ -314,24 +316,43 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let reloadChart = async () => {
       setTimeout(
         async () => {
-          // console.log(hostId);
           try {
             let res: any = undefined;
             res = <any>await this.dashboardService.hostMetricsData(hostId);
             // console.log(res);
             this.selectedHostMetrics = res;
             if (res.diskStatus) {
-              let disk = res.diskStatus;
-              disk[0] = ['Timestamp', 'Disk Total', 'Disk Usage', 'Disk Free']
-              let diskStatus: any = google.visualization.arrayToDataTable(disk);
 
-              let ram = res.memStatus;
-              ram[0] = ['Timestamp', 'Mem Total', 'Mem Usage', 'Mem Available']
-              let memStatus: any = google.visualization.arrayToDataTable(ram);
+              let diskStatus: any = undefined;
+              let memStatus: any = undefined;
+              let cpuStatus: any = undefined;
 
-              let cpu = res.cpuStatus;
-              cpu[0] = ['Timestamp', 'CPU Total', 'CPU Usage', 'CPU Free']
-              let cpuStatus: any = google.visualization.arrayToDataTable(cpu);
+              if (dataH) {
+                let disk = res.diskStatus.slice(dataTime);
+                disk.unshift(['Timestamp', 'Disk Total', 'Disk Usage', 'Disk Free']);
+                diskStatus = google.visualization.arrayToDataTable(disk);
+
+                let ram = res.memStatus.slice(dataTime);
+                ram.unshift(['Timestamp', 'Mem Total', 'Mem Usage', 'Mem Available']);
+                memStatus = google.visualization.arrayToDataTable(ram);
+
+                let cpu = res.cpuStatus.slice(dataTime);
+                cpu.unshift(['Timestamp', 'CPU Total', 'CPU Usage', 'CPU Free']);
+                cpuStatus = google.visualization.arrayToDataTable(cpu);
+
+              } else {
+                let disk = res.diskStatus;
+                disk.unshift(['Timestamp', 'Disk Total', 'Disk Usage', 'Disk Free']);
+                diskStatus = google.visualization.arrayToDataTable(disk);
+
+                let ram = res.memStatus;
+                ram.unshift(['Timestamp', 'Mem Total', 'Mem Usage', 'Mem Available']);
+                memStatus = google.visualization.arrayToDataTable(ram);
+
+                let cpu = res.cpuStatus;
+                cpu.unshift(['Timestamp', 'CPU Total', 'CPU Usage', 'CPU Free']);
+                cpuStatus = google.visualization.arrayToDataTable(cpu);
+              }
 
               let diskStatusOptions = {
                 title: `Disk Status => [ Total: ${res.DiskTotal}G, Use: ${res.DiskUsage}G, Free: ${res.DiskFree}G ]`,
@@ -362,10 +383,21 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 colors: ['blue', 'red', 'green'],
                 // legend: { position: 'bottom' }
               };
+
+              setTimeout(() => {
+                let dataTimeId: any = chartWindow.document.getElementById("dataTimeId");
+                if (dataH) {
+                  dataTimeId.innerHTML = `Metrics Time: Last ${dataH}H`;
+                } else {
+                  dataTimeId.innerHTML = `Metrics: All Data`;
+                }
+              }, 1000);
+
               setTimeout(() => {
                 let CPU: any = chartWindow.document.getElementById("CPU");
                 CPU.innerHTML = `CPU Core: ${this.selectedHostMetrics.CPU} Core`;
               }, 1000);
+
               setTimeout(() => {
                 let uptime: any = chartWindow.document.getElementById("uptime");
                 uptime.innerHTML = `Host Up Time: ${this.selectedHostMetrics.uptime}`;
