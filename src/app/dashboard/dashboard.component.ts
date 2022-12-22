@@ -320,7 +320,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             let res: any = undefined;
             res = <any>await this.dashboardService.hostMetricsData(hostId);
             // console.log(res);
-            this.selectedHostMetrics = res;
+            this.selectedHostMetrics = await res;
             if (res.diskStatus) {
 
               let diskStatus: any = undefined;
@@ -328,30 +328,30 @@ export class DashboardComponent implements OnInit, OnDestroy {
               let cpuStatus: any = undefined;
 
               if (dataH) {
-                let disk = res.diskStatus.slice(dataTime);
+                let disk = await res.diskStatus.slice(dataTime);
                 disk.unshift(['Timestamp', 'Disk Total', 'Disk Usage', 'Disk Free']);
-                diskStatus = google.visualization.arrayToDataTable(disk);
+                diskStatus = google.visualization.arrayToDataTable(await disk);
 
-                let ram = res.memStatus.slice(dataTime);
+                let ram = await res.memStatus.slice(dataTime);
                 ram.unshift(['Timestamp', 'Mem Total', 'Mem Usage', 'Mem Available']);
-                memStatus = google.visualization.arrayToDataTable(ram);
+                memStatus = google.visualization.arrayToDataTable(await ram);
 
-                let cpu = res.cpuStatus.slice(dataTime);
+                let cpu = await res.cpuStatus.slice(dataTime);
                 cpu.unshift(['Timestamp', 'CPU Total', 'CPU Usage', 'CPU Free']);
-                cpuStatus = google.visualization.arrayToDataTable(cpu);
+                cpuStatus = google.visualization.arrayToDataTable(await cpu);
 
               } else {
-                let disk = res.diskStatus;
+                let disk = await res.diskStatus;
                 disk.unshift(['Timestamp', 'Disk Total', 'Disk Usage', 'Disk Free']);
-                diskStatus = google.visualization.arrayToDataTable(disk);
+                diskStatus = google.visualization.arrayToDataTable(await disk);
 
-                let ram = res.memStatus;
+                let ram = await res.memStatus;
                 ram.unshift(['Timestamp', 'Mem Total', 'Mem Usage', 'Mem Available']);
-                memStatus = google.visualization.arrayToDataTable(ram);
+                memStatus = google.visualization.arrayToDataTable(await ram);
 
-                let cpu = res.cpuStatus;
+                let cpu = await res.cpuStatus;
                 cpu.unshift(['Timestamp', 'CPU Total', 'CPU Usage', 'CPU Free']);
-                cpuStatus = google.visualization.arrayToDataTable(cpu);
+                cpuStatus = google.visualization.arrayToDataTable(await cpu);
               }
 
               let diskStatusOptions = {
@@ -407,9 +407,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
               memStatusChart = await new google.visualization.AreaChart(chartWindow.document.getElementById('memStatus'));
               cpuStatusChart = await new google.visualization.AreaChart(chartWindow.document.getElementById('cpuStatus'));
 
-              await diskStatusChart.draw(diskStatus, diskStatusOptions);
-              await memStatusChart.draw(memStatus, memStatusOptions);
-              await cpuStatusChart.draw(cpuStatus, cpuStatusOptions);
+              await diskStatusChart.draw(await diskStatus, diskStatusOptions);
+              await memStatusChart.draw(await memStatus, memStatusOptions);
+              await cpuStatusChart.draw(await cpuStatus, cpuStatusOptions);
             }
 
           } catch (e) {
@@ -419,6 +419,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
           bSpinner.style.display = 'none'
         }, 3000);
     }
-    reloadChart();
+    await reloadChart();
   }
 }
