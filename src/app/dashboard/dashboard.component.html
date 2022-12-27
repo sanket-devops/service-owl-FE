@@ -25,8 +25,9 @@
         <th scope="col">#</th>
         <th scope="col">Host Name</th>
         <th scope="col">Address</th>
+        <th scope="col">Host Check</th>
         <th scope="col">Service</th>
-        <th scope="col">Check</th>
+        <th scope="col">Metrics Check</th>
         <th scope="col">Host Metrics</th>
         <th scope="col">Linked</th>
         <th scope="col">Group Name</th>
@@ -51,6 +52,12 @@
           <td>{{data.ipAddress}}</td>
           <td>
             <div class="nowrap text-center">
+              <mat-slide-toggle data-bs-toggle="modal" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"></mat-slide-toggle>
+              <!-- <input type="checkbox" checked data-bs-toggle="modal" data-onstyle="success" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"> -->
+            </div>
+          </td>
+          <td>
+            <div class="nowrap text-center">
               <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal" (click)="selectedService = data">
                 <span>
                   <i class="fab fa-scribd fa-fw"></i>
@@ -71,7 +78,7 @@
           </td>
           <td>
             <div class="nowrap text-center">
-              <mat-slide-toggle data-bs-toggle="modal" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"></mat-slide-toggle>
+              <mat-slide-toggle data-bs-toggle="modal" [(ngModel)]="data.metricsCheck" (ngModelChange)="metricsCheckSwitch($event, data)"></mat-slide-toggle>
               <!-- <input type="checkbox" checked data-bs-toggle="modal" data-onstyle="success" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"> -->
             </div>
           </td>

@@ -220,6 +220,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
     );
   }
+  async metricsCheckSwitch(newValue: boolean, dashboard: Idashboard) {
+    await ConstantService.get_promise(
+      this.dashboardService.update({
+        _id: <any>dashboard._id,
+        metricsCheck: newValue,
+      })
+    );
+  }
 
   logout() {
     localStorage.clear();

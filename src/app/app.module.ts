@@ -22,6 +22,7 @@ import {MatInputModule} from '@angular/material/input';
 import {LoginComponent} from './login/login.component';
 import {CheckBoxModule} from '@progress/kendo-angular-treeview';
 import {SwitchModule} from '@progress/kendo-angular-inputs';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 // import * as http from 'http';
 
@@ -51,6 +52,7 @@ import {SwitchModule} from '@progress/kendo-angular-inputs';
         MatInputModule,
         CheckBoxModule,
         SwitchModule,
+        MatCheckboxModule,
     ],
   providers: [ConstantService, DashboardService],
   bootstrap: [AppComponent]

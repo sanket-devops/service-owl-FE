@@ -31,6 +31,7 @@ export class AddhostFormComponent implements OnInit {
       vmName: [''],
       note: [''],
       hostCheck: [''],
+      metricsCheck: [''],
     });
 
     if (this.dashboardservice.editObj || this.dashboardservice.cloneObj) {
