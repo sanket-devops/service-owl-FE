@@ -64,18 +64,26 @@
     </div>
     <div class="row">
       <div class="col-md-4">
-        <mat-form-field appearance="legacy">
+        <!-- <mat-form-field appearance="legacy">
           <mat-label>Host Check</mat-label>
           <input matInput type="boolean" placeholder="Host Check" formControlName="hostCheck">
-        </mat-form-field>
+        </mat-form-field> -->
+        <mat-label>Host Check</mat-label>
+        <br>
+        <mat-slide-toggle type="boolean" formControlName="hostCheck"></mat-slide-toggle>
       </div>
       <div class="col-md-4">
-        <mat-form-field appearance="legacy">
+        <!-- <mat-form-field appearance="legacy">
           <mat-label>Metrics Check</mat-label>
           <input matInput type="boolean" placeholder="Metrics Check" formControlName="metricsCheck">
-        </mat-form-field>
+        </mat-form-field> -->
+        <mat-label>Metrics Check</mat-label>
+        <br>
+        <mat-slide-toggle type="boolean" formControlName="metricsCheck"></mat-slide-toggle>
       </div>
     </div>
+
+    <br>
     <div>
       <div class="col-md-4">
         <mat-form-field appearance="legacy">
@@ -116,10 +124,13 @@
             </mat-form-field>
           </td>
           <td>
-            <mat-form-field appearance="legacy">
+            <!-- <mat-form-field appearance="legacy">
               <mat-label>Http Check</mat-label>
               <input matInput placeholder="Http Check" type="boolean" [(ngModel)]="data.http" name="port_{{index}}">
-            </mat-form-field>
+            </mat-form-field> -->
+            <mat-label>Http Check</mat-label>
+            <br>
+            <mat-slide-toggle [(ngModel)]="data.http" name="port_{{index}}"></mat-slide-toggle>
           </td>
           <td>
             <mat-form-field appearance="legacy">
