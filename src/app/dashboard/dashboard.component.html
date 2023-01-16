@@ -189,7 +189,9 @@
                     </span>
                   </div>
                 </td>
-                <td>{{data.http}}</td>
+                <td>
+                  <mat-slide-toggle [(ngModel)]="data.http" name="port_{{i}}"></mat-slide-toggle>
+                </td>
                 <td>{{data.path}}</td>
                 <td>{{data.method}}</td>
                 <td>{{data.statuscode}}</td>
