@@ -429,4 +429,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     await reloadChart();
   }
+
+  async rowChecked(data: any, event?: any) {
+    let rowId: any = document.getElementById(data._id);
+    // console.log(rowId.style.backgroundColor)
+    if (rowId.style.backgroundColor && (rowId.style.backgroundColor === "gray")) {
+      rowId.style.backgroundColor = "white";
+      }
+      else{
+        rowId.style.backgroundColor = "gray";
+      }
+
+  }
 }
