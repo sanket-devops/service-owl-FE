@@ -455,9 +455,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     console.log(hostData)
     let test = `http://192.168.120.135:8888/?hostname=${host}&username=${username}`
     // let test = `http://192.168.120.135:8888/?hostname=192.168.120.135&username=owlsnest&VHNlbiQyMDIxJXNsd28=`
-    let chartWindow: any = window.open(
+    let openTerminal: any = window.open(
       test,
-      `terminal`,
+      `${hostData.hostName} / ${hostData.ipAddress}`,
       `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
     );
   }
