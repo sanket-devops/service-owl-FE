@@ -6,12 +6,17 @@ import { GridItem } from '@progress/kendo-angular-grid';
 import { EStatus } from '../interface/enum/EStatus';
 import { State } from '@progress/kendo-data-query';
 import { Router } from '@angular/router';
-import { ngModuleJitUrl } from '@angular/compiler';
+// import { ngModuleJitUrl } from '@angular/compiler';
+// import { Terminal } from 'xterm';
+// import { WebLinksAddon } from 'xterm-addon-web-links';
+// import { io, Socket } from "socket.io-client";
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 
 declare let toastr: any;
 declare let $: any;
 declare let _: any;
 declare let google: any;
+
 
 @Component({
   selector: 'app-dashboard',
@@ -35,12 +40,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   intervalTime: number = 60;
   timer: number = this.intervalTime;
   login = { u: '', p: '', t: '' };
+  hostTerminal: any = undefined;
 
 
   constructor(
     public constantService: ConstantService,
     public dashboardService: DashboardService,
-    public router: Router
+    public router: Router,
+    private http: HttpClient
   ) { }
 
   async ngOnInit() {
@@ -440,5 +447,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
         rowId.style.backgroundColor = "gray";
       }
 
+  }
+
+  async openTerminal(hostData: any){
+    let host = hostData.ipAddress;
+    let username = hostData.userName;
+    console.log(hostData)
+    let test = `http://192.168.120.135:8888/?hostname=${host}&username=${username}`
+    // let test = `http://192.168.120.135:8888/?hostname=192.168.120.135&username=owlsnest&VHNlbiQyMDIxJXNsd28=`
+    let chartWindow: any = window.open(
+      test,
+      `terminal`,
+      `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
+    );
   }
 }
