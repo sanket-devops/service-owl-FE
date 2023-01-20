@@ -452,7 +452,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async openTerminal(hostData: any){
     let host = hostData.ipAddress;
     let username = hostData.userName;
-    console.log(hostData)
+    // console.log(hostData)
     let test = `http://192.168.120.135:8888/?hostname=${host}&username=${username}`
     // let test = `http://192.168.120.135:8888/?hostname=192.168.120.135&username=owlsnest&VHNlbiQyMDIxJXNsd28=`
     let openTerminal: any = window.open(
