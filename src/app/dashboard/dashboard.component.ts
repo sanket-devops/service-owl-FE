@@ -437,6 +437,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     await reloadChart();
   }
 
+  // Multiple row selection logic
   async rowChecked(data: any, event?: any) {
     let rowId: any = document.getElementById(data._id);
     // console.log(rowId.style.backgroundColor)
@@ -449,16 +450,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
 
+  // Host ssh access function
   async openTerminal(hostData: any){
     let host = hostData.ipAddress;
     let username = hostData.userName;
     // console.log(hostData)
-    let test = `http://192.168.120.135:8888/?hostname=${host}&username=${username}`
-    // let test = `http://192.168.120.135:8888/?hostname=192.168.120.135&username=owlsnest&VHNlbiQyMDIxJXNsd28=`
-    let openTerminal: any = window.open(
-      test,
-      `${hostData.hostName} / ${hostData.ipAddress}`,
-      `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
-    );
+    if (username) {
+      let test = `http://192.168.120.135:8888/?hostname=${host}&username=${username}`
+      // let test = `http://192.168.120.135:8888/?hostname=192.168.120.135&username=owlsnest&VHNlbiQyMDIxJXNsd28=`
+      let openTerminal: any = window.open(
+        test,
+        `${hostData.hostName} / ${hostData.ipAddress}`,
+        `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
+      );
+    }
   }
 }

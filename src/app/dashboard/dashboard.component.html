@@ -27,7 +27,7 @@
         <th scope="col">Address</th>
         <th scope="col">Host Check</th>
         <th scope="col">Service</th>
-        <th scope="col">Console</th>
+        <th scope="col" *ngIf="isAdmin">Console</th>
         <th scope="col">Metrics Check</th>
         <th scope="col">Host Metrics</th>
         <th scope="col">Linked</th>
@@ -36,7 +36,7 @@
         <th scope="col">Env</th>
         <th scope="col">VM</th>
         <th scope="col">Note</th>
-        <th scope="col">Option</th>
+        <th scope="col" *ngIf="isAdmin">Option</th>
       </tr>
     </thead>
     <tbody>
@@ -77,8 +77,8 @@
               </button>
             </div>
           </td>
-          <td>
-            <button type="button" class="btn btn-info btn-sm" (click)="openTerminal(data)">
+          <td *ngIf="isAdmin">
+            <button *ngIf="data.userName" type="button" class="btn btn-info btn-sm" (click)="openTerminal(data)">
               <i class="fas fa-terminal"></i>
             </button>
           </td>
@@ -132,7 +132,7 @@
           <td>{{data.envName}}</td>
           <td>{{data.vmName}}</td>
           <td class="text-wrap">{{data.note}}</td>
-          <td>
+          <td *ngIf="isAdmin">
             <div class="nowrap text-center">
               <button type="button" class="btn btn-primary btn-sm ml3" (click)="editData(data)">
                 <i class="fas fa-edit fa-fw"></i>
