@@ -456,12 +456,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let username = hostData.userName;
     // console.log(hostData)
     if (username) {
-      let test = `http://192.168.120.135:8888/?hostname=${host}&username=${username}`
-      // let test = `http://192.168.120.135:8888/?hostname=192.168.120.135&username=owlsnest&VHNlbiQyMDIxJXNsd28=`
+      let websshURL = `http://192.168.120.135:8888/?hostname=${host}&username=${username}`
+      // let websshURL = `http://192.168.120.135:8888/?hostname=192.168.120.135&username=owlsnest&VHNlbiQyMDIxJXNsd28=`
       let openTerminal: any = window.open(
-        test,
+        websshURL,
         `${hostData.hostName} / ${hostData.ipAddress}`,
-        `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
+        `toolbar=yes,scrollbars=yes,titlebar=yes,resizable=yes,top=1000,left=1000,width=1080,height=720`
       );
     }
   }
