@@ -454,16 +454,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async openTerminal(hostData: any){
     let host = hostData.ipAddress;
     let username = hostData.userName;
-    let password = btoa(hostData.userPass);
+    let password = hostData.userPass;
+    let passwordE = btoa(hostData.userPass);
     // console.log(hostData)
     if (username) {
-      let websshURL = `http://192.168.120.135:8888/?hostname=${host}&username=${username}&password=${password}`
-      // let websshURL = `http://192.168.120.135:8888/?hostname=192.168.120.135&username=owlsnest&VHNlbiQyMDIxJXNsd28=`
-      let openTerminal: any = window.open(
-        websshURL,
-        `${hostData.hostName} / ${hostData.ipAddress}`,
-        `toolbar=yes,scrollbars=yes,titlebar=yes,resizable=yes,top=1000,left=1000,width=1080,height=720`
-      );
+      let websshURL = `http://192.168.120.135:8888/?hostname=${host}&username=${username}&password=${passwordE}`
+      window.open(websshURL, '_blank');
+      // window.open(
+      //   websshURL,
+      //   `${hostData.hostName} / ${hostData.ipAddress}`,
+      //   `toolbar=yes,scrollbars=yes,titlebar=yes,resizable=yes,top=1000,left=1000,width=1080,height=720`
+      // );
     }
   }
 }
