@@ -32,6 +32,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   EStatus = EStatus;
   isChecked = true;
   loading: boolean = false;
+  internetLoading: boolean = false;
+  internetChartLoading: boolean = false;
   public state: State = { sort: [{ dir: 'desc', field: 'hostName' }] };
   audio = new Audio('../assets/sound/service_down.mp3');
   storageItemName = 'oldDashboard';
@@ -40,7 +42,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   intervalTime: number = 60;
   timer: number = this.intervalTime;
   login = { u: '', p: '', t: '' };
-  hostTerminal: any = undefined;
 
 
   constructor(
@@ -63,6 +64,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     // this.audio.play();
     await this.loadData();
+    await this.internetChart();
     // await this.compareStatus();
     this.intervalId = setInterval(() => {
       if (this.isChecked) {
@@ -71,6 +73,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (this.timer === 0) {
           this.loading = true;
           this.loadData();
+          this.internetChart()
           this.loading = false;
           toastr.success('Reload Data Successfully!');
           this.timer = this.intervalTime;
@@ -155,7 +158,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // let res = await ConstantService.get_promise(this.dashboardservice.latestPull());
     this.loading = true;
     await this.loadData();
+    await this.internetChart();
     this.loading = false;
+
   }
 
   async compareStatus(res: Idashboard[]) {
@@ -437,6 +442,59 @@ export class DashboardComponent implements OnInit, OnDestroy {
     await reloadChart();
   }
 
+  async internetChart() {
+    let internetStatusChart = undefined;
+    let speedChart = async () => {
+      setTimeout(
+        async () => {
+          try {
+            let res: any = undefined;
+            res = <any>await this.dashboardService.internetMetrics();
+            // console.log(res);
+            let internetStatus: any = undefined;
+            let internetTest = await res;
+            internetTest.unshift(['Timestamp', 'Ping', 'Download', 'Upload']);
+            // console.log(internetTest)
+            let latestMetrics = internetTest[internetTest.length - 1]
+            let Timestamp = latestMetrics[0];
+            let Ping = latestMetrics[1];
+            let Download = latestMetrics[2];
+            let Upload = latestMetrics[3];
+            // console.log(Timestamp)
+            internetStatus = google.visualization.arrayToDataTable(await internetTest);
+
+            let internetStatusOptions = {
+              title: `Internet Status => [ Timestamp: ${Timestamp}, Ping: ${Ping}/ms, Download: ${Download}/Mbps, Upload: ${Upload}/Mbps]`,
+              // title: `Disk Status => [ Total: Test ]`,
+              hAxis: { title: 'Timestemp' },
+              vAxis: { title: 'Speed in Mbps', minValue: 0 },
+              curveType: 'function',
+              pointSize: 3,
+              colors: ['blue', 'red', 'green'],
+              chartArea:{left:'10%',top:'8%',width:'75%'},
+              // legend: { position: 'bottom' }
+            };
+            internetStatusChart = await new google.visualization.AreaChart(document.getElementById('internetStatus'));
+            await internetStatusChart.draw(await internetStatus, internetStatusOptions);
+          } catch (e) {
+            console.log(e);
+          }
+        }, 3000);
+    }
+    this.internetLoading = true
+    await speedChart();
+    this.internetLoading = false
+  }
+
+  showInternetStatus(){
+    let x: any = document.getElementById("internetStatusId");
+    if (x.style.display === "none") {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
+  }
+
   // Multiple row selection logic
   async rowChecked(data: any, event?: any) {
     let rowId: any = document.getElementById(data._id);
@@ -447,7 +505,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       else{
         rowId.style.backgroundColor = "gray";
       }
-
   }
 
   // Host ssh access function
