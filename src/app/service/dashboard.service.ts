@@ -68,6 +68,11 @@ export class DashboardService {
     return JSON.parse(this.constantService.getDecryptedData(resp.data));
   }
 
+  internetCheck(id: any, data: boolean) {
+    let resp: any = this.http.get(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/speedTest/' + id + '/' + data)).toPromise();
+    return this.constantService.getDecryptedData(resp);
+  }
+
   async list(select?: string) {
     let resp: any;
     if (select) {

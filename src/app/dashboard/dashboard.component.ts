@@ -11,6 +11,7 @@ import { Router } from '@angular/router';
 // import { WebLinksAddon } from 'xterm-addon-web-links';
 // import { io, Socket } from "socket.io-client";
 import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { Ispeedtest } from '../interface/Ispeedtest';
 
 declare let toastr: any;
 declare let $: any;
@@ -31,6 +32,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   hostId: any = undefined
   EStatus = EStatus;
   isChecked = true;
+  intChecked = true;
+  selectedObj: Ispeedtest = <any>undefined;
   loading: boolean = false;
   internetLoading: boolean = false;
   internetChartLoading: boolean = false;
@@ -152,6 +155,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   async autoReload(event?: any) {
     this.isChecked != this.isChecked
+  }
+
+  async internetCheck(event?: any) {
+    this.intChecked != this.intChecked
+    let id = this.selectedObj._id
+    let req = <any>this.dashboardService.internetCheck(id, this.intChecked);
   }
 
   async latestPull(event?: any) {
@@ -450,9 +459,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
           try {
             let res: any = undefined;
             res = <any>await this.dashboardService.internetMetrics();
+            this.selectedObj = res;
+            this.intChecked = res.internetCheck;
             // console.log(res);
             let internetStatus: any = undefined;
-            let internetTest = await res;
+            let internetTest = await res.speedTest;
             internetTest.unshift(['Timestamp', 'Ping', 'Download', 'Upload']);
             // console.log(internetTest)
             let latestMetrics = internetTest[internetTest.length - 1]
