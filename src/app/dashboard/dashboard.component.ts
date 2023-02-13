@@ -160,7 +160,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async internetCheck(event?: any) {
     this.intChecked != this.intChecked
     let id = this.selectedObj._id
-    let req = <any>this.dashboardService.internetCheck(id, this.intChecked);
+    let req = await <any>this.dashboardService.internetCheck(id, this.intChecked);
   }
 
   async latestPull(event?: any) {
@@ -504,7 +504,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } else {
       x.style.display = "none";
     }
+    this.internetChart()
   }
+
 
   // Multiple row selection logic
   async rowChecked(data: any, event?: any) {
