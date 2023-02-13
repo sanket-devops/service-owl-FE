@@ -160,6 +160,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
   async internetCheck(event?: any) {
     this.intChecked != this.intChecked
     let id = this.selectedObj._id
+    let x: any = document.getElementById("internetStatusId");
+    if (this.intChecked) {
+      x.style.display = "block";
+    } else {
+      x.style.display = "none";
+    }
     let req = await <any>this.dashboardService.internetCheck(id, this.intChecked);
   }
 
@@ -501,10 +507,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let x: any = document.getElementById("internetStatusId");
     if (x.style.display === "none") {
       x.style.display = "block";
+      this.internetChart()
     } else {
       x.style.display = "none";
     }
-    this.internetChart()
   }
 
 
