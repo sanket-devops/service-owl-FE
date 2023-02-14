@@ -31,8 +31,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   selectedHostMetrics: IhostMetrics = <any>undefined;
   hostId: any = undefined
   EStatus = EStatus;
-  isChecked = true;
-  intChecked = true;
+  isChecked: boolean = true;
+  intChecked: boolean = true;
   selectedObj: Ispeedtest = <any>undefined;
   loading: boolean = false;
   internetLoading: boolean = false;
@@ -268,9 +268,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 // Open new window and drow chart
   async drawChart(_id: any, dataH?: any) {
     this.selectedHostMetrics = <any>undefined;
-    let diskStatusChart = undefined;
-    let memStatusChart = undefined;
-    let cpuStatusChart = undefined;
+    let diskStatusChart: any = undefined;
+    let memStatusChart: any = undefined;
+    let cpuStatusChart: any = undefined;
 
     let hostId = _id;
     let dataTime: number = (-Math.abs((dataH) * 12));
@@ -473,12 +473,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
             internetTest.unshift(['Timestamp', 'Ping', 'Download', 'Upload']);
             // console.log(internetTest)
             let latestMetrics = internetTest[internetTest.length - 1]
-            let Timestamp = latestMetrics[0];
+            let Timestamp = latestMetrics[0].toLocaleString("en-US", {
+              localeMatcher: "best fit",
+              timeZoneName: "short"
+            });
             let Ping = latestMetrics[1];
             let Download = latestMetrics[2];
             let Upload = latestMetrics[3];
             // console.log(Timestamp)
             internetStatus = google.visualization.arrayToDataTable(await internetTest);
+            console.log(Timestamp)
 
             let internetStatusOptions = {
               title: `Internet Status => [ Timestamp: ${Timestamp}, Ping: ${Ping}/ms, Download: ${Download}/Mbps, Upload: ${Upload}/Mbps]`,
