@@ -473,16 +473,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
             internetTest.unshift(['Timestamp', 'Ping', 'Download', 'Upload']);
             // console.log(internetTest)
             let latestMetrics = internetTest[internetTest.length - 1]
-            let Timestamp = latestMetrics[0].toLocaleString("en-US", {
-              localeMatcher: "best fit",
-              timeZoneName: "short"
-            });
+            let Timestamp = latestMetrics[0];
             let Ping = latestMetrics[1];
             let Download = latestMetrics[2];
             let Upload = latestMetrics[3];
-            // console.log(Timestamp)
             internetStatus = google.visualization.arrayToDataTable(await internetTest);
-            console.log(Timestamp)
 
             let internetStatusOptions = {
               title: `Internet Status => [ Timestamp: ${Timestamp}, Ping: ${Ping}/ms, Download: ${Download}/Mbps, Upload: ${Upload}/Mbps]`,
