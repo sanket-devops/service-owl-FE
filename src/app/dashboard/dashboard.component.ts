@@ -114,6 +114,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
     this.responseData = res;
     this.responseData = _.orderBy(this.responseData, ['status'], ['asc']);
+
+    let resInternetData: any = undefined;
+    resInternetData = <any>await this.dashboardService.internetMetrics();
+    this.selectedObj = resInternetData;
+    this.intChecked = resInternetData.internetCheck;
+
     this.loading = false;
   }
 
@@ -464,12 +470,50 @@ export class DashboardComponent implements OnInit, OnDestroy {
         async () => {
           try {
             let res: any = undefined;
-            res = <any>await this.dashboardService.internetMetrics();
-            this.selectedObj = res;
-            this.intChecked = res.internetCheck;
+            // res = <any>await this.dashboardService.internetMetrics();
+            res = <any>await this.dashboardService.internetMetricsPullData(12); // Get 1H Internet Data Last 12 Record.
+            let internetStatus: any = undefined;
+            let internetTest = await res;
+            internetTest.unshift(['Timestamp', 'Ping', 'Download', 'Upload']);
+            let latestMetrics = internetTest[internetTest.length - 1]
+            let Timestamp = latestMetrics[0];
+            let Ping = latestMetrics[1];
+            let Download = latestMetrics[2];
+            let Upload = latestMetrics[3];
+            internetStatus = google.visualization.arrayToDataTable(await internetTest);
+
+            let internetStatusOptions = {
+              title: `Internet Status => [ Timestamp: ${Timestamp}, Ping: ${Ping}/ms, Download: ${Download}/Mbps, Upload: ${Upload}/Mbps]`,
+              // title: `Disk Status => [ Total: Test ]`,
+              hAxis: { title: 'Timestemp' },
+              vAxis: { title: 'Speed in Mbps', minValue: 0 },
+              curveType: 'function',
+              pointSize: 3,
+              colors: ['blue', 'red', 'green'],
+              chartArea:{left:'10%',top:'8%',width:'75%'},
+              // legend: { position: 'bottom' }
+            };
+            internetStatusChart = await new google.visualization.AreaChart(document.getElementById('internetStatus'));
+            await internetStatusChart.draw(await internetStatus, internetStatusOptions);
+          } catch (e) {
+            console.log(e);
+          }
+        }, 1000);
+    }
+    this.internetLoading = true
+    await speedChart();
+    this.internetLoading = false
+  }
+
+  async internetChartGet(PullData: number) {
+    let internetStatusChart = undefined;
+          try {
+            let res: any = undefined;
+            // res = <any>await this.dashboardService.internetMetrics();
+            res = <any>await this.dashboardService.internetMetricsPullData(PullData);
             // console.log(res);
             let internetStatus: any = undefined;
-            let internetTest = await res.speedTest;
+            let internetTest = await res;
             internetTest.unshift(['Timestamp', 'Ping', 'Download', 'Upload']);
             // console.log(internetTest)
             let latestMetrics = internetTest[internetTest.length - 1]
@@ -495,10 +539,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           } catch (e) {
             console.log(e);
           }
-        }, 3000);
-    }
     this.internetLoading = true
-    await speedChart();
     this.internetLoading = false
   }
 

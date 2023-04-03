@@ -1,4 +1,3 @@
-<!---->
 <div class="first-div">
   <!--  <button mat-raised-button color="primary" class="btn btn-primary" (click)="latestPull($event)">Reload</button>-->
   <button type="button" class="btn btn-secondary ml3" (click)="latestPull($event)"><i class="fas fa-sync-alt fa-fw"></i> Reload in <span class="timer">{{timer}}</span></button>
@@ -9,10 +8,21 @@
   </button>
   <button type="button" class="btn btn-danger float-end mr-2" (click)="logout()"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</button>
 
-  <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="showInternetStatus()">
-    <i class="fab fa-internet-explorer"></i>&nbsp;&nbsp;
+  <button type="button" class="btn btn-primary ml3" (click)="showInternetStatus()"><i class="fab fa-internet-explorer"></i>&nbsp;&nbsp;
     <mat-slide-toggle [(ngModel)]="this.intChecked" name="check" (change)="internetCheck($event)"></mat-slide-toggle>
   </button>
+  <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3 dropdown-toggle" id="dropdownInternetCheck" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fas fa-chart-area"></i>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdownInternetCheck">
+    <li><a class="dropdown-item" (click)="internetChartGet(24)">2H Metrics</a></li>
+    <li><a class="dropdown-item" (click)="internetChartGet(48)">4H Metrics</a></li>
+    <li><a class="dropdown-item" (click)="internetChartGet(96)">8H Metrics</a></li>
+    <li><a class="dropdown-item" (click)="internetChartGet(144)">12H Metrics</a></li>
+    <li><a class="dropdown-item" (click)="internetChartGet(288)">24H Metrics</a></li>
+    <li><a class="dropdown-item" (click)="internetChartGet(576)">48H Metrics</a></li>
+    <li><a class="dropdown-item" (click)="internetChartGet(2016)" *ngIf="isAdmin">Full Metrics <i class="fas fa-exclamation-circle"></i></a></li>
+  </ul>
 </div>
 
 <div id="internetStatusId" style="text-align: center">
@@ -101,7 +111,7 @@
           </td>
           <td>
             <div class="nowrap">
-              <button *ngIf="(data.hostMetrics | keyvalue)?.length" class="btn btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" (click)="this.selectedService = data;" aria-expanded="false">
+              <button *ngIf="(data.hostMetrics | keyvalue)?.length" class="btn btn-info btn-sm dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" (click)="this.selectedService = data;" aria-expanded="false">
                 <!-- <i class="fas fa-eye"></i> -->
                 <i class="fas fa-chart-area"></i>
               </button>
