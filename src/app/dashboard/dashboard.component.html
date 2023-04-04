@@ -99,12 +99,12 @@
             </div>
           </td>
           <td *ngIf="isAdmin">
-            <a *ngIf="data.userName" role="button" class="btn btn-info btn-sm" (click)="openTerminal(data)">
+            <a *ngIf="data.userName && data.userPass" role="button" class="btn btn-info btn-sm" (click)="openTerminal(data)">
               <i class="fas fa-terminal"></i>
             </a>
           </td>
-          <td>
-            <div class="nowrap text-center">
+          <td *ngIf="isAdmin">
+            <div *ngIf="data.userName && data.userPass" class="nowrap text-center">
               <mat-slide-toggle data-bs-toggle="modal" [(ngModel)]="data.metricsCheck" (ngModelChange)="metricsCheckSwitch($event, data)"></mat-slide-toggle>
               <!-- <input type="checkbox" checked data-bs-toggle="modal" data-onstyle="success" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"> -->
             </div>
