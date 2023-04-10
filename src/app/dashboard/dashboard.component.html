@@ -8,7 +8,7 @@
   </button>
   <button type="button" class="btn btn-danger float-end mr-2" (click)="logout()"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</button>
 
-  <button type="button" class="btn btn-primary ml3" (click)="showInternetStatus()"><i class="fab fa-internet-explorer"></i>&nbsp;&nbsp;
+  <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="showInternetStatus()"><i class="fab fa-internet-explorer"></i>&nbsp;&nbsp;
     <mat-slide-toggle [(ngModel)]="this.intChecked" name="check" (change)="internetCheck($event)"></mat-slide-toggle>
   </button>
   <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3 dropdown-toggle" id="dropdownInternetCheck" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,10 +46,10 @@
         <th scope="col">#</th>
         <th scope="col">Host Name</th>
         <th scope="col">Address</th>
-        <th scope="col">Host Check</th>
+        <th scope="col" *ngIf="isAdmin">Host Check</th>
         <th scope="col">Service</th>
         <th scope="col" *ngIf="isAdmin">Console</th>
-        <th scope="col">Metrics Check</th>
+        <th scope="col" *ngIf="isAdmin">Metrics Check</th>
         <th scope="col">Host Metrics</th>
         <th scope="col">Linked</th>
         <th scope="col">Group Name</th>
@@ -72,7 +72,7 @@
             </td>
           <td>{{data.hostName}}</td>
           <td>{{data.ipAddress}}</td>
-          <td>
+          <td *ngIf="isAdmin">
             <div class="nowrap text-center">
               <mat-slide-toggle data-bs-toggle="modal" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"></mat-slide-toggle>
               <!-- <input type="checkbox" checked data-bs-toggle="modal" data-onstyle="success" [(ngModel)]="data.hostCheck" (ngModelChange)="switchChange($event, data)"> -->
