@@ -251,18 +251,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return arr;
   }
 
-  async switchChange(newValue: boolean, dashboard: Idashboard) {
+  async switchChange(newValue: any, host: Idashboard) {
     await ConstantService.get_promise(
       this.dashboardService.update({
-        _id: <any>dashboard._id,
+        _id: <any>host._id,
         hostCheck: newValue,
       })
     );
   }
-  async metricsCheckSwitch(newValue: boolean, dashboard: Idashboard) {
+  async metricsCheckSwitch(newValue: any, host: Idashboard) {
     await ConstantService.get_promise(
       this.dashboardService.update({
-        _id: <any>dashboard._id,
+        _id: <any>host._id,
         metricsCheck: newValue,
       })
     );

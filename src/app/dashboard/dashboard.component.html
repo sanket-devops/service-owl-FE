@@ -106,7 +106,7 @@
         <td class="nowrap text-center">{{host.hostName}}</td>
         <td class="nowrap text-center">{{host.ipAddress}}</td>
         <td *ngIf="isAdmin" class="text-center">
-          <mat-slide-toggle data-bs-toggle="modal" [(ngModel)]="host.hostCheck"
+          <mat-slide-toggle [(ngModel)]="host.hostCheck"
             (ngModelChange)="switchChange($event, host)"></mat-slide-toggle>
         </td>
         <td class="text-center">
@@ -138,7 +138,7 @@
         </td>
         <td *ngIf="isAdmin" class="text-center">
           <div *ngIf="host.userName && host.userPass">
-            <mat-slide-toggle data-bs-toggle="modal" [(ngModel)]="host.metricsCheck"
+            <mat-slide-toggle [(ngModel)]="host.metricsCheck"
               (ngModelChange)="metricsCheckSwitch($event, host)"></mat-slide-toggle>
           </div>
         </td>
