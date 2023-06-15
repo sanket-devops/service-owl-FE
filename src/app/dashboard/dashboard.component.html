@@ -48,7 +48,7 @@
 </div>
 
 <div class="card">
-  <p-table class="table" #dt [value]="responseData"
+  <p-table class="table" #dt [value]="responseData" styleClass="p-datatable-sm"
     [globalFilterFields]="['hostName','ipAddress','status','groupName','clusterName','envName','vmName','note']"
     selectionMode="multiple" [(selection)]="selectedHosts" [metaKeySelection]="true" [rowHover]="true" dataKey="_id"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
@@ -63,7 +63,7 @@
     </ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th style="width: 3rem">
+        <th class="text-center" style="width: 3rem">
           <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
         </th>
         <th style="width: 16rem" class="text-center" pSortableColumn="hostName ">Host Name<p-sortIcon
