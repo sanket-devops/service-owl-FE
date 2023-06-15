@@ -45,7 +45,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   intervalTime: number = 60;
   timer: number = this.intervalTime;
   login = { u: '', p: '', t: '' };
-  display: boolean = false;
 
   constructor(
     public constantService: ConstantService,
@@ -171,6 +170,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let x: any = document.getElementById('internetStatusId');
     if (this.intChecked) {
       x.style.display = 'block';
+      this.internetChart();
     } else {
       x.style.display = 'none';
     }
@@ -622,8 +622,5 @@ export class DashboardComponent implements OnInit, OnDestroy {
       //   `toolbar=yes,scrollbars=yes,titlebar=yes,resizable=yes,top=1000,left=1000,width=1080,height=720`
       // );
     }
-  }
-  showDialog() {
-    this.display = true;
   }
 }
