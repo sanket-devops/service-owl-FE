@@ -24,6 +24,27 @@ import {CheckBoxModule} from '@progress/kendo-angular-treeview';
 import {SwitchModule} from '@progress/kendo-angular-inputs';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 
+import {TableModule} from 'primeng-lts/table';
+import {ToastModule} from 'primeng-lts/toast';
+import {CalendarModule} from 'primeng-lts/calendar';
+import {SliderModule} from 'primeng-lts/slider';
+import {MultiSelectModule} from 'primeng-lts/multiselect';
+import {ContextMenuModule} from 'primeng-lts/contextmenu';
+import {DialogModule} from 'primeng-lts/dialog';
+import {ButtonModule} from 'primeng-lts/button';
+import {DropdownModule} from 'primeng-lts/dropdown';
+import {ProgressBarModule} from 'primeng-lts/progressbar';
+import {InputTextModule} from 'primeng-lts/inputtext';
+import {FileUploadModule} from 'primeng-lts/fileupload';
+import {ToolbarModule} from 'primeng-lts/toolbar';
+import {RatingModule} from 'primeng-lts/rating';
+import {RadioButtonModule} from 'primeng-lts/radiobutton';
+import {InputNumberModule} from 'primeng-lts/inputnumber';
+import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
+import {InputTextareaModule} from 'primeng-lts/inputtextarea';
+
+
+
 // import * as http from 'http';
 
 
@@ -53,6 +74,24 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
         CheckBoxModule,
         SwitchModule,
         MatCheckboxModule,
+        TableModule,
+        ToastModule,
+        CalendarModule,
+        SliderModule,
+        MultiSelectModule,
+        ContextMenuModule,
+        DialogModule,
+        ButtonModule,
+        DropdownModule,
+        ProgressBarModule,
+        InputTextModule,
+        FileUploadModule,
+        ToolbarModule,
+        RatingModule,
+        RadioButtonModule,
+        InputNumberModule,
+        ConfirmDialogModule,
+        InputTextareaModule,
     ],
   providers: [ConstantService, DashboardService],
   bootstrap: [AppComponent]

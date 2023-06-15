@@ -26,6 +26,7 @@ declare let google: any;
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   responseData: Idashboard[] = [];
+  selectedHosts: Idashboard[] = <any>undefined;
   clusterCount: number = 1;
   selectedService: Idashboard = <any>undefined;
   selectedHostMetrics: IhostMetrics = <any>undefined;
@@ -103,8 +104,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
       res = <any>await this.dashboardService.list();
       // console.log(res)
     } catch (e) {
-      <any>await this.audio.play();
-      console.log(e);
+      setTimeout(async() => {
+        <any>await this.audio.play();
+        console.log(e);
+      }, 1000);
     }
     for (let data of res) {
       if (data.status === EStatus.DOWN || data.status === EStatus.S_DOWN) {
@@ -200,7 +203,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
           break;
         }
       }
-      if (changeFound) await this.audio.play();
+      if (changeFound) {
+        setTimeout(async() => {
+        await this.audio.play();
+      }, 1000);
+      }
       else console.log('No change found');
       localStorage.setItem(
         this.storageItemName,
