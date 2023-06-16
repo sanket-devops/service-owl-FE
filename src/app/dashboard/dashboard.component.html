@@ -1,35 +1,40 @@
-<div class="first-div">
-  <!--  <button mat-raised-button color="primary" class="btn btn-primary" (click)="latestPull($event)">Reload</button>-->
-  <button type="button" class="btn btn-secondary ml3" (click)="latestPull($event)"><i class="fas fa-sync-alt fa-fw"></i>
-    Reload in <span class="timer">{{timer}}</span></button>
-  <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="AddHost()"><i
-      class="fas fa-plus fa-fw"></i> Add Host</button>
-  <button type="button" class="btn btn-primary ml3">
-    <i class="fas fa-sync-alt fa-fw"></i> Reload 60s&nbsp;
-    <mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="autoReload($event)"></mat-slide-toggle>
-  </button>
-  <button type="button" class="btn btn-danger float-end mr-2" (click)="logout()"><i
-      class="fas fa-sign-out-alt fa-fw"></i> Logout</button>
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <!--  <button mat-raised-button color="primary" class="btn btn-primary" (click)="latestPull($event)">Reload</button>-->
+    <button type="button" class="btn btn-secondary ml3" (click)="latestPull($event)"><i
+        class="fas fa-sync-alt fa-fw"></i>
+      Reload in <span class="timer">{{timer}}</span></button>
+    <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="AddHost()"><i
+        class="fas fa-plus fa-fw"></i> Add Host</button>
+    <button type="button" class="btn btn-primary ml3">
+      <i class="fas fa-sync-alt fa-fw"></i> Reload 60s&nbsp;
+      <mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="autoReload($event)"></mat-slide-toggle>
+    </button>
+    <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="showInternetStatus()"><i
+        class="fab fa-internet-explorer"></i>&nbsp;&nbsp;
+      <mat-slide-toggle [(ngModel)]="this.intChecked" name="check" (change)="internetCheck($event)"></mat-slide-toggle>
+    </button>
+    <button type="button" *ngIf="isAdmin && this.intChecked" class="btn btn-primary ml3 dropdown-toggle"
+      id="dropdownInternetCheck" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fas fa-chart-area"></i>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownInternetCheck">
+      <li><a class="dropdown-item" (click)="internetChartGet(24)">2H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(48)">4H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(96)">8H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(144)">12H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(288)">24H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(576)">48H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(2016)" *ngIf="isAdmin">Full Metrics <i
+            class="fas fa-exclamation-circle"></i></a></li>
+    </ul>
+  </ng-template>
 
-  <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="showInternetStatus()"><i
-      class="fab fa-internet-explorer"></i>&nbsp;&nbsp;
-    <mat-slide-toggle [(ngModel)]="this.intChecked" name="check" (change)="internetCheck($event)"></mat-slide-toggle>
-  </button>
-  <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3 dropdown-toggle" id="dropdownInternetCheck"
-    data-bs-toggle="dropdown" aria-expanded="false">
-    <i class="fas fa-chart-area"></i>
-  </button>
-  <ul class="dropdown-menu" aria-labelledby="dropdownInternetCheck">
-    <li><a class="dropdown-item" (click)="internetChartGet(24)">2H Metrics</a></li>
-    <li><a class="dropdown-item" (click)="internetChartGet(48)">4H Metrics</a></li>
-    <li><a class="dropdown-item" (click)="internetChartGet(96)">8H Metrics</a></li>
-    <li><a class="dropdown-item" (click)="internetChartGet(144)">12H Metrics</a></li>
-    <li><a class="dropdown-item" (click)="internetChartGet(288)">24H Metrics</a></li>
-    <li><a class="dropdown-item" (click)="internetChartGet(576)">48H Metrics</a></li>
-    <li><a class="dropdown-item" (click)="internetChartGet(2016)" *ngIf="isAdmin">Full Metrics <i
-          class="fas fa-exclamation-circle"></i></a></li>
-  </ul>
-</div>
+  <ng-template pTemplate="right">
+    <button type="button" class="btn btn-danger float-end mr-2" (click)="logout()"><i
+        class="fas fa-sign-out-alt fa-fw"></i> Logout</button>
+  </ng-template>
+</p-toolbar>
 
 <div id="internetStatusId" class="second-div">
   <div *ngIf="this.intChecked" style="text-align: center">
