@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {ConstantService} from './constant.service';
 // import {CookieService} from 'ngx-cookie-service';
 import {Idashboard} from '../interface/Idashboard';
+import {Ispeedtest} from '../interface/Ispeedtest';
 
 @Injectable()
 export class DashboardService {
@@ -11,6 +12,8 @@ export class DashboardService {
 
   cloneObj: Idashboard = <any>undefined;
   editObj: Idashboard = <any>undefined;
+
+  speedObj: Ispeedtest = <any>undefined;
 
   constructor(private http: HttpClient, public constantService: ConstantService) {
   }
@@ -48,6 +51,35 @@ export class DashboardService {
   // latestPull() {
   //   return this.http.get<Partial<Idashboard>>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/latestPull'));
   // }
+
+  async hostMetricsData(_id: any) {
+    let resp: any;
+    if (_id) {
+      resp = await this.http.get<Partial<Idashboard>[]>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/hostMetrics/' + _id)).toPromise();
+      // console.log(resp);
+    }
+    return JSON.parse(this.constantService.getDecryptedData(resp.data));
+  }
+
+  async internetMetrics() {
+    let resp: any;
+      resp = await this.http.get<Partial<Ispeedtest>[]>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/speedTest')).toPromise();
+      // console.log(this.constantService.getDecryptedData(resp.data));
+    return JSON.parse(this.constantService.getDecryptedData(resp.data));
+  }
+
+  async internetMetricsPullData(PullData: any) {
+    let resp: any;
+      resp = await this.http.get<Partial<Ispeedtest>[]>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/speedTest/' + PullData)).toPromise();
+    return JSON.parse(this.constantService.getDecryptedData(resp.data));
+  }
+
+  async internetCheck(id: any, data: boolean) {
+    let resp: any;
+    resp = await this.http.get(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/speedTest/' + id + '/' + data)).toPromise();
+    // console.log(resp)
+    return resp;
+  }
 
   async list(select?: string) {
     let resp: any;

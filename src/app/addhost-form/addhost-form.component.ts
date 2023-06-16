@@ -23,12 +23,15 @@ export class AddhostFormComponent implements OnInit {
       _id: [''],
       hostName: [''],
       ipAddress: [''],
+      userName: [''],
+      userPass: [''],
       groupName: [''],
       clusterName: [''],
       envName: [''],
       vmName: [''],
       note: [''],
-      hostCheck: [''],
+      hostCheck: [false],
+      metricsCheck: [false],
     });
 
     if (this.dashboardservice.editObj || this.dashboardservice.cloneObj) {

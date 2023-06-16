@@ -1,170 +1,408 @@
-<!---->
-<div class="first-div">
-  <!--  <button mat-raised-button color="primary" class="btn btn-primary" (click)="latestPull($event)">Reload</button>-->
-  <button type="button" class="btn btn-secondary ml3" (click)="latestPull($event)"><i class="fas fa-sync-alt fa-fw"></i> Reload in <span class="timer">{{timer}}</span></button>
-  <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="AddHost()"><i class="fas fa-plus fa-fw"></i> Add Host</button>
-  <!-- <button type="button" class="btn btn-primary ml3 timer" (click)="latestPull($event)"><i class="fas fa-sync-alt fa-fw"></i> 60</button> -->
-  <button type="button" class="btn btn-primary ml3">
-    <mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="autoReload($event)"><i class="fas fa-sync-alt fa-fw"></i> Auto Reload 60/s: {{isChecked}}</mat-slide-toggle>
-  </button>
-  <button type="button" class="btn btn-danger float-right mr-2" (click)="logout()"><i class="fas fa-sign-out-alt fa-fw"></i> Logout</button>
-  <!--  <button mat-raised-button color="primary" class="btn btn-primary ml3" (click)="AddHost()">Add Host</button>-->
+<p-toolbar styleClass="p-mb-4">
+  <ng-template pTemplate="left">
+    <!--  <button mat-raised-button color="primary" class="btn btn-primary" (click)="latestPull($event)">Reload</button>-->
+    <button type="button" class="btn btn-secondary ml3" (click)="latestPull($event)"><i
+        class="fas fa-sync-alt fa-fw"></i>
+      Reload in <span class="timer">{{timer}}</span></button>
+    <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="AddHost()"><i
+        class="fas fa-plus fa-fw"></i> Add Host</button>
+    <button type="button" class="btn btn-primary ml3">
+      <i class="fas fa-sync-alt fa-fw"></i> Reload 60s&nbsp;
+      <mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="autoReload($event)"></mat-slide-toggle>
+    </button>
+    <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="showInternetStatus()"><i
+        class="fab fa-internet-explorer"></i>&nbsp;&nbsp;
+      <mat-slide-toggle [(ngModel)]="this.intChecked" name="check" (change)="internetCheck($event)"></mat-slide-toggle>
+    </button>
+    <button type="button" *ngIf="isAdmin && this.intChecked" class="btn btn-primary ml3 dropdown-toggle"
+      id="dropdownInternetCheck" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fas fa-chart-area"></i>
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="dropdownInternetCheck">
+      <li><a class="dropdown-item" (click)="internetChartGet(24)">2H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(48)">4H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(96)">8H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(144)">12H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(288)">24H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(576)">48H Metrics</a></li>
+      <li><a class="dropdown-item" (click)="internetChartGet(2016)" *ngIf="isAdmin">Full Metrics <i
+            class="fas fa-exclamation-circle"></i></a></li>
+    </ul>
+  </ng-template>
 
+  <ng-template pTemplate="right">
+    <button type="button" class="btn btn-danger float-end mr-2" (click)="logout()"><i
+        class="fas fa-sign-out-alt fa-fw"></i> Logout</button>
+  </ng-template>
+</p-toolbar>
+
+<div id="internetStatusId" class="second-div">
+  <div *ngIf="this.intChecked" style="text-align: center">
+    <div id="internetStatus" style="height:500px;">
+      <div style="text-align: center" id="iSpinner" class="spinner-border" role="status">
+        <span style="text-align: center" class="sr-only"></span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center">
+    <div *ngIf="this.loading" style="text-align: center" id="mSpinner" class="spinner-border" role="status">
+      <span style="text-align: center" class="sr-only"></span>
+    </div>
+  </div>
 </div>
 
-<kendo-grid [kendoGridBinding]="responseData"
-            kendoGridSelectBy="_id"
-            [pageable]="false"
-            [sortable]="true"
-            [reorderable]="true"
-            [resizable]="true"
-            [loading]="loading"
-            [columnMenu]="{ filter: true }"
-            [trackBy]="trackBy"
-            class="grid-sm chocolaty kendo-grid-clickable kendo-grid-stripped"
-            style="overflow: hidden; height: calc(100vh - 5px);">
-  <kendo-grid-checkbox-column title="" [width]="40" aria-checked="true">
-    <ng-template kendoGridCellTemplate let-idx="rowIndex">
-      <input [kendoGridSelectionCheckbox]="idx" />
-    </ng-template>
-  </kendo-grid-checkbox-column>
-  <kendo-grid-column field="hostName" title="Host Name" [width]="230"></kendo-grid-column>
-  <kendo-grid-column field="ipAddress" title="Address" [width]="135"></kendo-grid-column>
-  <kendo-grid-column field="status" title="Service" [width]="130" class="text-center">
-    <ng-template kendoGridCellTemplate let-dataItem>
-      <div class="nowrap text-center">
-        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#serviceModal" (click)="selectedService = dataItem">
-          <span>
-            <i class="fab fa-scribd fa-fw"></i>
-            <span class="small mr-1">Services</span>
-            <span *ngIf="!dataItem.status" class="badge badge-secondary ml-2">&nbsp;&nbsp;</span>
-          <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-1">
-            <i class="fas fa-angle-double-up fa-fw"></i>
-          </span>
-          <span *ngIf="dataItem.status === EStatus.DOWN" class="badge badge-danger ml-1">
-            <i class="fas fa-angle-double-down fa-fw"></i>
-          </span>
-          <span *ngIf="dataItem.status === EStatus.S_DOWN" class="badge badge-warning ml-1">
-            <i class="fas fa-angle-double-right fa-fw"></i>
-          </span>
-          </span>
-        </button>
+<div class="card">
+  <p-table class="table" #dt [value]="responseData" styleClass="p-datatable-sm"
+    [globalFilterFields]="['hostName','ipAddress','status','groupName','clusterName','envName','vmName','note']"
+    selectionMode="multiple" [(selection)]="selectedHosts" [metaKeySelection]="true" [rowHover]="true" dataKey="_id"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
+    <ng-template pTemplate="caption">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        <span class="p-input-icon-left">
+          <i class="pi pi-search"></i>
+          <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+            placeholder="Search..." />
+        </span>
       </div>
     </ng-template>
-  </kendo-grid-column>
-  <kendo-grid-column field="hostCheck" title="Check" [width]="80">
-    <ng-template kendoGridCellTemplate let-dataItem>
-      <div class="switch">
-        <kendo-switch data-toggle="modal" [(ngModel)]="dataItem.hostCheck" (ngModelChange)="switchChange($event, dataItem)"></kendo-switch>
+    <ng-template pTemplate="header">
+      <tr>
+        <th class="text-center" style="width: 3rem">
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+        <th style="width: 16rem" class="text-center" pSortableColumn="hostName ">Host Name<p-sortIcon
+            field="hostName"></p-sortIcon></th>
+        <th style="width: 8rem" class="text-center" pSortableColumn="ipAddress">Address<p-sortIcon
+            field="ipAddress"></p-sortIcon></th>
+        <th style="width: 7rem" class="text-center" pSortableColumn="hostCheck" *ngIf="isAdmin">Host Check<p-sortIcon
+            field="hostCheck"></p-sortIcon></th>
+        <th style="width: 8rem" class="text-center" pSortableColumn="status">Services<p-sortIcon
+            field="status"></p-sortIcon></th>
+        <th style="width: 6rem" class="text-center" pSortableColumn="" *ngIf="isAdmin">SSH<p-sortIcon
+            field=""></p-sortIcon></th>
+        <th style="width: 7rem" class="text-center" pSortableColumn="metricsCheck" *ngIf="isAdmin">Metrics
+          Check<p-sortIcon field="metricsCheck"></p-sortIcon></th>
+        <th style="width: 8rem" class="text-center" pSortableColumn="hostMetrics">Host Metrics<p-sortIcon
+            field="hostMetrics"></p-sortIcon>
+        </th>
+        <th style="width: 7rem" class="text-center" pSortableColumn="">Linked<p-sortIcon field=""></p-sortIcon></th>
+        <th style="width: 13rem" class="text-center" pSortableColumn="groupName">Group Name<p-sortIcon
+            field="groupName"></p-sortIcon></th>
+        <th style="width: 18rem" class="text-center" pSortableColumn="clusterName">Cluster Name<p-sortIcon
+            field="clusterName"></p-sortIcon></th>
+        <th style="width: 10rem" class="text-center" pSortableColumn="envName">Env<p-sortIcon
+            field="envName"></p-sortIcon></th>
+        <th style="width: 18rem" class="text-center" pSortableColumn="vmName">VM<p-sortIcon field="vmName"></p-sortIcon>
+        </th>
+        <th style="width: 7rem" class="text-center" pSortableColumn="note">Note<p-sortIcon field="note"></p-sortIcon>
+        </th>
+        <th style="width: 9rem" class="text-center" pSortableColumn="">Option<p-sortIcon field=""></p-sortIcon>
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-host let-rowIndex="rowIndex">
+      <tr [pSelectableRow]="host" [pSelectableRowIndex]="rowIndex">
+        <td class="text-center">
+          <p-tableCheckbox [value]="host"></p-tableCheckbox>
+        </td>
+        <td class="nowrap text-center">{{host.hostName}}</td>
+        <td class="nowrap text-center">{{host.ipAddress}}</td>
+        <td *ngIf="isAdmin" class="text-center">
+          <mat-slide-toggle [(ngModel)]="host.hostCheck"
+            (ngModelChange)="switchChange($event, host)"></mat-slide-toggle>
+        </td>
+        <td class="text-center">
+          <div class="nowrap">
+            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#serviceModal"
+              (click)="selectedService = host">
+              <span>
+                <i class="fab fa-scribd fa-fw"></i>
+                <span class="small mr-1">Services &nbsp;&nbsp;</span>
+                <span *ngIf="!host.status" class="badge bg-secondary md-2">&nbsp;&nbsp;</span>
+                <span *ngIf="host.status === EStatus.UP" class="badge bg-success md-1">
+                  <i class="fas fa-angle-double-up fa-fw"></i>
+                </span>
+                <span *ngIf="host.status === EStatus.DOWN" class="badge bg-danger md-1">
+                  <i class="fas fa-angle-double-down fa-fw"></i>
+                </span>
+                <span *ngIf="host.status === EStatus.S_DOWN" class="badge bg-warning md-1">
+                  <i class="fas fa-angle-double-right fa-fw"></i>
+                </span>
+              </span>
+            </button>
+          </div>
+        </td>
+        <td *ngIf="isAdmin" class="text-center">
+          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-info btn-sm"
+            (click)="openTerminal(host)">
+            <i class="fas fa-terminal"></i>
+          </a>
+        </td>
+        <td *ngIf="isAdmin" class="text-center">
+          <div *ngIf="host.userName && host.userPass">
+            <mat-slide-toggle [(ngModel)]="host.metricsCheck"
+              (ngModelChange)="metricsCheckSwitch($event, host)"></mat-slide-toggle>
+          </div>
+        </td>
+        <td class="text-center">
+          <div class="nowrap">
+            <button *ngIf="(host.hostMetrics | keyvalue)?.length" class="btn btn-info btn-sm dropdown-toggle"
+              type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" (click)="this.selectedService = host;"
+              aria-expanded="false">
+              <!-- <i class="fas fa-eye"></i> -->
+              <i class="fas fa-chart-area"></i>
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
+              <li><a class="dropdown-item" (click)="drawChart(host._id, '1')">1H Metrics</a></li>
+              <li><a class="dropdown-item" (click)="drawChart(host._id, '2')">2H Metrics</a></li>
+              <li><a class="dropdown-item" (click)="drawChart(host._id, '4')">4H Metrics</a></li>
+              <li><a class="dropdown-item" (click)="drawChart(host._id, '8')">8H Metrics</a></li>
+              <li><a class="dropdown-item" (click)="drawChart(host._id, '12')">12H Metrics</a></li>
+              <li><a class="dropdown-item" (click)="drawChart(host._id, '24')">24H Metrics</a></li>
+              <li><a class="dropdown-item" (click)="drawChart(host._id, '48')">48H Metrics</a></li>
+              <li><a class="dropdown-item" (click)="drawChart(host._id, '72')">72H Metrics <i
+                    class="fas fa-exclamation-circle"></i></a></li>
+              <li><a class="dropdown-item" (click)="drawChart(host._id)" *ngIf="isAdmin">Full Metrics <i
+                    class="fas fa-exclamation-circle"></i></a></li>
+            </ul>
+            <button *ngIf="(host.hostMetrics | keyvalue)?.length" type="button"
+              class="btn btn-info rounded-circle btn-sm" data-bs-toggle="modal" data-bs-target="#hostStatus"
+              (click)="this.selectedService = host">
+              <span>
+                <span
+                  *ngIf="(host.hostMetrics[0].DiskFree <= 5 || host.hostMetrics[0].MemFree <= 0.1 || host.hostMetrics[0].CpuUsage >= 90) && (host.hostMetrics[0].DiskFree > 0)"
+                  class="badge bg-warning sm-0">
+                  <i class="fas fa-exclamation"></i>
+                </span>
+                <span
+                  *ngIf="host.hostMetrics[0].DiskFree > 5 && host.hostMetrics[0].MemFree > 0.1 && host.hostMetrics[0].CpuUsage < 90"
+                  class="badge bg-success sm-0">
+                  <i class="far fa-thumbs-up"></i>
+                </span>
+                <span
+                  *ngIf="host.hostMetrics[0].DiskFree === 0 && host.hostMetrics[0].MemFree === 0 && host.hostMetrics[0].CpuUsage === 0"
+                  class="badge bg-danger sm-0">
+                  <i class="fas fa-skull-crossbones"></i>
+                </span>
+              </span>
+            </button>
+          </div>
+        </td>
+        <td class="text-center">
+          <div class="nowrap">
+            <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#linkModal"
+              (click)="this.selectedService = host">
+              <i class="fas fa-link fa-fw"></i>
+            </button>
+          </div>
+        </td>
+        <td class="text-center">{{host.groupName}}</td>
+        <td class="text-center">{{host.clusterName}}</td>
+        <td class="text-center">{{host.envName}}</td>
+        <td class="text-center">{{host.vmName}}</td>
+        <td class="text-center" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis">
+          <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#noteModal"
+            (click)="this.selectedService = host">
+            Note <i class="fas fa-exclamation"></i>
+          </button>
+        </td>
+        <td *ngIf="isAdmin" class="text-center">
+          <div class="nowrap text-center">
+            <button type="button" class="btn btn-primary btn-sm ml3" (click)="editData(host)">
+              <i class="fas fa-edit fa-fw"></i>
+            </button>
+            <button type="button" class="btn btn-info btn-sm ml3" (click)="cloneData(host)">
+              <i class="far fa-clone fa-fw"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-sm ml3" (click)="deleteData(host)">
+              <i class="fas fa-trash fa-fw"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="summary">
+      <div class="p-d-flex p-ai-center p-jc-between">
+        In total there are {{responseData ? responseData.length : 0 }} products.
       </div>
     </ng-template>
-  </kendo-grid-column>
-  <kendo-grid-column field="linkTo" title="Linked" [width]="70">
-    <ng-template kendoGridCellTemplate let-dataItem>
-      <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#linkModal" (click)="this.selectedService = dataItem">
-        <i class="fas fa-link fa-fw"></i>
-      </button>
-    </ng-template>
-  </kendo-grid-column>
-  <kendo-grid-column field="groupName" title="Group Name" [width]="180"></kendo-grid-column>
-  <kendo-grid-column field="clusterName" title="Cluster Name" [width]="220"></kendo-grid-column>
-  <kendo-grid-column field="envName" title="Env" [width]="80"></kendo-grid-column>
-  <kendo-grid-column field="vmName" title="VM" [width]="80"></kendo-grid-column>
-  <kendo-grid-column field="note" title="Note" class="nowrap" [width]="150"></kendo-grid-column>
-  <kendo-grid-column *ngIf="isAdmin" field="linkTo" title="Options" [width]="150">
-    <ng-template kendoGridCellTemplate let-dataItem>
-      <div class="nowrap text-center">
-        <button type="button" class="btn btn-primary btn-sm ml3" (click)="editData(dataItem)">
-          <i class="fas fa-edit fa-fw"></i>
-        </button>
-        <button type="button" class="btn btn-info btn-sm ml3" (click)="cloneData(dataItem)">
-          <i class="far fa-clone fa-fw"></i>
-        </button>
-        <button type="button" class="btn btn-danger btn-sm ml3" (click)="deleteData(dataItem)">
-          <i class="fas fa-trash fa-fw"></i>
-        </button>
-      </div>
-    </ng-template>
-  </kendo-grid-column>
-</kendo-grid>
+  </p-table>
+</div>
 
-<!-- Modal -->
-<div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel" aria-hidden="true">
+
+<!-- Services Modal -->
+<div class="modal fade" id="serviceModal" tabindex="-1" role="dialog" aria-labelledby="serviceModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div *ngIf="selectedService" class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title mb-0 bold" id="serviceModalLabel">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+      <div class="modal-header text-center">
+        <h1 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">Services Status<br> </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
+      <div>
+        <!-- <button type="button" class="btn btn-secondary ml3 float-left" (click)="latestPull($event)"><i class="fas fa-sync-alt fa-fw"></i> Reload in <span class="timer">{{timer}}</span></button>
+        <button type="button" class="btn btn-primary ml3 float-left">
+          <mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="autoReload($event)"><i class="fas fa-sync-alt fa-fw"></i> Auto Reload 60/s: {{isChecked}}</mat-slide-toggle>
+        </button> -->
+        <h3 class="text-center">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
+      </div>
       <div class="modal-body p-1">
-        <kendo-grid [kendoGridBinding]="selectedService.port"
-                    class="grid-sm chocolaty"
-                    kendoGridSelectBy="_id"
-                    [pageable]="false"
-                    [sortable]="true"
-                    [reorderable]="true"
-                    [resizable]="true"
-                    [loading]="loading"
-                    [columnMenu]="{ filter: true }"
-                    [trackBy]="trackBy">
-          <kendo-grid-column field="name" [width]="180" title="Service Name"></kendo-grid-column>
-          <kendo-grid-column field="port" [width]="70" title="Port"></kendo-grid-column>
-          <kendo-grid-column field="status" [width]="60" title="Status">
-            <ng-template kendoGridCellTemplate let-dataItem>
-              <span *ngIf="dataItem.status === EStatus.UP" class="badge badge-success ml-1">
-                <i class="fas fa-angle-double-up fa-fw"></i>
-              </span>
-              <span *ngIf="dataItem.status === EStatus.DOWN" class="badge badge-danger ml-1">
-                <i class="fas fa-angle-double-down fa-fw"></i>
-              </span>
-            </ng-template>
-          </kendo-grid-column>
-          <kendo-grid-column field="http" [width]="60" title="Http"></kendo-grid-column>
-          <kendo-grid-column field="path" [width]="35" title="Path"></kendo-grid-column>
-          <kendo-grid-column field="method" [width]="60" title="Method"></kendo-grid-column>
-          <kendo-grid-column field="statuscode" [width]="60" title="Code"></kendo-grid-column>
-        </kendo-grid>
+        <table class="table table-striped table-hover text-center">
+          <thead>
+            <tr class="text-light bg-dark">
+              <th scope="col">#</th>
+              <th scope="col">Service Name</th>
+              <th scope="col">Port</th>
+              <th scope="col">Status</th>
+              <th scope="col">Http</th>
+              <th scope="col">Path</th>
+              <th scope="col">Method</th>
+              <th scope="col">Code</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of selectedService.port ; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{data.name}}</td>
+              <td>{{data.port}}</td>
+              <td>
+                <div class="nowrap">
+                  <span *ngIf="data.status === EStatus.UP" class="badge bg-success ml-1">
+                    <i class="fas fa-angle-double-up fa-fw"></i>
+                  </span>
+                  <span *ngIf="data.status === EStatus.DOWN" class="badge bg-danger ml-1">
+                    <i class="fas fa-angle-double-down fa-fw"></i>
+                  </span>
+                </div>
+              </td>
+              <td>
+                <mat-slide-toggle [(ngModel)]="data.http" name="port_{{i}}"></mat-slide-toggle>
+              </td>
+              <td>{{data.path}}</td>
+              <td>{{data.method}}</td>
+              <td>{{data.statuscode}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
+
 
 <!-- link modal -->
 <div class="modal fade" id="linkModal" tabindex="-1" role="dialog" aria-labelledby="linkModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog modal-lg" role="document">
     <div *ngIf="selectedService" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title mb-0 bold" id="linkModalLabel">{{ selectedService.hostName }} {{ selectedService.ipAddress }}</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+      <div class="modal-header text-center">
+        <h1 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">Linked Hosts<br> </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
+      <div>
+        <h3 class="modal-title mb-0 bold w-100 text-center" id="hostStatusModalLabel">{{ selectedService.hostName }} /
+          {{ selectedService.ipAddress }}</h3>
+      </div>
       <div class="modal-body p-1">
-        <kendo-grid [kendoGridBinding]="selectedService.linkTo"
-                    class="grid-sm chocolaty"
-                    [height]="410"
-                    kendoGridSelectBy="_id"
-                    [pageable]="false"
-                    [sortable]="true"
-                    [reorderable]="true"
-                    [resizable]="true"
-                    [loading]="loading"
-                    [columnMenu]="{ filter: true }"
-                    [trackBy]="trackBy">
-          <kendo-grid-column field="hostName" title="Host Name"></kendo-grid-column>
-          <kendo-grid-column field="ipAddress" [width]="135" title="Address"></kendo-grid-column>
-          <kendo-grid-column field="port" [width]="75" title="Port"></kendo-grid-column>
-        </kendo-grid>
+        <table class="table table-striped table-hover text-center">
+          <thead>
+            <tr class="text-light bg-dark">
+              <th scope="col">#</th>
+              <th scope="col">Host Name</th>
+              <th scope="col">Address</th>
+              <th scope="col">Port</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of selectedService.linkTo ; let i = index">
+              <td>{{i + 1}}</td>
+              <td>{{data.hostName}}</td>
+              <td>{{data.ipAddress}}</td>
+              <td>{{data.port}}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Host Metrics Modal -->
+<div class="modal fade" id="hostStatus" tabindex="-1" role="dialog" aria-labelledby="hostStatusModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div *ngIf="selectedService" class="modal-content">
+      <div class="modal-header text-center">
+        <h1 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">Host Metrics Status<br> </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div>
+        <h3 class="modal-title mb-0 bold w-100 text-center" id="hostStatusModalLabel">{{ selectedService.hostName }} /
+          {{ selectedService.ipAddress }}</h3>
+      </div>
+      <div class="modal-body p-1">
+        <table class="table table-striped table-hover text-center">
+          <thead>
+            <tr class="text-light bg-dark">
+              <th scope="col">#</th>
+              <th scope="col">Disk Free in GB</th>
+              <th scope="col">Memory Free in GB</th>
+              <th scope="col">CPU Usage in %</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of selectedService.hostMetrics ; let i = index">
+              <td>{{i + 1}}</td>
+              <td *ngIf="data.DiskFree <= 5" class="table-danger">{{data.DiskFree}}</td>
+              <td *ngIf="data.DiskFree > 5" class="table-success">{{data.DiskFree}}</td>
+
+              <td *ngIf="data.MemFree <= 0.1" class="table-danger">{{data.MemFree}}</td>
+              <td *ngIf="data.MemFree > 0.1" class="table-success">{{data.MemFree}}</td>
+
+              <td
+                *ngIf="(data.DiskFree === 0 && data.MemFree === 0 && data.CpuUsage === 0) || (data.DiskFree > 0 && data.CpuUsage >= 90)"
+                class="table-danger">{{data.CpuUsage}}</td>
+              <td *ngIf="data.DiskFree > 0 && data.CpuUsage < 90" class="table-success">{{data.CpuUsage}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Note Modal -->
+<div class="modal fade" id="noteModal" tabindex="-1" role="dialog" aria-labelledby="noteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-md" role="document">
+    <div *ngIf="selectedService" class="modal-content">
+      <div class="modal-header text-center">
+        <h1 class="modal-title mb-0 bold w-100" id="noteModalLabel">Note<br> </h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+        </button>
+      </div>
+      <div>
+        <h3 class="modal-title mb-0 bold w-100 text-center" id="noteModalLabel">{{ selectedService.hostName }} /
+          {{ selectedService.ipAddress }}</h3>
+      </div>
+      <div class="modal-body p-1">
+        {{selectedService.note}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
