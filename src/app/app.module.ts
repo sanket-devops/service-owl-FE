@@ -4,6 +4,7 @@ import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {DashboardComponent} from './dashboard/dashboard.component';
+import {GraphComponent} from './graph/graph.component';
 import {GuiGridModule} from '@generic-ui/ngx-grid';
 import {DashboardService} from './service/dashboard.service';
 import {ConstantService} from './service/constant.service';
@@ -53,7 +54,8 @@ import {InputTextareaModule} from 'primeng-lts/inputtextarea';
     AppComponent,
     DashboardComponent,
     AddhostFormComponent,
-    LoginComponent
+    LoginComponent,
+    GraphComponent
   ],
     imports: [
         BrowserModule,

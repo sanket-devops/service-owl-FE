@@ -159,6 +159,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboardService.editObj = <any>undefined;
     this.router.navigate(['addhost']);
   }
+  Graph() {
+    this.router.navigate(['graph']);
+  }
 
   async autoReload(event?: any) {
     this.isChecked != this.isChecked;
