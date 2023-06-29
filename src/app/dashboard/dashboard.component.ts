@@ -605,6 +605,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
       rowId.style.backgroundColor = 'gray';
     }
   }
+  async restartHost(data: any) {
+    let res: any = undefined;
+    try {
+      // console.log(data);
+      res =  <any>await this.dashboardService._restartHost(data);
+    } catch (error) {
+
+    }
+    return await res;
+  }
 
   // Host ssh access function
   async openTerminal(hostData: any) {

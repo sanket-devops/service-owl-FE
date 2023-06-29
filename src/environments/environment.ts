@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   hmr: false,
-  API_BASE_URL: 'http://192.168.120.135:8002'
+  API_BASE_URL: 'http://localhost:8002'
 
 };
 

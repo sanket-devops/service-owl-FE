@@ -139,6 +139,14 @@
             (click)="openTerminal(host)">
             <i class="fas fa-terminal"></i>
           </a>
+          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-info btn-sm"
+            (click)="restartHost(host)">
+            <i class="fas fa-sync-alt"></i>
+          </a>
+          <!-- <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-info btn-sm"
+          (click)="openTerminal(host)">
+          <i class="fas fa-power-off"></i>
+        </a> -->
         </td>
         <td *ngIf="isAdmin" class="text-center">
           <div *ngIf="host.userName && host.userPass">
