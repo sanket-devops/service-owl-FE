@@ -605,15 +605,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
       rowId.style.backgroundColor = 'gray';
     }
   }
-  async restartHost(data: any) {
-    let res: any = undefined;
-    try {
-      // console.log(data);
-      res =  <any>await this.dashboardService._restartHost(data);
-    } catch (error) {
-
+  async restartHost(data: Idashboard, playBookName: any) {
+    if (
+      window.confirm(
+        `Do you want to Reboot Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+      )
+    ){
+      try {
+        let res: any = undefined;
+        res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    return await res;
+    toastr.warning(`${data.hostName} is Restarted...`);
   }
 
   // Host ssh access function
