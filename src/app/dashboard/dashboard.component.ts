@@ -613,17 +613,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ) {
       if (
         window.confirm(
-          `Again Do you want to Reboot Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+          `Again do you want to Reboot Host : ${data.hostName + ' : ' + data.ipAddress} ?`
         )
       ) {
         try {
           let res: any = undefined;
           res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
           if (res.code === 0) {
-            toastr.warning(`${data.hostName} is Restarted...`);
+            toastr.warning(`${data.hostName} => ${data.ipAddress} is Restarted...`);
           }
           else {
-            toastr.error(`${data.hostName} Restart Failed...`);
+            toastr.error(`${data.hostName} => ${data.ipAddress} Restart Failed...`);
           }
         } catch (error) {
           console.log(error);
@@ -639,17 +639,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     ) {
       if (
         window.confirm(
-          `Again Do you want to Shutdown Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+          `Again do you want to Shutdown Host : ${data.hostName + ' : ' + data.ipAddress} ?`
         )
       ) {
         try {
           let res: any = undefined;
           res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
           if (res.code === 0) {
-            toastr.warning(`${data.hostName} is Shutdown...`);
+            toastr.warning(`${data.hostName} => ${data.ipAddress} is Shutdown...`);
           }
           else {
-            toastr.error(`${data.hostName} Shutdown Failed...`);
+            toastr.error(`${data.hostName} => ${data.ipAddress} Shutdown Failed...`);
           }
         } catch (error) {
           console.log(error);
