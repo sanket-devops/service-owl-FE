@@ -96,8 +96,12 @@ export class DashboardService {
   }
 
   async runAnsiblePlaybook(data: any, playBookName: string) {
-    let resp: any;
-      resp = await this.http.post(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/restart-host'),{data: this.constantService.getEncryptedData(data), bookName: playBookName}).toPromise();
-    return JSON.parse(this.constantService.getDecryptedData(resp.data));
+    try {
+      let resp: any;
+      resp = await this.http.post(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/runbook-host'),{data: this.constantService.getEncryptedData(data), bookName: playBookName}).toPromise();
+      return JSON.parse(this.constantService.getDecryptedData(resp.data));
+    } catch (error) {
+      return error;
+    }
   }
 }

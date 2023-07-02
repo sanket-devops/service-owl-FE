@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public dashboardService: DashboardService,
     public router: Router,
     private http: HttpClient
-  ) {}
+  ) { }
 
   async ngOnInit() {
     try {
@@ -610,15 +610,52 @@ export class DashboardComponent implements OnInit, OnDestroy {
       window.confirm(
         `Do you want to Reboot Host : ${data.hostName + ' : ' + data.ipAddress} ?`
       )
-    ){
-      try {
-        let res: any = undefined;
-        res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
-      } catch (error) {
-        console.log(error);
+    ) {
+      if (
+        window.confirm(
+          `Again Do you want to Reboot Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+        )
+      ) {
+        try {
+          let res: any = undefined;
+          res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
+          if (res.code === 0) {
+            toastr.warning(`${data.hostName} is Restarted...`);
+          }
+          else {
+            toastr.error(`${data.hostName} Restart Failed...`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
-    toastr.warning(`${data.hostName} is Restarted...`);
+  }
+  async shutdownHost(data: Idashboard, playBookName: any) {
+    if (
+      window.confirm(
+        `Do you want to Shutdown Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+      )
+    ) {
+      if (
+        window.confirm(
+          `Again Do you want to Shutdown Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+        )
+      ) {
+        try {
+          let res: any = undefined;
+          res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
+          if (res.code === 0) {
+            toastr.warning(`${data.hostName} is Shutdown...`);
+          }
+          else {
+            toastr.error(`${data.hostName} Shutdown Failed...`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
   }
 
   // Host ssh access function
