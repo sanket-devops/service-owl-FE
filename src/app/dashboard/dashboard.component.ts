@@ -666,7 +666,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let passwordE = btoa(hostData.userPass);
     // console.log(hostData)
     if (username) {
-      let websshURL = `http://192.168.120.135:8888/?hostname=${host}&username=${username}&password=${passwordE}`;
+      let websshURL = `${this.constantService.WEB_SSH_ENDPOINT}/?hostname=${host}&username=${username}&password=${passwordE}`;
       window.open(websshURL, '_blank');
       // window.open(
       //   websshURL,
