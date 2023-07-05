@@ -94,4 +94,14 @@ export class DashboardService {
   query(query: any) {
     return this.http.post<Partial<Idashboard>[]>(this.constantService.get_api_url(this.constantService.API_ENDPOINT + `query`), query);
   }
+
+  async runAnsiblePlaybook(data: any, playBookName: string) {
+    try {
+      let resp: any;
+      resp = await this.http.post(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/runbook-host'),{data: this.constantService.getEncryptedData(data), bookName: playBookName}).toPromise();
+      return JSON.parse(this.constantService.getDecryptedData(resp.data));
+    } catch (error) {
+      return error;
+    }
+  }
 }

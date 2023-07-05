@@ -51,7 +51,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public dashboardService: DashboardService,
     public router: Router,
     private http: HttpClient
-  ) {}
+  ) { }
 
   async ngOnInit() {
     try {
@@ -605,6 +605,58 @@ export class DashboardComponent implements OnInit, OnDestroy {
       rowId.style.backgroundColor = 'gray';
     }
   }
+  async restartHost(data: Idashboard, playBookName: any) {
+    if (
+      window.confirm(
+        `Do you want to Reboot Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+      )
+    ) {
+      if (
+        window.confirm(
+          `Again do you want to Reboot Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+        )
+      ) {
+        try {
+          let res: any = undefined;
+          res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
+          if (res.code === 0) {
+            toastr.warning(`${data.hostName} => ${data.ipAddress} is Restarted...`);
+          }
+          else {
+            toastr.error(`${data.hostName} => ${data.ipAddress} Restart Failed...`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  }
+  async shutdownHost(data: Idashboard, playBookName: any) {
+    if (
+      window.confirm(
+        `Do you want to Shutdown Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+      )
+    ) {
+      if (
+        window.confirm(
+          `Again do you want to Shutdown Host : ${data.hostName + ' : ' + data.ipAddress} ?`
+        )
+      ) {
+        try {
+          let res: any = undefined;
+          res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
+          if (res.code === 0) {
+            toastr.warning(`${data.hostName} => ${data.ipAddress} is Shutdown...`);
+          }
+          else {
+            toastr.error(`${data.hostName} => ${data.ipAddress} Shutdown Failed...`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
+  }
 
   // Host ssh access function
   async openTerminal(hostData: any) {
@@ -614,7 +666,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let passwordE = btoa(hostData.userPass);
     // console.log(hostData)
     if (username) {
-      let websshURL = `http://192.168.120.135:8888/?hostname=${host}&username=${username}&password=${passwordE}`;
+      let websshURL = `${this.constantService.WEB_SSH_ENDPOINT}/?hostname=${host}&username=${username}&password=${passwordE}`;
       window.open(websshURL, '_blank');
       // window.open(
       //   websshURL,
