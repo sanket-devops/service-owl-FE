@@ -26,6 +26,7 @@ declare let google: any;
 export class DashboardComponent implements OnInit, OnDestroy {
   responseData: Idashboard[] = [];
   selectedHosts: Idashboard[] = <any>undefined;
+  selectedHostServices: Idashboard[] = <any>undefined;
   clusterCount: number = 1;
   selectedService: Idashboard = <any>undefined;
   selectedHostMetrics: IhostMetrics = <any>undefined;
@@ -45,6 +46,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   intervalTime: number = 60;
   timer: number = this.intervalTime;
   login = { u: '', p: '', t: '' };
+  serviceModal: boolean = false;
+  linkedModal: boolean = false;
+  noteModal: boolean = false;
 
   constructor(
     public constantService: ConstantService,
@@ -92,6 +96,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   get isUser() {
     return this.login && this.login.t === 'user';
+  }
+
+  showServiceModalDialog() {
+    this.serviceModal = true;
+  }
+
+  showLinkedModalDialog() {
+    this.linkedModal = true;
+  }
+
+  showNoteModalDialog() {
+    this.noteModal = true;
   }
 
   async loadData() {
