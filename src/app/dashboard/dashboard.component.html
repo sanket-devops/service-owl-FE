@@ -110,7 +110,7 @@
         <td class="nowrap text-center">{{host.hostName}}</td>
         <td class="nowrap text-center">{{host.ipAddress}}</td>
         <td *ngIf="isAdmin" class="text-center">
-          <mat-slide-toggle [(ngModel)]="host.hostCheck"
+          <mat-slide-toggle color="accent" [(ngModel)]="host.hostCheck"
             (ngModelChange)="switchChange($event, host)"></mat-slide-toggle>
         </td>
         <td class="text-center">
@@ -134,17 +134,17 @@
           </div>
         </td>
         <td *ngIf="isAdmin" class="text-center">
-          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-success btn-sm"
+          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-light btn-sm"
             (click)="openTerminal(host)">
-            <i class="fas fa-terminal"></i>
+            <i style="color:green;" class="fas fa-terminal"></i>
           </a>
           <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-light btn-sm"
             (click)="restartHost(host, 'restart-host')">
-            <i class="fas fa-sync-alt"></i>
+            <i style="color:rgb(0, 166, 255);" class="fas fa-sync-alt"></i>
           </a>
-          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-danger btn-sm"
+          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-light btn-sm"
             (click)="shutdownHost(host, 'shutdown-host')">
-            <i class="fas fa-power-off"></i>
+            <i style="color:red;" class="fas fa-power-off"></i>
           </a>
         </td>
         <td *ngIf="isAdmin" class="text-center">
@@ -155,11 +155,11 @@
         </td>
         <td class="text-center">
           <div class="nowrap">
-            <button *ngIf="(host.hostMetrics | keyvalue)?.length" class="btn btn-info btn-sm dropdown-toggle"
+            <button *ngIf="(host.hostMetrics | keyvalue)?.length" class="btn btn-light btn-sm dropdown-toggle"
               type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" (click)="this.selectedService = host;"
               aria-expanded="false">
               <!-- <i class="fas fa-eye"></i> -->
-              <i class="fas fa-chart-area"></i>
+              <i style="color:magenta;" class="fas fa-chart-area"></i>
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton3">
               <li><a class="dropdown-item" (click)="drawChart(host._id, '1')">1H Metrics</a></li>
@@ -175,7 +175,7 @@
                     class="fas fa-exclamation-circle"></i></a></li>
             </ul>
             <button *ngIf="(host.hostMetrics | keyvalue)?.length" type="button"
-              class="btn btn-info rounded-circle btn-sm" data-bs-toggle="modal" data-bs-target="#hostStatus"
+              class="btn btn-light rounded-circle btn-sm" data-bs-toggle="modal" data-bs-target="#hostStatus"
               (click)="this.selectedService = host">
               <span>
                 <span
@@ -199,9 +199,9 @@
         </td>
         <td class="text-center">
           <div class="nowrap">
-            <button type="button" class="btn btn-info btn-sm"
+            <button type="button" class="btn btn-light btn-sm"
               (click)="this.selectedService = host; showLinkedModalDialog()">
-              <i class="fas fa-link fa-fw"></i>
+              <i style="color:blue;" class="fas fa-link fa-fw"></i>
             </button>
           </div>
         </td>
@@ -210,7 +210,7 @@
         <td class="text-center">{{host.envName}}</td>
         <td class="text-center">{{host.vmName}}</td>
         <td class="text-center" style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis">
-          <button type="button" class="btn btn-info btn-sm" (click)="this.selectedService = host; showNoteModalDialog()">
+          <button type="button" class="btn btn-light btn-sm" (click)="this.selectedService = host; showNoteModalDialog()">
             Note <i class="fas fa-exclamation"></i>
           </button>
         </td>
