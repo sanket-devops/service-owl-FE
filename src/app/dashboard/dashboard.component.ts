@@ -33,11 +33,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   hostId: any = undefined;
   EStatus = EStatus;
   isChecked: boolean = true;
-  intChecked: boolean = true;
+  intChecked: boolean = false;
   selectedObj: Ispeedtest = <any>undefined;
   loading: boolean = false;
-  internetLoading: boolean = false;
-  internetChartLoading: boolean = false;
   public state: State = { sort: [{ dir: 'desc', field: 'hostName' }] };
   audio = new Audio('../assets/sound/service_down.mp3');
   storageItemName = 'oldDashboard';
@@ -77,10 +75,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.timer--;
         $('.timer').text(this.timer);
         if (this.timer === 0) {
-          this.loading = true;
           this.loadData();
           this.internetChart();
-          this.loading = false;
           toastr.success('Reload Data Successfully!');
           this.timer = this.intervalTime;
         }
@@ -551,9 +547,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       }, 1000);
     };
-    this.internetLoading = true;
     await speedChart();
-    this.internetLoading = false;
   }
 
   async internetChartGet(PullData: number) {
@@ -597,8 +591,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.log(e);
     }
-    this.internetLoading = true;
-    this.internetLoading = false;
   }
 
   showInternetStatus() {
