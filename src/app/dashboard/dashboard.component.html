@@ -238,7 +238,7 @@
 </div>
 
 <!-- Services Modal -->
-<p-dialog header="Services Status" [(visible)]="serviceModal" [modal]="true" [style]="{width: '100vw'}" [maximizable]="true"
+<p-dialog header="Services Status" [(visible)]="serviceModal" [modal]="true" [maximizable]="true"
   [baseZIndex]="100" [draggable]="true" [resizable]="true">
   <div *ngIf="selectedService" class="card">
     <p-table class="table" #dt [value]="selectedService.port" styleClass="p-datatable-sm"
