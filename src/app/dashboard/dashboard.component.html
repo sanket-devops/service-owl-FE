@@ -134,11 +134,11 @@
           </div>
         </td>
         <td *ngIf="isAdmin" class="text-center">
-          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-info btn-sm"
+          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-success btn-sm"
             (click)="openTerminal(host)">
             <i class="fas fa-terminal"></i>
           </a>
-          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-warning btn-sm"
+          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-light btn-sm"
             (click)="restartHost(host, 'restart-host')">
             <i class="fas fa-sync-alt"></i>
           </a>
@@ -231,7 +231,7 @@
     </ng-template>
     <ng-template pTemplate="summary">
       <div class="p-d-flex p-ai-center p-jc-between">
-        In total there are {{responseData ? responseData.length : 0 }} products.
+        In total there are {{responseData ? responseData.length : 0 }} servers.
       </div>
     </ng-template>
   </p-table>
@@ -305,7 +305,7 @@
     </ng-template>
     <ng-template pTemplate="summary">
       <div class="p-d-flex p-ai-center p-jc-between">
-        In total there are {{selectedService.port ? selectedService.port.length : 0 }} products.
+        In total there are {{selectedService.port ? selectedService.port.length : 0 }} services.
       </div>
     </ng-template>
     </p-table>
@@ -361,7 +361,7 @@
     </ng-template>
     <ng-template pTemplate="summary">
       <div class="p-d-flex p-ai-center p-jc-between">
-        In total there are {{selectedService.linkTo ? selectedService.linkTo.length : 0 }} products.
+        In total there are {{selectedService.linkTo ? selectedService.linkTo.length : 0 }} servers linked.
       </div>
     </ng-template>
     </p-table>
