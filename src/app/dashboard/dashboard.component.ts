@@ -668,13 +668,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Host ssh access function
   async openTerminal(hostData: any) {
+    let hostname = hostData.hostName;
     let host = hostData.ipAddress;
     let username = hostData.userName;
     let password = hostData.userPass;
     let passwordE = btoa(hostData.userPass);
     // console.log(hostData)
     if (username) {
-      let websshURL = `${this.constantService.WEB_SSH_ENDPOINT}/?hostname=${host}&username=${username}&password=${passwordE}`;
+      let websshURL = `${this.constantService.WEB_SSH_ENDPOINT}/?title=${hostname}&hostname=${host}&username=${username}&password=${passwordE}`;
       window.open(websshURL, '_blank');
       // window.open(
       //   websshURL,
