@@ -172,6 +172,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.router.navigate(['addhost']);
   }
 
+  webSSH() {
+    this.router.navigate(['webssh']);
+  }
+
   async autoReload(event?: any) {
     this.isChecked != this.isChecked;
   }

@@ -42,6 +42,7 @@ import {RadioButtonModule} from 'primeng-lts/radiobutton';
 import {InputNumberModule} from 'primeng-lts/inputnumber';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {InputTextareaModule} from 'primeng-lts/inputtextarea';
+import { WebsshComponent } from './webssh/webssh.component';
 
 
 
@@ -53,7 +54,8 @@ import {InputTextareaModule} from 'primeng-lts/inputtextarea';
     AppComponent,
     DashboardComponent,
     AddhostFormComponent,
-    LoginComponent
+    LoginComponent,
+    WebsshComponent
   ],
     imports: [
         BrowserModule,

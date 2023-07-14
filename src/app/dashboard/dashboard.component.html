@@ -28,6 +28,9 @@
       <li><a class="dropdown-item" (click)="internetChartGet(2016)" *ngIf="isAdmin">Full Metrics <i
             class="fas fa-exclamation-circle"></i></a></li>
     </ul>
+    <button type="button" *ngIf="isAdmin" class="btn btn-secondary l3" (click)="webSSH()">
+      <i style="color:rgb(4, 255, 4);" class="fas fa-terminal"></i>
+    </button>
   </ng-template>
 
   <ng-template pTemplate="right">
