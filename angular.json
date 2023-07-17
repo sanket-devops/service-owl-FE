@@ -45,8 +45,7 @@
               "node_modules/primeng-lts/resources/primeng.min.css"
             ],
             "scripts": [
-              "node_modules/toastr/build/toastr.min.js",
-              "src/assets/static/js/main.js"
+              "node_modules/toastr/build/toastr.min.js"
             ]
           },
           "configurations": {

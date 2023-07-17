@@ -41,12 +41,14 @@
     "@progress/kendo-data-query": "^1.5.4",
     "@progress/kendo-drawing": "^1.9.4",
     "@progress/kendo-licensing": "^1.1.3",
+    "axios": "^1.4.0",
     "element-resize-detector": "^1.1.14",
     "primeicons": "^5.0.0",
     "primeng-lts": "^11.4.10",
     "rxjs": "~6.6.0",
     "toastr": "^2.1.4",
     "tslib": "^2.0.0",
+    "xterm": "^5.2.1",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {

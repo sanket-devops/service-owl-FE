@@ -4,6 +4,7 @@ var jQuery;
 var wssh = {};
 var websshURL = "http://192.168.10.108:8888";
 
+console.log("Main.js loaded...")
 
 (function() {
   // For FormData without getter and setter
@@ -601,7 +602,7 @@ jQuery(function($){
     var hostname = data.get('hostname'),
         port = data.get('port'),
         username = data.get('username'),
-        pk = data.get('privatekeyfile') || data.get('privatekey'),
+        pk =  data.get('privatekey') || data.get('privatekeyfile'),
         result = {
           valid: false,
           data: data,
@@ -676,7 +677,7 @@ jQuery(function($){
 
     disable_file_inputs(inputs);
     data = new FormData(form);
-    pk = data.get('privatekeyfile') || data.get('privatekey');
+    pk =  data.get('privatekey') || data.get('privatekeyfile');
     enable_file_inputs(inputs);
 
     function ajax_post() {
@@ -700,7 +701,6 @@ jQuery(function($){
       return;
     }
 
-    console.log(pk);
     if (pk && pk.size && !debug) {
       read_file_as_text(pk, function(text) {
         if (text === undefined) {
