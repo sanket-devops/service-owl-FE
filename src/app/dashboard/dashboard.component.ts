@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Idashboard, IhostMetrics, IPort } from '../interface/Idashboard';
 import { ConstantService } from '../service/constant.service';
 import { DashboardService } from '../service/dashboard.service';
@@ -6,6 +7,7 @@ import { GridItem } from '@progress/kendo-angular-grid';
 import { EStatus } from '../interface/enum/EStatus';
 import { State } from '@progress/kendo-data-query';
 import { Router } from '@angular/router';
+// import { WebsshComponent } from '../webssh/webssh.component'
 // import { ngModuleJitUrl } from '@angular/compiler';
 // import { Terminal } from 'xterm';
 // import { WebLinksAddon } from 'xterm-addon-web-links';
@@ -47,13 +49,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
   serviceModal: boolean = false;
   linkedModal: boolean = false;
   noteModal: boolean = false;
+  form: FormGroup;
 
   constructor(
     public constantService: ConstantService,
     public dashboardService: DashboardService,
     public router: Router,
-    private http: HttpClient
-  ) { }
+    private http: HttpClient,
+    public formbuilder: FormBuilder,
+    // public websshService: WebsshComponent
+  ) {
+    this.form = this.formbuilder.group({
+      hostname: ['192.168.120.172'],
+      port: [22],
+      username: ['qabutler'],
+      password: ['Reltubaq$7670%'],
+      privatekey: [''],
+      privatekeyfile: [''],
+      passphrase: [''],
+      totp: ['']
+    });
+   }
 
   async ngOnInit() {
     try {
@@ -678,9 +694,42 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let password = hostData.userPass;
     let passwordE = btoa(hostData.userPass);
     // console.log(hostData)
-    if (username) {
-      let websshURL = `${this.constantService.WEB_SSH_ENDPOINT}/?title=${hostname}&hostname=${host}&username=${username}&password=${passwordE}`;
-      window.open(websshURL, '_blank');
+    if (hostname && username && password ) {
+      let winHtml = `
+      <!DOCTYPE html>
+      <html>
+          <head>
+              <title>${this.selectedService.hostName} / ${this.selectedService.ipAddress}</title>
+              <!-- CSS only -->
+              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+              <!-- JavaScript Bundle with Popper -->
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+          </head>
+          <body>
+            <div class="container">
+              <div id="status" style="color: red;"></div>
+              <div id="terminal"></div>
+            </div>
+          </body>
+      </html>`;
+
+      let winUrl = URL.createObjectURL(
+        new Blob([winHtml], { type: 'text/html' })
+      );
+      let chartWindow: any = window.open(
+        winUrl,
+        `${this.selectedService.hostName} / ${this.selectedService.ipAddress}`,
+        `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
+      );
+
+      if (this.form.invalid) return;
+      let formValue: any = this.form.value;
+
+
+      // let websshURL = `${this.constantService.WEB_SSH_ENDPOINT}/?title=${hostname}&hostname=${host}&username=${username}&password=${passwordE}`;
+      // window.open(websshURL, '_blank');
+
+
       // window.open(
       //   websshURL,
       //   `${hostData.hostName} / ${hostData.ipAddress}`,
