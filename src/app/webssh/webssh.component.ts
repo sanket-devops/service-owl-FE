@@ -32,6 +32,7 @@ export class WebsshComponent implements OnInit {
       privatekeyfile: [''],
       passphrase: [''],
       totp: [''],
+      term: ['xterm-256color']
     });
   }
 
