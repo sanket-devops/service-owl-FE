@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ConstantService } from '../service/constant.service';
 import axios from 'axios';
@@ -20,6 +20,7 @@ export class WebsshComponent implements OnInit {
 
   constructor(
     public router: Router,
+    public route: ActivatedRoute,
     public formbuilder: FormBuilder,
     public constantService: ConstantService
   ) {
@@ -36,7 +37,8 @@ export class WebsshComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
@@ -110,36 +112,35 @@ export class WebsshComponent implements OnInit {
   }
 
   async connectWS(msg: any) {
-
     let formValue: any = this.form.value;
+    // const url = this.router.createUrlTree(['/webssh'], { relativeTo: this.route }).toString();
+    // window.open(url, '_blank');
 
-    // let winHtml = `
-    // <!DOCTYPE html>
-    // <html>
-    //     <head>
-    //       <title>${this.form.value.hostname}</title>
-    //       <link href="../../assets/static/css/xterm.min.css" rel="stylesheet" type="text/css" />
-    //       <link href="../..//assets/static/css/fullscreen.min.css" rel="stylesheet" type="text/css" />
 
-    //       <script src="../../assets/static/js/xterm.min.js"></script>
-    //       <script src="../../assets/static/js/xterm-addon-fit.min.js"></script>
-    //     </head>
-    //     <body>
-    //      <div class="container">
-    //       <div id="status" style="color: red;"></div>
-    //       <div id="windoTerminal"></div>
-    //     </div>
-    //     </body>
-    // </html>`;
+    let winHtml = `
+    <!DOCTYPE html>
+    <html>
+        <head>
+          <title>${this.form.value.hostname}</title>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm@4.19.0/css/xterm.css" />
+          <script src="https://cdn.jsdelivr.net/npm/xterm@4.19.0/lib/xterm.js"></script>
+        </head>
+        <body>
+         <div class="container">
+          <div id="status" style="color: red;"></div>
+          <div id="windoTerminal"></div>
+        </div>
+        </body>
+    </html>`;
 
-    // let winUrl = URL.createObjectURL(
-    //   new Blob([winHtml], { type: 'text/html' })
-    // );
-    // let termWindow: any = window.open(
-    //   winUrl,
-    //   `_blank`,
-    //   `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
-    // );
+    let winUrl = URL.createObjectURL(
+      new Blob([winHtml], { type: 'text/html' })
+    );
+    let termWindow: any = window.open(
+      winUrl,
+      `_blank`,
+      `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
+    );
 
     setTimeout(async () => {
       var status = $('#status'),
@@ -341,8 +342,8 @@ export class WebsshComponent implements OnInit {
         decoder = window.TextDecoder
           ? new window.TextDecoder(encoding)
           : encoding,
-        terminal = document.getElementById('terminal'),
-        // terminal = termWindow.document.getElementById('windoTerminal'),
+        // terminal = document.getElementById('terminal'),
+        terminal = termWindow.document.getElementById('windoTerminal'),
         termOptions: any = {
           cursorBlink: true,
           theme: {
