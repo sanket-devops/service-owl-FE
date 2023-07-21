@@ -5,6 +5,8 @@ export interface Idashboard extends ICore {
   ipAddress: string,
   userName: string,
   userPass: string,
+  privateKey: string,
+  sshPort: number,
   port: IPort[],
   hostMetrics: IhostMetrics[],
   linkTo: ILinked[],

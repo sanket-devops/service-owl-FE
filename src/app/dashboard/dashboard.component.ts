@@ -6,7 +6,7 @@ import { DashboardService } from '../service/dashboard.service';
 import { GridItem } from '@progress/kendo-angular-grid';
 import { EStatus } from '../interface/enum/EStatus';
 import { State } from '@progress/kendo-data-query';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 // import { WebsshComponent } from '../webssh/webssh.component'
 // import { ngModuleJitUrl } from '@angular/compiler';
 // import { Terminal } from 'xterm';
@@ -55,6 +55,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public constantService: ConstantService,
     public dashboardService: DashboardService,
     public router: Router,
+    public route: ActivatedRoute,
     private http: HttpClient,
     public formbuilder: FormBuilder,
     // public websshService: WebsshComponent
@@ -688,53 +689,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Host ssh access function
   async openTerminal(hostData: any) {
-    let hostname = hostData.hostName;
-    let host = hostData.ipAddress;
-    let username = hostData.userName;
-    let password = hostData.userPass;
-    let passwordE = btoa(hostData.userPass);
-    // console.log(hostData)
-    if (hostname && username && password ) {
-      let winHtml = `
-      <!DOCTYPE html>
-      <html>
-          <head>
-              <title>${this.selectedService.hostName} / ${this.selectedService.ipAddress}</title>
-              <!-- CSS only -->
-              <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
-              <!-- JavaScript Bundle with Popper -->
-              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-          </head>
-          <body>
-            <div class="container">
-              <div id="status" style="color: red;"></div>
-              <div id="terminal"></div>
-            </div>
-          </body>
-      </html>`;
-
-      let winUrl = URL.createObjectURL(
-        new Blob([winHtml], { type: 'text/html' })
-      );
-      let chartWindow: any = window.open(
-        winUrl,
-        `${this.selectedService.hostName} / ${this.selectedService.ipAddress}`,
-        `toolbar=yes,scrollbars=yes,resizable=yes,top=1000,left=1000,width=2500,height=2000`
-      );
-
-      if (this.form.invalid) return;
-      let formValue: any = this.form.value;
-
-
-      // let websshURL = `${this.constantService.WEB_SSH_ENDPOINT}/?title=${hostname}&hostname=${host}&username=${username}&password=${passwordE}`;
-      // window.open(websshURL, '_blank');
-
-
-      // window.open(
-      //   websshURL,
-      //   `${hostData.hostName} / ${hostData.ipAddress}`,
-      //   `toolbar=yes,scrollbars=yes,titlebar=yes,resizable=yes,top=1000,left=1000,width=1080,height=720`
-      // );
+    let sshConnData = {
+      hostname: hostData.ipAddress,
+      port: 22,
+      username: hostData.userName,
+      password: hostData.userPass,
+      privatekey: hostData.privateKey || '' ,
+      term: 'xterm-256color'
     }
+
+    let formValue: any = sshConnData;
+      if ((
+        formValue.hostname &&
+        formValue.port &&
+        formValue.username
+      ) || (
+        formValue.host &&
+        formValue.port &&
+        formValue.username &&
+        formValue.password && formValue.privatekey)
+      ) {
+        window.localStorage.setItem('sshConnection', JSON.stringify(formValue));
+
+        const url = this.router.createUrlTree(['/webssh'], { relativeTo: this.route }).toString();
+        window.open(url, '_blank');
+      }
+
   }
 }

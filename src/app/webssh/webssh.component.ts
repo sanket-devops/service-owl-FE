@@ -43,6 +43,8 @@ export class WebsshComponent implements OnInit {
     let sshFormData: any = JSON.parse(<string>window.localStorage.getItem("sshConnection"));
 
     setTimeout(() => {
+      // console.log(sshFormData);
+      // getWebsshID();
       window.localStorage.removeItem('sshConnection');
     }, 1000);
 
@@ -59,7 +61,7 @@ export class WebsshComponent implements OnInit {
           formValue.hostname &&
           formValue.port &&
           formValue.username &&
-          (formValue.password || formValue.privatekey))
+          formValue.password && formValue.privatekey)
         ) {
           let res: any;
           let headers: any = {
@@ -495,10 +497,23 @@ export class WebsshComponent implements OnInit {
   }
 
   async startSSH() {
-    window.localStorage.setItem('sshConnection', JSON.stringify(this.form.value));
+    if (this.form.invalid) return;
+    let formValue: any = this.form.value;
+      if ((
+        formValue.hostname &&
+        formValue.port &&
+        formValue.username
+      ) || (
+        formValue.hostname &&
+        formValue.port &&
+        formValue.username &&
+        (formValue.password || formValue.privatekey))
+      ) {
+        window.localStorage.setItem('sshConnection', JSON.stringify(this.form.value));
 
-    const url = this.router.createUrlTree(['/webssh'], { relativeTo: this.route }).toString();
-    window.open(url, '_blank');
+        const url = this.router.createUrlTree(['/webssh'], { relativeTo: this.route }).toString();
+        window.open(url, '_blank');
+      }
   }
 
   // async getWebsshID() {
