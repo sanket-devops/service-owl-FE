@@ -690,6 +690,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Host ssh access function
   async openTerminal(hostData: any) {
     let sshConnData = {
+      connectionName: hostData.hostName,
       hostname: hostData.ipAddress,
       port: 22,
       username: hostData.userName,
