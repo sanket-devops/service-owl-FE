@@ -40,6 +40,10 @@ export class ConstantService {
     // return return_url;
   }
 
+  get_webssh_url(url: string): string {
+    return url;
+  }
+
   isValidUser(data: any) {
     for (let item of this.vu) {
       if (item.u === data.u && item.p === data.p) return true;

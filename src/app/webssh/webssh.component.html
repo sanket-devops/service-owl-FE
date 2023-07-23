@@ -1,0 +1,60 @@
+<div class="first-div">
+  <button type="button" class="btn btn-primary ml3" (click)="backToDashboard()">Dashboard</button>
+</div>
+
+<title> WebSSH </title>
+<div id="waiter" style="display: none"> Connecting ... </div>
+
+<div class="container form-container">
+  <form id="connect" action="" method="post" enctype="multipart/form-data" [formGroup]="form">
+    <div class="row">
+      <div class="col">
+        <label for="Hostname">Hostname</label>
+        <input class="form-control" type="text" id="hostname" name="hostname" value="" required formControlName="hostname">
+      </div>
+      <div class="col">
+        <label for="Port">Port</label>
+        <input class="form-control" type="number" id="port" name="port" placeholder="22" value="22" min=1 max=65535 formControlName="port">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <label for="Username">Username</label>
+        <input class="form-control" type="text" id="username" name="username" value="" required formControlName="username">
+      </div>
+      <div class="col">
+        <label for="Password">Password</label>
+        <input class="form-control" type="password" id="password" name="password" value="" formControlName="password">
+      </div>
+    </div>
+    <h5
+      style="width: 100%; text-align: center; border-bottom: 1px solid #000; line-height: 0.1em; margin: 25px 0 25px;">
+      <span style="background:#fff; padding:0 10px;">Private Key File OR Private Key</span></h5>
+    <div class="row">
+      <div class="col">
+        <label for="Username">Private Key File</label>
+        <input class="form-control" type="file" id="privatekeyfile" name="privatekeyfile" value="" (change)="onFileSelected($event)" formControlName="privatekeyfile"><br />
+
+        <label for="Passphrase">Passphrase</label>
+        <input class="form-control" type="password" id="passphrase" name="passphrase" value="" formControlName="passphrase"><br />
+
+        <label for="totp">Totp (time-based one-time password)</label>
+        <input class="form-control" type="password" id="totp" name="totp" value="" formControlName="totp">
+      </div>
+      <div class="col">
+        <label for="Username">Private Key</label>
+        <textarea rows="8" class="form-control" id="privatekey" name="privatekey" value="" formControlName="privatekey"></textarea>
+      </div>
+    </div>
+    <input type="hidden" id="term" name="term" value="xterm-256color" formControlName="term">
+    <!-- <button type="submit" class="btn btn-primary" (click)="getWebsshID()">Connect</button> -->
+    <button type="submit" class="btn btn-primary" (click)="startSSH()">Connect</button>
+    <button type="reset" class="btn btn-danger" (click)="resetForm()">Reset</button>
+  </form>
+</div>
+
+<div class="container">
+  <div id="status" style="color: red;"></div>
+  <div id="terminal"></div>
+</div>
+

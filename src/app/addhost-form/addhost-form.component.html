@@ -1,5 +1,5 @@
 <div class="first-div">
-  <button type="button" class="btn btn-primary ml3" (click)="back()">Dashboard</button>
+  <button type="button" class="btn btn-primary ml3" (click)="backToDashboard()">Dashboard</button>
 </div>
 
 <div class="container-fluid">
@@ -17,6 +17,12 @@
           <input matInput placeholder="IP Address" formControlName="ipAddress">
         </mat-form-field>
       </div>
+      <div class="col-md-4">
+        <mat-form-field appearance="legacy">
+          <mat-label>SSH Port</mat-label>
+          <input matInput placeholder="SSH Port" formControlName="sshPort">
+        </mat-form-field>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-4">
@@ -24,59 +30,65 @@
           <mat-label>User Name</mat-label>
           <input matInput placeholder="User Name" formControlName="userName">
         </mat-form-field>
+
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="legacy">
+              <mat-label>Group Name</mat-label>
+              <input matInput placeholder="Group Name" formControlName="groupName">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="legacy">
+              <mat-label>Env Name</mat-label>
+              <input matInput placeholder="Env Name" formControlName="envName">
+            </mat-form-field>
+          </div>
+        </div>
       </div>
+
       <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>User Pass</mat-label>
           <input matInput placeholder="User Pass" formControlName="userPass">
         </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <mat-form-field appearance="legacy">
-          <mat-label>Group Name</mat-label>
-          <input matInput placeholder="Group Name" formControlName="groupName">
-        </mat-form-field>
+
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="legacy">
+              <mat-label>Cluster Name</mat-label>
+              <input matInput placeholder="Cluster Name" formControlName="clusterName">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="legacy">
+              <mat-label>Vm Name</mat-label>
+              <input matInput placeholder="Vm Name" formControlName="vmName">
+            </mat-form-field>
+          </div>
+        </div>
       </div>
 
       <div class="col-md-4">
         <mat-form-field appearance="legacy">
-          <mat-label>Cluster Name</mat-label>
-          <input matInput placeholder="Cluster Name" formControlName="clusterName">
+          <mat-label>Private Key</mat-label>
+          <textarea rows="8" matInput name="privatekey" value="" formControlName="privateKey"></textarea>
         </mat-form-field>
       </div>
     </div>
     <div class="row">
       <div class="col-md-4">
-        <mat-form-field appearance="legacy">
-          <mat-label>Env Name</mat-label>
-          <input matInput placeholder="Env Name" formControlName="envName">
-        </mat-form-field>
-      </div>
-
-      <div class="col-md-4">
-        <mat-form-field appearance="legacy">
-          <mat-label>Vm Name</mat-label>
-          <input matInput placeholder="Vm Name" formControlName="vmName">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <!-- <mat-form-field appearance="legacy">
-          <mat-label>Host Check</mat-label>
-          <input matInput type="boolean" placeholder="Host Check" formControlName="hostCheck">
-        </mat-form-field> -->
         <mat-label>Host Check</mat-label>
         <br>
         <mat-slide-toggle type="boolean" formControlName="hostCheck"></mat-slide-toggle>
       </div>
       <div class="col-md-4">
-        <!-- <mat-form-field appearance="legacy">
-          <mat-label>Metrics Check</mat-label>
-          <input matInput type="boolean" placeholder="Metrics Check" formControlName="metricsCheck">
-        </mat-form-field> -->
         <mat-label>Metrics Check</mat-label>
         <br>
         <mat-slide-toggle type="boolean" formControlName="metricsCheck"></mat-slide-toggle>

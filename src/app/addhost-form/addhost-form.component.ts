@@ -23,8 +23,10 @@ export class AddhostFormComponent implements OnInit {
       _id: [''],
       hostName: [''],
       ipAddress: [''],
+      sshPort: [22],
       userName: [''],
       userPass: [''],
+      privateKey: [''],
       groupName: [''],
       clusterName: [''],
       envName: [''],
@@ -79,7 +81,7 @@ export class AddhostFormComponent implements OnInit {
     this.data.linkTo.splice(index, 1);
   }
 
-  back() {
+  backToDashboard() {
     this.router.navigate(['dashboard']);
   }
 
@@ -98,7 +100,7 @@ export class AddhostFormComponent implements OnInit {
         toastr.success('Data saved.');
         this.form.reset();
       }
-      this.back();
+      this.backToDashboard();
     } catch (e) {
       console.log(e);
     }

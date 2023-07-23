@@ -1,11 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Idashboard, IhostMetrics, IPort } from '../interface/Idashboard';
 import { ConstantService } from '../service/constant.service';
 import { DashboardService } from '../service/dashboard.service';
 import { GridItem } from '@progress/kendo-angular-grid';
 import { EStatus } from '../interface/enum/EStatus';
 import { State } from '@progress/kendo-data-query';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+// import { WebsshComponent } from '../webssh/webssh.component'
 // import { ngModuleJitUrl } from '@angular/compiler';
 // import { Terminal } from 'xterm';
 // import { WebLinksAddon } from 'xterm-addon-web-links';
@@ -26,17 +28,16 @@ declare let google: any;
 export class DashboardComponent implements OnInit, OnDestroy {
   responseData: Idashboard[] = [];
   selectedHosts: Idashboard[] = <any>undefined;
+  selectedHostServices: Idashboard[] = <any>undefined;
   clusterCount: number = 1;
   selectedService: Idashboard = <any>undefined;
   selectedHostMetrics: IhostMetrics = <any>undefined;
   hostId: any = undefined;
   EStatus = EStatus;
   isChecked: boolean = true;
-  intChecked: boolean = true;
+  intChecked: boolean = false;
   selectedObj: Ispeedtest = <any>undefined;
   loading: boolean = false;
-  internetLoading: boolean = false;
-  internetChartLoading: boolean = false;
   public state: State = { sort: [{ dir: 'desc', field: 'hostName' }] };
   audio = new Audio('../assets/sound/service_down.mp3');
   storageItemName = 'oldDashboard';
@@ -45,13 +46,31 @@ export class DashboardComponent implements OnInit, OnDestroy {
   intervalTime: number = 60;
   timer: number = this.intervalTime;
   login = { u: '', p: '', t: '' };
+  serviceModal: boolean = false;
+  linkedModal: boolean = false;
+  noteModal: boolean = false;
+  form: FormGroup;
 
   constructor(
     public constantService: ConstantService,
     public dashboardService: DashboardService,
     public router: Router,
-    private http: HttpClient
-  ) { }
+    public route: ActivatedRoute,
+    private http: HttpClient,
+    public formbuilder: FormBuilder,
+    // public websshService: WebsshComponent
+  ) {
+    this.form = this.formbuilder.group({
+      hostname: ['192.168.120.172'],
+      port: [22],
+      username: ['qabutler'],
+      password: ['Reltubaq$7670%'],
+      privatekey: [''],
+      privatekeyfile: [''],
+      passphrase: [''],
+      totp: ['']
+    });
+   }
 
   async ngOnInit() {
     try {
@@ -73,10 +92,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.timer--;
         $('.timer').text(this.timer);
         if (this.timer === 0) {
-          this.loading = true;
           this.loadData();
           this.internetChart();
-          this.loading = false;
           toastr.success('Reload Data Successfully!');
           this.timer = this.intervalTime;
         }
@@ -92,6 +109,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   get isUser() {
     return this.login && this.login.t === 'user';
+  }
+
+  showServiceModalDialog() {
+    this.serviceModal = true;
+  }
+
+  showLinkedModalDialog() {
+    this.linkedModal = true;
+  }
+
+  showNoteModalDialog() {
+    this.noteModal = true;
   }
 
   async loadData() {
@@ -158,6 +187,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dashboardService.cloneObj = <any>undefined;
     this.dashboardService.editObj = <any>undefined;
     this.router.navigate(['addhost']);
+  }
+
+  webSSH() {
+    this.router.navigate(['webssh']);
   }
 
   async autoReload(event?: any) {
@@ -535,9 +568,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       }, 1000);
     };
-    this.internetLoading = true;
     await speedChart();
-    this.internetLoading = false;
   }
 
   async internetChartGet(PullData: number) {
@@ -581,8 +612,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     } catch (e) {
       console.log(e);
     }
-    this.internetLoading = true;
-    this.internetLoading = false;
   }
 
   showInternetStatus() {
@@ -660,19 +689,32 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   // Host ssh access function
   async openTerminal(hostData: any) {
-    let host = hostData.ipAddress;
-    let username = hostData.userName;
-    let password = hostData.userPass;
-    let passwordE = btoa(hostData.userPass);
-    // console.log(hostData)
-    if (username) {
-      let websshURL = `${this.constantService.WEB_SSH_ENDPOINT}/?hostname=${host}&username=${username}&password=${passwordE}`;
-      window.open(websshURL, '_blank');
-      // window.open(
-      //   websshURL,
-      //   `${hostData.hostName} / ${hostData.ipAddress}`,
-      //   `toolbar=yes,scrollbars=yes,titlebar=yes,resizable=yes,top=1000,left=1000,width=1080,height=720`
-      // );
+    let sshConnData = {
+      connectionName: hostData.hostName,
+      hostname: hostData.ipAddress,
+      port: hostData.sshPort || 22,
+      username: hostData.userName,
+      password: hostData.userPass,
+      privatekey: hostData.privateKey || '' ,
+      term: 'xterm-256color'
     }
+
+    let formValue: any = sshConnData;
+      if ((
+        formValue.hostname &&
+        formValue.port &&
+        formValue.username
+      ) || (
+        formValue.host &&
+        formValue.port &&
+        formValue.username &&
+        formValue.password && formValue.privatekey)
+      ) {
+        window.localStorage.setItem('sshConnection', JSON.stringify(formValue));
+
+        const url = this.router.createUrlTree(['/webssh'], { relativeTo: this.route }).toString();
+        window.open(url, '_blank');
+      }
+
   }
 }
