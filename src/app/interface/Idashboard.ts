@@ -3,10 +3,10 @@ import {ICore} from './Icore';
 export interface Idashboard extends ICore {
   hostName: string,
   ipAddress: string,
+  sshPort: number,
   userName: string,
   userPass: string,
   privateKey: string,
-  sshPort: number,
   port: IPort[],
   hostMetrics: IhostMetrics[],
   linkTo: ILinked[],

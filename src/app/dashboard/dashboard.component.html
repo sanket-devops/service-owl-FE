@@ -136,7 +136,7 @@
           </div>
         </td>
         <td *ngIf="isAdmin" class="text-center">
-          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-light btn-sm"
+          <a *ngIf="host.userName && (host.userPass || host.privateKey)" role="button" class="btn btn-light btn-sm"
             (click)="openTerminal(host)">
             <i style="color:green;" class="fas fa-terminal"></i>
           </a>

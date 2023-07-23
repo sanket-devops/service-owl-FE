@@ -54,10 +54,12 @@ export class WebsshComponent implements OnInit {
       let formValue: any = sshFormData;
       try {
         if ((
+          formValue &&
           formValue.hostname &&
           formValue.port &&
           formValue.username
         ) || (
+          formValue &&
           formValue.hostname &&
           formValue.port &&
           formValue.username &&
@@ -117,7 +119,7 @@ export class WebsshComponent implements OnInit {
           waiter = $('#waiter'),
           term_type = $('#term'),
           style: any = {},
-          default_title = '🟢' + formValue.connectionName || formValue.username + '@' + formValue.hostname,
+          default_title = formValue.connectionName ? '🟢' + formValue.connectionName : '🟢' + formValue.hostname,
           title_element: any = document.querySelector('title'),
           form_id = '#connect',
           // custom_font = document.fonts ? document.fonts.values().next().value : undefined,
@@ -474,7 +476,7 @@ export class WebsshComponent implements OnInit {
           toastr.warning('WebSSH Terminal Dissconnected. ❌');
           // log_status(e.reason, true);
           state = DISCONNECTED;
-          default_title = '🔴' + formValue.connectionName || formValue.username + '@' + formValue.hostname;
+          default_title = formValue.connectionName ? '🔴' + formValue.connectionName : '🔴' + formValue.hostname;
           title_element.text = default_title;
         };
 

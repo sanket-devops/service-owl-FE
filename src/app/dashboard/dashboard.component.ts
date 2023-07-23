@@ -692,7 +692,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     let sshConnData = {
       connectionName: hostData.hostName,
       hostname: hostData.ipAddress,
-      port: 22,
+      port: hostData.sshPort || 22,
       username: hostData.userName,
       password: hostData.userPass,
       privatekey: hostData.privateKey || '' ,
