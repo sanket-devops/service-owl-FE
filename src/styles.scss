@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import "~toastr";
+
 $chocolaty: #4e342e;
 // Kendo overrides
 .grid-sm.k-grid td {
@@ -109,12 +110,19 @@ $chocolaty: #4e342e;
   width: 50px;
   border-radius: 50px;
 }
+
 .example-spacer {
   flex: 1 1 auto;
 }
 
 html, body { height: 100%; }
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.modal-header {
+  padding: 0.7rem;
+}
+
 .example-form {
   min-width: 150px;
   max-width: 500px;
@@ -124,9 +132,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .example-full-width {
   width: 100%;
 }
-
-
-
 
 
 .example-h2 {
@@ -149,6 +154,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   margin-bottom: 2px;
   margin-left: 2px;
 }
+
 .ml3 {
-  margin-left: 3px!important;
+  margin-left: 3px !important;
+}
+
+.mt3 {
+  margin-top: 3px !important;
+}
+.cursor-pointer {
+  cursor: pointer;
 }

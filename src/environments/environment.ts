@@ -5,11 +5,8 @@
 export const environment = {
   production: false,
   hmr: false,
-  API_BASE_URL: 'http://127.0.0.1:8002',
-  // API_BASE_URL: 'https://savaapi.com',
-  // API_BASE_URL: 'http://192.168.0.7',
-  // API_BASE_URL: 'http://172.104.162.232',
-
+  API_BASE_URL: 'http://localhost:8002',
+  WEB_SSH_URL: 'http://localhost:8888'
 };
 
 /*

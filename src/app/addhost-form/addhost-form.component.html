@@ -1,70 +1,103 @@
 <div class="first-div">
-  <button type="button" class="btn btn-primary ml3" (click)="back()">Dashboard</button>
+  <button type="button" class="btn btn-primary ml3" (click)="backToDashboard()">Dashboard</button>
 </div>
 
-<div class="container">
+<div class="container-fluid">
   <form [formGroup]="form">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
-          <mat-label>HostName</mat-label>
-          <input matInput placeholder="HostName" formControlName="hostName">
+          <mat-label>Host Name</mat-label>
+          <input matInput placeholder="Host Name" formControlName="hostName">
         </mat-form-field>
       </div>
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
-          <mat-label>IPAddress</mat-label>
-          <input matInput placeholder="IPAddress" formControlName="ipAddress">
+          <mat-label>IP Address</mat-label>
+          <input matInput placeholder="IP Address" formControlName="ipAddress">
+        </mat-form-field>
+      </div>
+      <div class="col-md-4">
+        <mat-form-field appearance="legacy">
+          <mat-label>SSH Port</mat-label>
+          <input matInput placeholder="SSH Port" formControlName="sshPort">
         </mat-form-field>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
-          <mat-label>GroupName</mat-label>
-          <input matInput placeholder="groupName" formControlName="groupName">
+          <mat-label>User Name</mat-label>
+          <input matInput placeholder="User Name" formControlName="userName">
         </mat-form-field>
+
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="legacy">
+              <mat-label>Group Name</mat-label>
+              <input matInput placeholder="Group Name" formControlName="groupName">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="legacy">
+              <mat-label>Env Name</mat-label>
+              <input matInput placeholder="Env Name" formControlName="envName">
+            </mat-form-field>
+          </div>
+        </div>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
-          <mat-label>ClusterName</mat-label>
-          <input matInput placeholder="ClusterName" formControlName="clusterName">
+          <mat-label>User Pass</mat-label>
+          <input matInput placeholder="User Pass" formControlName="userPass">
         </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-6">
-        <mat-form-field appearance="legacy">
-          <mat-label>EnvName</mat-label>
-          <input matInput placeholder="EnvName" formControlName="envName">
-        </mat-form-field>
+
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="legacy">
+              <mat-label>Cluster Name</mat-label>
+              <input matInput placeholder="Cluster Name" formControlName="clusterName">
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <mat-form-field appearance="legacy">
+              <mat-label>Vm Name</mat-label>
+              <input matInput placeholder="Vm Name" formControlName="vmName">
+            </mat-form-field>
+          </div>
+        </div>
       </div>
 
-      <div class="col-md-6">
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
-          <mat-label>VmName</mat-label>
-          <input matInput placeholder="VmName" formControlName="vmName">
+          <mat-label>Private Key</mat-label>
+          <textarea rows="8" matInput name="privatekey" value="" formControlName="privateKey"></textarea>
         </mat-form-field>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-6">
-        <mat-form-field appearance="legacy">
-          <mat-label>User</mat-label>
-          <input matInput placeholder="User" formControlName="usr">
-        </mat-form-field>
+      <div class="col-md-4">
+        <mat-label>Host Check</mat-label>
+        <br>
+        <mat-slide-toggle type="boolean" formControlName="hostCheck"></mat-slide-toggle>
       </div>
+      <div class="col-md-4">
+        <mat-label>Metrics Check</mat-label>
+        <br>
+        <mat-slide-toggle type="boolean" formControlName="metricsCheck"></mat-slide-toggle>
+      </div>
+    </div>
 
-      <div class="col-md-6">
-        <mat-form-field appearance="legacy">
-          <mat-label>Password</mat-label>
-          <input matInput placeholder="Password" formControlName="pwd">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-12">
+    <br>
+    <div>
+      <div class="col-md-4">
         <mat-form-field appearance="legacy">
           <mat-label>Note</mat-label>
           <textarea matInput placeholder="Note" formControlName="note"></textarea>
@@ -75,11 +108,15 @@
   <div class="row">
     <div class="col-md-12">
       <h3>Port Table</h3>
-      <table class="table table-bordered">
+      <table class="table table-hover table-striped table-responsive table-sm">
         <thead>
         <tr>
           <th>Name</th>
           <th>Port</th>
+          <th>Http Check</th>
+          <th>Path</th>
+          <th>Req Type</th>
+          <th>Status Code</th>
           <th>Action</th>
         </tr>
         </thead>
@@ -99,8 +136,35 @@
             </mat-form-field>
           </td>
           <td>
-            <button class="btn btn-success" (click)="AddPortTableRow()">+</button>
-            <button class="btn btn-danger ml3" (click)="removePortTableRow(index)">-</button>
+            <!-- <mat-form-field appearance="legacy">
+              <mat-label>Http Check</mat-label>
+              <input matInput placeholder="Http Check" type="boolean" [(ngModel)]="data.http" name="port_{{index}}">
+            </mat-form-field> -->
+            <mat-label>Http Check</mat-label>
+            <br>
+            <mat-slide-toggle [(ngModel)]="data.http" name="port_{{index}}"></mat-slide-toggle>
+          </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Path</mat-label>
+              <input matInput placeholder="Path" type="text" [(ngModel)]="data.path" name="port_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Req Type</mat-label>
+              <input matInput placeholder="Req Type" type="text" [(ngModel)]="data.method" name="port_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <mat-form-field appearance="legacy">
+              <mat-label>Status Code</mat-label>
+              <input matInput placeholder="Status Code" type="number" [(ngModel)]="data.statuscode" name="port_{{index}}">
+            </mat-form-field>
+          </td>
+          <td>
+            <button class="btn btn-success ml3 mt3" (click)="AddPortTableRow()">+</button>
+            <button class="btn btn-danger ml3 mt3" (click)="removePortTableRow(index)">--</button>
           </td>
         </tr>
         </tbody>
@@ -111,7 +175,7 @@
   <div class="row">
     <div class="col-md-12">
       <h3>Linked Table</h3>
-      <table class="table table-bordered">
+      <table class="table table-hover table-striped table-responsive table-sm">
         <thead>
         <tr>
           <th>HostName</th>
@@ -142,8 +206,8 @@
             </mat-form-field>
           </td>
           <td>
-            <button class="btn btn-success" (click)="AddLinktoTableRow()">+</button>
-            <button class="btn btn-danger ml3" (click)="RemoveLinktoTableRow(index)">-</button>
+            <button class="btn btn-success ml3 mt3" (click)="AddLinktoTableRow()">+</button>
+            <button class="btn btn-danger ml3 mt3" (click)="RemoveLinktoTableRow(index)">--</button>
           </td>
         </tr>
         </tbody>

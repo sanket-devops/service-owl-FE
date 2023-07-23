@@ -1,26 +1,24 @@
-import {Injectable} from "@angular/core";
-import {environment} from "../../environments/environment";
-import {Router} from '@angular/router';
-import {Idashboard} from '../interface/Idashboard';
+import {Injectable} from '@angular/core';
+import {environment} from '../../environments/environment';
 import {Observable} from 'rxjs';
-// import {CookieService} from "ngx-cookie-service";
 
 declare let moment: any;
+declare let CryptoJS: any;
 
 @Injectable()
 export class ConstantService {
-  g_user: Partial<Idashboard> = <Partial<Idashboard>>{}; // It will store logged in users full object
-
-  version: string = '1.0';
-
   API_ENDPOINT: string = environment.API_BASE_URL + '/hosts';
+  WEB_SSH_ENDPOINT: string = environment.WEB_SSH_URL;
   DATE_FORMAT_MONGODB: string = 'YYYY-MM-DDTHH:mm:SS.000Z';
   DATE_FORMAT_USER: string = 'DD-MM-YYYY';
   DATETIME_FORMAT_USER: string = 'DD-MM-YYYY H:mm A';
+  k = '\x6A\x40\x6D\x65\x73\x62\x6F\x6E\x64';
 
-  // constructor(private cookieService: CookieService,
-  //             private router: Router) {
-  // }
+  vu = [
+    {u: 'admin', p: 'Nimda$2022%letaP', t: 'admin'},
+    {u: 'owl', p: 'Owl@1234', t: 'user'},
+  ];
+
 
   get_api_url(url: string): string {
     // console.log(url, ' url');
@@ -41,6 +39,31 @@ export class ConstantService {
     // }
     // return return_url;
   }
+
+  get_webssh_url(url: string): string {
+    return url;
+  }
+
+  isValidUser(data: any) {
+    for (let item of this.vu) {
+      if (item.u === data.u && item.p === data.p) return true;
+    }
+    return false;
+  }
+
+  getEncryptedData(data: any) {
+    let encryptMe;
+    if (typeof data === 'object') encryptMe = JSON.stringify(data);
+    else if (typeof data === 'string') encryptMe = data;
+    else throw new Error('Invalid data sent');
+    return CryptoJS.AES.encrypt(encryptMe, this.k).toString();
+  }
+
+  getDecryptedData(data: any) {
+    let bytes = CryptoJS.AES.decrypt(data, this.k);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
+
   public static get_promise(observable: Observable<any>): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       observable.subscribe((response) => {
