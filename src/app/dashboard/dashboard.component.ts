@@ -16,6 +16,24 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Ispeedtest } from '../interface/Ispeedtest';
 
 declare let toastr: any;
+toastr.options = {
+  "closeButton": true,
+  "debug": false,
+  "newestOnTop": false,
+  "progressBar": true,
+  "positionClass": "toast-top-right",
+  "preventDuplicates": true,
+  "onclick": null,
+  "showDuration": "300",
+  "hideDuration": "1000",
+  "timeOut": "5000",
+  "extendedTimeOut": "5000",
+  "showEasing": "swing",
+  "hideEasing": "linear",
+  "showMethod": "fadeIn",
+  "hideMethod": "fadeOut"
+}
+
 declare let $: any;
 declare let _: any;
 declare let google: any;
@@ -94,11 +112,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         if (this.timer === 0) {
           this.loadData();
           this.internetChart();
-          toastr.success('Reload Data Successfully!');
+          toastr.success('Reload Data Successfully!', '♻️');
           this.timer = this.intervalTime;
         }
       } else {
-        toastr.warning('Auto Reload Data Off!');
+        toastr.warning('Auto Reload Data Off!', '❌');
       }
     }, 1000);
   }
@@ -174,7 +192,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       )
     ) {
       let resp = await this.dashboardService.delete(<any>item._id).toPromise();
-      toastr.success('Item deleted successfully : ' + item.hostName);
+      toastr.success('Item deleted successfully : ' + item.hostName, '➖');
       await this.loadData();
     }
   }
@@ -649,10 +667,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           let res: any = undefined;
           res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
           if (res.code === 0) {
-            toastr.warning(`${data.hostName} => ${data.ipAddress} is Restarted...`);
+            toastr.warning(`${data.hostName} => ${data.ipAddress} is Restarted!`, '♻️');
           }
           else {
-            toastr.error(`${data.hostName} => ${data.ipAddress} Restart Failed...`);
+            toastr.error(`${data.hostName} => ${data.ipAddress} Restart Failed!`, '❌');
           }
         } catch (error) {
           console.log(error);
@@ -675,10 +693,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
           let res: any = undefined;
           res = <any>await this.dashboardService.runAnsiblePlaybook(data, playBookName);
           if (res.code === 0) {
-            toastr.warning(`${data.hostName} => ${data.ipAddress} is Shutdown...`);
+            toastr.warning(`${data.hostName} => ${data.ipAddress} is Shutdown!`, '🛑');
           }
           else {
-            toastr.error(`${data.hostName} => ${data.ipAddress} Shutdown Failed...`);
+            toastr.error(`${data.hostName} => ${data.ipAddress} Shutdown Failed!`, '❌');
           }
         } catch (error) {
           console.log(error);
