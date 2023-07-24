@@ -140,11 +140,11 @@
             (click)="openTerminal(host)">
             <i style="color:green;" class="fas fa-terminal"></i>
           </a>
-          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-light btn-sm"
+          <a *ngIf="host.userName && (host.userPass || host.privateKey)" role="button" class="btn btn-light btn-sm"
             (click)="restartHost(host, 'restart-host')">
             <i style="color:rgb(0, 166, 255);" class="fas fa-sync-alt"></i>
           </a>
-          <a *ngIf="host.userName && host.userPass" role="button" class="btn btn-light btn-sm"
+          <a *ngIf="host.userName && (host.userPass || host.privateKey)" role="button" class="btn btn-light btn-sm"
             (click)="shutdownHost(host, 'shutdown-host')">
             <i style="color:red;" class="fas fa-power-off"></i>
           </a>
