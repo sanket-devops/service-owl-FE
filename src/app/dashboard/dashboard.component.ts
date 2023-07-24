@@ -333,6 +333,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedHostMetrics = <any>undefined;
     let diskStatusChart: any = undefined;
     let memStatusChart: any = undefined;
+    let networkStatusChart: any = undefined;
     let cpuStatusChart: any = undefined;
 
     let hostId = _id;
@@ -370,6 +371,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
               </div>
             </div>
             <div id="memStatus" style="width:2500px; height:800px;">
+              <div id="bSpinner" class="spinner-border" role="status">
+                <span class="sr-only"></span>
+              </div>
+            </div>
+            <div id="networkStatus" style="width:2500px; height:800px;">
               <div id="bSpinner" class="spinner-border" role="status">
                 <span class="sr-only"></span>
               </div>
@@ -422,6 +428,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
             let diskStatus: any = undefined;
             let memStatus: any = undefined;
             let cpuStatus: any = undefined;
+            let networkStatus: any = undefined;
 
             if (dataH) {
               let disk = await res.diskStatus.slice(dataTime);
@@ -441,6 +448,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 'Mem Available',
               ]);
               memStatus = google.visualization.arrayToDataTable(await ram);
+
+              let network = await res.networkStatus.slice(dataTime);
+              network.unshift([
+                'Timestamp',
+                'Net Download Rx',
+                'Net Upload Tx'
+              ]);
+              networkStatus = google.visualization.arrayToDataTable(await network);
 
               let cpu = await res.cpuStatus.slice(dataTime);
               cpu.unshift(['Timestamp', 'CPU Total', 'CPU Usage', 'CPU Free']);
@@ -464,6 +479,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
               ]);
               memStatus = google.visualization.arrayToDataTable(await ram);
 
+              let network = await res.networkStatus.slice(dataTime);
+              network.unshift([
+                'Timestamp',
+                'Download Rx',
+                'Upload Tx'
+              ]);
+              networkStatus = google.visualization.arrayToDataTable(await network);
+
               let cpu = await res.cpuStatus;
               cpu.unshift(['Timestamp', 'CPU Total', 'CPU Usage', 'CPU Free']);
               cpuStatus = google.visualization.arrayToDataTable(await cpu);
@@ -486,6 +509,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
               curveType: 'function',
               pointSize: 3,
               colors: ['blue', 'red', 'green'],
+              // legend: { position: 'bottom' }
+            };
+
+            let networkStatusOptions = {
+              title: `Network Status => [ Download Speed: ${res.downloadRx}M, Upload Speed: ${res.uploadTx}M ]`,
+              hAxis: { title: 'Timestemp' },
+              vAxis: { title: 'Network Speed in MB', minValue: 0 },
+              curveType: 'function',
+              pointSize: 3,
+              colors: ['green', 'red'],
               // legend: { position: 'bottom' }
             };
 
@@ -525,12 +558,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
             memStatusChart = await new google.visualization.AreaChart(
               chartWindow.document.getElementById('memStatus')
             );
+            networkStatusChart = await new google.visualization.AreaChart(
+              chartWindow.document.getElementById('networkStatus')
+            );
             cpuStatusChart = await new google.visualization.AreaChart(
               chartWindow.document.getElementById('cpuStatus')
             );
 
             await diskStatusChart.draw(await diskStatus, diskStatusOptions);
             await memStatusChart.draw(await memStatus, memStatusOptions);
+            await networkStatusChart.draw(await networkStatus, networkStatusOptions);
             await cpuStatusChart.draw(await cpuStatus, cpuStatusOptions);
           }
         } catch (e) {
