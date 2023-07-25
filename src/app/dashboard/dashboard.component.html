@@ -175,6 +175,8 @@
                     class="fas fa-exclamation-circle"></i></a></li>
               <li><a class="dropdown-item" (click)="drawChart(host._id)" *ngIf="isAdmin">Full Metrics <i
                     class="fas fa-exclamation-circle"></i></a></li>
+              <li><a class="dropdown-item" (click)="hostMetricsDelete(host)" *ngIf="isAdmin">Delete Host Metrics <i
+                    class="fas fa-exclamation-circle"></i></a></li>
             </ul>
             <button *ngIf="(host.hostMetrics | keyvalue)?.length" type="button"
               class="btn btn-light rounded-circle btn-sm" data-bs-toggle="modal" data-bs-target="#hostStatus"

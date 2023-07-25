@@ -328,6 +328,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     clearInterval(this.intervalId);
   }
 
+  async hostMetricsDelete(item: any ) {
+    if (
+      window.confirm(
+        `Do you want to delete : ${item.hostName + ' : ' + item.ipAddress} Host Metrics Data ?`
+      )
+    ) {
+      let resp = await this.dashboardService.hostMetricsDelete(<any>item._id).toPromise();
+      toastr.success('Host Metrics deleted successfully : ' + item.hostName, '➖');
+      await this.loadData();
+    }
+  }
+
   // Open new window and drow chart
   async drawChart(_id: any, dataH?: any) {
     this.selectedHostMetrics = <any>undefined;
