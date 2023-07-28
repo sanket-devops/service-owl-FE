@@ -92,7 +92,7 @@ export class WebsshComponent implements OnInit {
               // console.log(response);
               if (response.id) {
                 setTimeout(async () => {
-                  connectWS(response);
+                  await connectWS(response);
                 }, 100);
                 toastr.success('WebSSH Terminal Requested!', '🚀');
               }
@@ -111,7 +111,7 @@ export class WebsshComponent implements OnInit {
       }
     }
 
-    function connectWS(msg: any) {
+    async function connectWS(msg: any) {
       let formValue: any = sshFormData;
       var status = $('#status'),
       button = $('.btn-primary'),
