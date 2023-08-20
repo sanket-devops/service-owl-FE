@@ -68,6 +68,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   linkedModal: boolean = false;
   noteModal: boolean = false;
   form: FormGroup;
+  isSpinner: any = [];
 
   constructor(
     public constantService: ConstantService,
@@ -119,6 +120,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
         toastr.warning('Auto Reload Data Off!', '❌');
       }
     }, 1000);
+  }
+
+  removeItemFromisSpinner (index: number) {
+    let indexToRemove = index - 1;
+    this.isSpinner.splice(indexToRemove, 1);
+  }
+
+  spinnerRunning () {
   }
 
   get isAdmin() {
@@ -702,6 +711,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
   async restartHost(data: Idashboard, playBookName: any) {
+    let indexOfItem = this.isSpinner.push(data.hostName+'-restart');
     if (
       window.confirm(
         `Do you want to Reboot Host : ${data.hostName + ' : ' + data.ipAddress} ?`
@@ -726,8 +736,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       }
     }
+    this.removeItemFromisSpinner(indexOfItem);
   }
   async shutdownHost(data: Idashboard, playBookName: any) {
+    let indexOfItem = this.isSpinner.push(data.hostName+'-shutdown');
     if (
       window.confirm(
         `Do you want to Shutdown Host : ${data.hostName + ' : ' + data.ipAddress} ?`
@@ -752,6 +764,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       }
     }
+    this.removeItemFromisSpinner(indexOfItem);
   }
 
   // Host ssh access function
