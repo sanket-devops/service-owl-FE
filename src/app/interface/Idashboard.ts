@@ -43,6 +43,7 @@ export interface IhostMetrics {
   diskStatus: [diskStatus: []];
   memStatus: [memStatus: []];
   cpuStatus: [cpuStatus: []];
+  networkStatus: [networkStatus: []];
   DiskTotal: number;
   DiskUsage: number;
   DiskFree: number;

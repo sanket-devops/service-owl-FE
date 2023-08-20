@@ -43,7 +43,8 @@ import {InputNumberModule} from 'primeng-lts/inputnumber';
 import {ConfirmDialogModule} from 'primeng-lts/confirmdialog';
 import {InputTextareaModule} from 'primeng-lts/inputtextarea';
 import { WebsshComponent } from './webssh/webssh.component';
-
+import {TooltipModule} from 'primeng-lts/tooltip';
+import {ProgressSpinnerModule} from 'primeng-lts/progressspinner';
 
 
 
@@ -95,6 +96,8 @@ import { WebsshComponent } from './webssh/webssh.component';
         InputNumberModule,
         ConfirmDialogModule,
         InputTextareaModule,
+        TooltipModule,
+        ProgressSpinnerModule,
     ],
   providers: [ConstantService, DashboardService],
   bootstrap: [AppComponent]

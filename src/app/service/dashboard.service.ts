@@ -29,6 +29,10 @@ export class DashboardService {
     return this.http.post(this.constantService.get_api_url(this.constantService.API_ENDPOINT + `/host-delete`), {data: this.constantService.getEncryptedData(_id)});
   }
 
+  hostMetricsDelete(_id: string) {
+    return this.http.post(this.constantService.get_api_url(this.constantService.API_ENDPOINT + `/hostMetrics-delete`), {data: this.constantService.getEncryptedData(_id)});
+  }
+
   save(data: Partial<Idashboard>) {
     return this.http.post(this.constantService.get_api_url(this.constantService.API_ENDPOINT + '/host-save'), {
       data: this.constantService.getEncryptedData(data)
