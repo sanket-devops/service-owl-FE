@@ -104,9 +104,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     // this.audio.play();
     await this.loadData();
-    await this.internetChart();
+    if (this.intChecked) await this.internetChart();
     // await this.compareStatus();
     this.intervalId = setInterval(() => {
+      if (Math.sign(this.timer) === -1 || Math.sign(this.timer) === 0) {
+        this.timer = 1;
+      }
       if (this.isChecked) {
         this.timer--;
         $('.timer').text(this.timer);
@@ -151,8 +154,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async loadData() {
-    this.loading = true;
-    this.responseData = [];
+    // this.loading = true;
     let res: Idashboard[] = [];
     try {
       res = <any>await this.dashboardService.list();
@@ -172,12 +174,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.responseData = res;
     this.responseData = _.orderBy(this.responseData, ['status'], ['asc']);
 
-    let resInternetData: any = undefined;
-    resInternetData = <any>await this.dashboardService.internetMetrics();
+    let resInternetData: any = await this.dashboardService.internetMetrics();
     this.selectedObj = resInternetData;
     this.intChecked = resInternetData.internetCheck;
 
-    this.loading = false;
+    // this.loading = false;
   }
 
   cloneData(item: Idashboard) {
@@ -240,11 +241,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async latestPull(event?: any) {
-    // let res = await ConstantService.get_promise(this.dashboardservice.latestPull());
-    this.loading = true;
     await this.loadData();
-    await this.internetChart();
-    this.loading = false;
+    if (this.intChecked) await this.internetChart();
   }
 
   async compareStatus(res: Idashboard[]) {

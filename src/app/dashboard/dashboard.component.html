@@ -8,7 +8,7 @@
         class="fas fa-plus fa-fw"></i> Add Host</button>
     <button type="button" class="btn btn-primary ml3">
       <i class="fas fa-sync-alt fa-fw"></i> Reload
-      <input type="text" style="width:40px; height: 18px; text-align: center;" class="p-inputtext-sm" [(ngModel)]="intervalTime" pInputText pTooltip="Interval Time In Second" /> s&nbsp;
+      <input type="number" style="width:60px; height: 18px; text-align: center;" class="p-inputtext-sm" [(ngModel)]="intervalTime" pInputText pTooltip="Interval Time In Second" /> s&nbsp;
       <mat-slide-toggle [(ngModel)]="isChecked" name="check" (change)="autoReload($event)" pTooltip="Reload Counter ON/OFF"></mat-slide-toggle>
     </button>
     <button type="button" *ngIf="isAdmin" class="btn btn-primary ml3" (click)="showInternetStatus()" pTooltip="Show Internet Check Metrics Chart If On"><i
@@ -249,9 +249,9 @@
 </div>
 
 <!-- Services Modal -->
-<p-dialog header="Services Status" [(visible)]="serviceModal" [modal]="true" [maximizable]="true"
+<p-dialog *ngIf="selectedService" header="Services Status [ {{ selectedService.hostName }} / {{ selectedService.ipAddress }} ]" [(visible)]="serviceModal" [modal]="true" [maximizable]="true"
   [baseZIndex]="100" [draggable]="true" [resizable]="true">
-  <div *ngIf="selectedService" class="card">
+  <div class="card">
     <p-table class="table" #dt [value]="selectedService.port" styleClass="p-datatable-sm"
     [globalFilterFields]="['name','port','status', 'http', 'path', 'method', 'statuscode']"
     selectionMode="multiple" [(selection)]="selectedHostServices" [metaKeySelection]="true" [rowHover]="true"
@@ -259,7 +259,7 @@
     [showCurrentPageReport]="true">
     <ng-template pTemplate="caption">
       <div class="p-d-flex p-ai-center p-jc-between">
-        <h3 style="font-weight: bold" class="text-center">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
+        <!-- <h3 style="font-weight: bold" class="text-center">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3> -->
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
           <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
@@ -328,9 +328,9 @@
 
 
 <!-- link modal -->
-<p-dialog header="Linked Hosts" [(visible)]="linkedModal" [modal]="true" [style]="{width: '60vw'}" [maximizable]="true"
+<p-dialog *ngIf="selectedService" header="Linked Hosts [ {{ selectedService.hostName }} / {{ selectedService.ipAddress }} ]" [(visible)]="linkedModal" [modal]="true" [style]="{width: '60vw'}" [maximizable]="true"
   [baseZIndex]="100" [draggable]="true" [resizable]="true">
-  <div *ngIf="selectedService" class="card">
+  <div class="card">
     <p-table class="table" #dt [value]="selectedService.linkTo" styleClass="p-datatable-sm"
     [globalFilterFields]="['hostName', 'ipAddress', 'port']"
     selectionMode="multiple" [(selection)]="selectedHostServices" [metaKeySelection]="true" [rowHover]="true"
@@ -338,7 +338,7 @@
     [showCurrentPageReport]="true">
     <ng-template pTemplate="caption">
       <div class="p-d-flex p-ai-center p-jc-between">
-        <h3 style="font-weight: bold" class="text-center">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
+        <!-- <h3 style="font-weight: bold" class="text-center">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3> -->
         <span class="p-input-icon-left">
           <i class="pi pi-search"></i>
           <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
@@ -389,13 +389,14 @@
   <div class="modal-dialog modal-md" role="document">
     <div *ngIf="selectedService" class="modal-content">
       <div class="modal-header text-center">
-        <h1 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">Host Metrics Status<br> </h1>
+        <h2 class="modal-title mb-0 bold w-100" id="hostStatusModalLabel">Host Metrics Status [ {{ selectedService.hostName }} /
+          {{ selectedService.ipAddress }} ]<br> </h2>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
         </button>
       </div>
       <div>
-        <h3 class="modal-title mb-0 bold w-100 text-center" id="hostStatusModalLabel">{{ selectedService.hostName }} /
-          {{ selectedService.ipAddress }}</h3>
+        <!-- <h3 class="modal-title mb-0 bold w-100 text-center" id="hostStatusModalLabel">{{ selectedService.hostName }} /
+          {{ selectedService.ipAddress }}</h3> -->
       </div>
       <div class="modal-body p-1">
         <table class="table table-striped table-hover text-center">
@@ -432,13 +433,13 @@
 </div>
 
 <!-- Note Modal -->
-<p-dialog header="Notes" [(visible)]="noteModal" [modal]="true" [style]="{width: '60vw'}" [maximizable]="true"
+<p-dialog *ngIf="selectedService" header="Note [ {{ selectedService.hostName }} / {{ selectedService.ipAddress }} ]" [(visible)]="noteModal" [modal]="true" [style]="{width: '60vw'}" [maximizable]="true"
   [baseZIndex]="100" [draggable]="true" [resizable]="true">
-  <div *ngIf="selectedService">
-    <h3 style="font-weight: bold" class="text-center">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3>
+  <!-- <div *ngIf="selectedService"> -->
+    <!-- <h3 style="font-weight: bold" class="text-center">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3> -->
     <p>{{selectedService.note}}</p>
-  </div>
+  <!-- </div> -->
   <ng-template pTemplate="footer">
-    <p-button icon="pi pi-times" (click)="linkedModal=false" label="Close"></p-button>
+    <p-button icon="pi pi-times" (click)="noteModal=false" label="Close"></p-button>
   </ng-template>
 </p-dialog>
