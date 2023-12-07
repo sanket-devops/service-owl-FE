@@ -107,6 +107,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (this.intChecked) await this.internetChart();
     // await this.compareStatus();
     this.intervalId = setInterval(() => {
+      if (Math.sign(this.timer) === -1 || Math.sign(this.timer) === 0) {
+        this.timer = 1;
+      }
       if (this.isChecked) {
         this.timer--;
         $('.timer').text(this.timer);
@@ -151,8 +154,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   async loadData() {
-    this.loading = true;
-    this.responseData = [];
+    // this.loading = true;
     let res: Idashboard[] = [];
     try {
       res = <any>await this.dashboardService.list();
@@ -176,7 +178,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.selectedObj = resInternetData;
     this.intChecked = resInternetData.internetCheck;
 
-    this.loading = false;
+    // this.loading = false;
   }
 
   cloneData(item: Idashboard) {
