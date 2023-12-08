@@ -115,7 +115,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         $('.timer').text(this.timer);
         if (this.timer === 0) {
           this.loadData();
-          this.internetChart();
+          if (this.intChecked) this.internetChart();
           toastr.success('Reload Data Successfully!', '♻️');
           this.timer = this.intervalTime;
         }
