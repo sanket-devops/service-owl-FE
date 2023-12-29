@@ -19,7 +19,7 @@
       id="dropdownInternetCheck" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="fas fa-chart-area"></i>
     </button>
-    <ul class="dropdown-menu" aria-labelledby="dropdownInternetCheck">
+    <ul class="dropdown-menu ml3" aria-labelledby="dropdownInternetCheck">
       <li><a class="dropdown-item" (click)="internetChartGet(24)">2H Metrics</a></li>
       <li><a class="dropdown-item" (click)="internetChartGet(48)">4H Metrics</a></li>
       <li><a class="dropdown-item" (click)="internetChartGet(96)">8H Metrics</a></li>
@@ -29,7 +29,7 @@
       <li><a class="dropdown-item" (click)="internetChartGet(2016)" *ngIf="isAdmin">Full Metrics <i
             class="fas fa-exclamation-circle"></i></a></li>
     </ul>
-    <button type="button" *ngIf="isAdmin" class="btn btn-secondary l3" (click)="webSSH()" pTooltip="Connect SSH">
+    <button type="button" *ngIf="isAdmin" class="btn btn-secondary ml3" (click)="webSSH()" pTooltip="Connect SSH">
       <i style="color:rgb(4, 255, 4);" class="fas fa-terminal"></i>
     </button>
   </ng-template>
@@ -62,9 +62,9 @@
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [showCurrentPageReport]="true">
     <ng-template pTemplate="caption">
       <div class="p-d-flex p-ai-center p-jc-between">
-        <span class="p-input-icon-left">
+        <span class="p-input-icon-left col-8">
           <i class="pi pi-search"></i>
-          <input pInputText type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+          <input pInputText class="col-8" type="text" (input)="dt.filterGlobal($any($event.target).value, 'contains')"
             placeholder="Search..." />
         </span>
         <p-progressSpinner class="float-end" *ngIf="this.isSpinner.length" [style]="{width: '30px', height: '30px'}"
@@ -437,8 +437,7 @@
   [baseZIndex]="100" [draggable]="true" [resizable]="true">
   <!-- <div *ngIf="selectedService"> -->
     <!-- <h3 style="font-weight: bold" class="text-center">{{ selectedService.hostName }} / {{ selectedService.ipAddress }}</h3> -->
-    <p>{{selectedService.note}}</p>
-  <!-- </div> -->
+    <p style="white-space: pre-wrap">{{selectedService.note}}</p>
   <ng-template pTemplate="footer">
     <p-button icon="pi pi-times" (click)="noteModal=false" label="Close"></p-button>
   </ng-template>
