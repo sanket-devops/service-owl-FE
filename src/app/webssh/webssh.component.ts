@@ -46,7 +46,7 @@ export class WebsshComponent implements OnInit {
       // console.log(sshFormData);
       // getWebsshID();
       window.localStorage.removeItem('sshConnection');
-    }, 1000);
+    }, 10);
 
     getWebsshID();
 
